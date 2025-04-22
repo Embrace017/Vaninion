@@ -10,6 +10,7 @@ public class Player {
     private int money;
     private int level;
     private int experience;
+    private int skillPoints;
     private int health;
     //private int maxHealth;
     private int mana;
@@ -25,6 +26,7 @@ public class Player {
         this.money = 1000000;
         this.level = 1;
         this.experience = 0;
+        this.skillPoints = 0;
         this.health = 100;
         //this.maxHealth = health;
         this.mana = 50;
@@ -57,6 +59,8 @@ public class Player {
     public void setLevel(int level) { this.level = level; }
     public int getExperience() { return experience; }
     public void setExperience(int experience) { this.experience = experience; }
+    public int getSkillPoints() { return skillPoints; }
+    public void setSkillPoints(int skillPoints) { this.skillPoints = skillPoints;}
     //public Map<String, Integer> getItemAndCounts() { return itemAndCounts; }
     //public void setItemAndCounts(Map<String, Integer> itemAndCounts) { this.itemAndCounts = itemAndCounts; }
 
@@ -108,22 +112,37 @@ public class Player {
     // End inventory management methods
 
     // Expierience management methods
+    public void stats() {
+        System.out.println(YELLOW + "\n====== " + getName() + "'s Stats ======" + RESET);
+        System.out.println(GREEN + "Level: " + getLevel() + RESET);
+        System.out.println(GREEN + "Experience: " + getExperience() + "/" + (1000 * getLevel()) + RESET);
+        System.out.println(GREEN + "Skill Points: " + getSkillPoints() + RESET);
+        System.out.println(GREEN + "Health: " + getHealth() + RESET);
+        System.out.println(GREEN + "Mana: " + getMana() + RESET);
+        System.out.println(GREEN + "Strength: " + getStrength() + RESET);
+        System.out.println(GREEN + "Defence: " + getDefence() + RESET);
+        System.out.println(GREEN + "Wisdom: " + getWisdom() + RESET);
+        System.out.println(GREEN + "Charisma: " + getCharisma() + RESET);
+    }
+
     public void gainExperience(int expGained) {
-        this.experience += expGained;
-        if (this.experience >= 1000 * (this.level) && this.level < 100) {
-            this.level++;
-            this.experience -= 1000;
+        setExperience(getExperience() + expGained);
+        while (getExperience() >= 1000 * getLevel() && getLevel() < 100) {
+            setSkillPoints(getSkillPoints() + 1);
+            setLevel(getLevel() + 1);
+            setExperience(0);
             System.out.println(GREEN + "You gained a level!" + RESET);
-            System.out.println(GREEN + "Your new level is " + this.level + "!" + RESET);
+            System.out.println(GREEN + "Your new level is " + getLevel() + "!" + RESET);
         }
     }
+
     public void attack(Monster target) {
         int number = random.nextInt(this.getStrength() * 10);
         int damage = Math.max(1, number + this.getStrength() - target.getDefence());
         target.setHealth(target.getHealth() - damage);
         // Player damage message
         System.out.println(" ");
-        System.out.println(BOLD + BLUE + "\n====== Combat Continued ======" + RESET);
+        System.out.println(BOLD + BLUE + "\n========= Combat Continued =========" + RESET);
         System.out.println(this.getName() + " attacks " + target.getName() + " for " + damage + " damage!");
     }
 }

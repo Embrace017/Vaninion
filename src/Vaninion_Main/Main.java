@@ -12,6 +12,7 @@ public class Main {
     private static final Fishing fishing = new Fishing();
     private static final Monster goblin = new Goblin();
     private static final Combat combat = new Combat();
+    private static final Adventure adventure = new Adventure();
 
     public static void main(String[] args) {
 
@@ -62,6 +63,8 @@ public class Main {
             System.out.println("2. " + PURPLE + "Fishing" + RESET);
             System.out.println("3. " + PURPLE + "Inventory" + RESET);
             System.out.println("4. " + PURPLE + "Attack" + RESET);
+            System.out.println("5. " + PURPLE + "Adventure" + RESET);
+            System.out.println("6. " + PURPLE + "Stats" + RESET);
             System.out.println("* " + RED + "Exit Game" + RESET);
 
 
@@ -77,6 +80,10 @@ public class Main {
                         combat.fight(player, selectedMonster);
                     }
                 }
+                case "5", "adventure" -> {
+                    System.out.println("Adventure not yet implemented.");
+                }
+                case "6", "stats" -> player.stats();
                 case "*", "leave", "quit", "exit", "exit game" -> {
                     System.out.println(YELLOW + "Are you sure you want to exit? (yes/no)" + RESET);
                     String confirm = scanner.nextLine().toLowerCase().trim();

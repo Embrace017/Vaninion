@@ -48,8 +48,8 @@ public abstract class Monster {
         int damage = Math.max(1, this.strength - player.getDefence());
         player.setHealth(player.getHealth() - damage);
         System.out.println(" ");
-        System.out.println(this.name + " attacks for " + damage + " damage!");
-        System.out.println(BOLD + BLUE + "^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^");
+        System.out.println(this.name + " attacks " + player.getName() + "for " + damage + " damage!");
+        //System.out.println(BOLD + BLUE + "^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^");
     }
 
     public boolean isAlive() {

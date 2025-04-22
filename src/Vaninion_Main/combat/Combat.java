@@ -16,7 +16,7 @@ public class Combat {
     // Monster getter
         public Monster npc() {
             while (true) {
-                System.out.println("What would you like to fight?");
+                System.out.println("\nWhat would you like to fight?");
                 System.out.println("1. Goblin");
                 System.out.println("2. Skeleton");
                 System.out.println("* " + RED + "Back" + RESET);
@@ -41,13 +41,15 @@ public class Combat {
         }
         monster.reset();
 
-        System.out.println(BOLD + BLUE + "\n====== Combat Started ======" + RESET);
+        System.out.println(BOLD + BLUE + "\n========= Combat Started =========" + RESET);
         System.out.println("You are fighting a " + PURPLE + monster.getName() + RESET);
 
         while (monster.isAlive() && player.getHealth() > 0) {
             // Display current status
-            System.out.println("\n" + GREEN + "Your HP: " + player.getHealth() + RESET + " | " + PURPLE + "Your MP: " + player.getMana() + RESET);
-                    System.out.println(RED + "Monster HP: " + monster.getHealth() + RESET);
+            System.out.println("\n" + PURPLE + BOLD + "~*~\n" + RESET);
+            System.out.println(GREEN + "Your HP: " + player.getHealth() + RESET + " | " + PURPLE + "Your MP: " + player.getMana() + RESET);
+                    System.out.println(RED + monster.getName() + " HP: " + monster.getHealth() + RESET);
+            System.out.println(BOLD + BLUE + "^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^");
 
             // Combat options
             System.out.println(YELLOW + "\nWhat would you like to do?" + RESET);
@@ -69,12 +71,12 @@ public class Combat {
                         int damage = player.getStrength() * 2;
                         monster.setHealth(monster.getHealth() - damage);
                         player.setMana(player.getMana() - 20);
-                        System.out.println(BLUE + BOLD + "\n====== Combat Continued ======" + RESET);
+                        System.out.println(BLUE + BOLD + "\n========= Combat Continued =========" + RESET);
                         System.out.println(PURPLE + "You used a special attack for " + damage + " damage!" + RESET);
                         playerTurnEnded = true;
                     } else {
                         System.out.println(" ");
-                        System.out.println(BLUE + BOLD + "\n====== Please Choose again ======" + RESET);
+                        System.out.println(BLUE + BOLD + "\n========= Please Choose again =========" + RESET);
                         System.out.println(RED + "Not enough MP!" + RESET);
                     }
                 }
@@ -84,7 +86,7 @@ public class Combat {
                         System.out.println(GREEN + "You successfully fled from combat!" + RESET);
                         return;
                     } else {
-                        System.out.println(BLUE + BOLD + "\n====== Combat Continued ======" + RESET);
+                        System.out.println(BLUE + BOLD + "\n========= Combat Continued =========" + RESET);
                         System.out.println(RED + "Failed to flee!" + RESET);
                         playerTurnEnded = true;
                     }
@@ -98,7 +100,7 @@ public class Combat {
 
             // Check if monster died from player's action
             if (!monster.isAlive()) {
-                System.out.println(BLUE + BOLD + "\n====== Combat Ended ======" + RESET);
+                System.out.println(BLUE + BOLD + "\n========= Combat Ended =========" + RESET);
                 System.out.println(GREEN + "\nYou defeated the " +
                         PURPLE + monster.getName() + GREEN + "!" + RESET);
 
@@ -113,8 +115,10 @@ public class Combat {
                         System.out.println(PURPLE + "- " + quantity + "x " + item + RESET);
                     }
                 }
+                // Action after monster defeat
                 player.gainExperience(monster.getExp() + player.getWisdom());
-                return;
+                monster.reset();
+                npc();
             }
 
             // Monster's turn
@@ -125,4 +129,5 @@ public class Combat {
             }
         }
         monster.reset();
-    }}
+    }
+    }

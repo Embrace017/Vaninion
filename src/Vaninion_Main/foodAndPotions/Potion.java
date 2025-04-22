@@ -44,7 +44,7 @@ public class Potion {
                     player.setStrength(player.getStrength() + 10);
                     drinkPotion(player, choice);
                 }
-                System.out.println(player.getStrength());
+                System.out.println("Stregth: " + player.getStrength());
             }
             case "4", "defence potion", "defence" -> {
                 choice = "defence potion";
@@ -53,7 +53,7 @@ public class Potion {
                     player.setDefence(player.getDefence() + 1);
                     drinkPotion(player, choice);
                 }
-                System.out.println(player.getDefence());
+                System.out.println("Defence: " + player.getDefence());
             }
             case "*", "back", "exit", "leave" -> System.out.println("Not thirsty?");
             default -> System.out.println(RED + "Invalid choice!" + RESET);
