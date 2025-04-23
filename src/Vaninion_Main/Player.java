@@ -1,4 +1,5 @@
 package Vaninion_Main;
+import Vaninion_Main.adventure.Riddle;
 import Vaninion_Main.monsters.*;
 
 import java.util.*;
@@ -15,11 +16,13 @@ public class Player {
     //private int maxHealth;
     private int mana;
     private int strength;
-    private int defence;
+    private int defense;
     private int wisdom;
     private int charisma;
     protected Map<String, Integer> itemAndCounts;  // Changed to protected for subclass access
     private Random random = new Random();
+    private Riddle riddleGame = new Riddle();
+    Scanner scanner = new Scanner(System.in);
 
     public Player(String name) {
         this.name = name;
@@ -31,11 +34,28 @@ public class Player {
         //this.maxHealth = health;
         this.mana = 50;
         this.strength = 1;
-        this.defence = 1;
+        this.defense = 1;
         this.wisdom = 1;
         this.charisma = 1;
         this.itemAndCounts = new HashMap<>();  // Initialize here in parent class
     }
+
+    // RANDOM NUMBER GEN
+    public String getRandomItem(Map<String, Double> itemMap) {
+        double totalWeight = itemMap.values().stream().mapToDouble(d -> d).sum();
+        double random = Math.random() * totalWeight;
+        double cumulative = 0.0;
+
+        for (Map.Entry<String, Double> entry : itemMap.entrySet()) {
+            cumulative += entry.getValue();
+            if (random < cumulative) {
+                return entry.getKey();
+            }
+        }
+        return null;
+    }
+
+
 
     // Getters and setters
     public String getName() { return name; }
@@ -49,8 +69,8 @@ public class Player {
     public void setMana(int mana) { this.mana = mana; }
     public int getStrength() { return strength; }
     public void setStrength(int strength) { this.strength = strength; }
-    public int getDefence() { return defence; }
-    public void setDefence(int defence) { this.defence = defence; }
+    public int getDefense() { return defense; }
+    public void setDefense(int defence) { this.defense = defence; }
     public int getWisdom() { return wisdom; }
     public void setWisdom(int wisdom) { this.wisdom = wisdom; }
     public int getCharisma() { return charisma; }
@@ -120,19 +140,78 @@ public class Player {
         System.out.println(GREEN + "Health: " + getHealth() + RESET);
         System.out.println(GREEN + "Mana: " + getMana() + RESET);
         System.out.println(GREEN + "Strength: " + getStrength() + RESET);
-        System.out.println(GREEN + "Defence: " + getDefence() + RESET);
+        System.out.println(GREEN + "Defence: " + getDefense() + RESET);
         System.out.println(GREEN + "Wisdom: " + getWisdom() + RESET);
         System.out.println(GREEN + "Charisma: " + getCharisma() + RESET);
     }
 
     public void gainExperience(int expGained) {
         setExperience(getExperience() + expGained);
-        while (getExperience() >= 1000 * getLevel() && getLevel() < 100) {
+        while (getExperience() >= 100 * getLevel() / 2) {
             setSkillPoints(getSkillPoints() + 1);
             setLevel(getLevel() + 1);
             setExperience(0);
             System.out.println(GREEN + "You gained a level!" + RESET);
             System.out.println(GREEN + "Your new level is " + getLevel() + "!" + RESET);
+        }
+    }
+    // Level up logic
+    public void useSkillPoint() {
+        if (getSkillPoints() > 0) {
+            Scanner scanner = new Scanner(System.in);
+
+            System.out.println("\nYou have " + getSkillPoints() + " skill point(s).");
+            System.out.println("Which attribute would you like to upgrade?");
+            System.out.println("1. Health");
+            System.out.println("2. Mana");
+            System.out.println("3. Strength");
+            System.out.println("4. Defense");
+            System.out.println("5. Wisdom");
+            System.out.println("6. Charisma");
+
+            System.out.print("Enter the number corresponding to your choice: ");
+            String choice = scanner.nextLine();
+
+            switch (choice) {
+                case "1" -> {
+                    setHealth(getHealth() + 10); // Upgrade health by 10
+                    System.out.println("Your Health has increased to " + getHealth() + "!");
+                }
+                case "2" -> {
+                    setMana(getMana() + 10); // Upgrade mana by 5
+                    System.out.println("Your Mana has increased to " + getMana() + "!");
+                }
+                case "3" -> {
+                    setStrength(getStrength() + 1); // Upgrade strength by 2
+                    System.out.println("Your Strength has increased to " + getStrength() + "!");
+                }
+                case "4" -> {
+                    setDefense(getDefense() + 1); // Upgrade defense by 2
+                    System.out.println("Your Defense has increased to " + getDefense() + "!");
+                }
+                case "5" -> {
+                    setWisdom(getWisdom() + 1); // Upgrade wisdom by 2
+                    System.out.println("Your Wisdom has increased to " + getWisdom() + "!");
+                }
+                case "6" -> {
+                    setCharisma(getCharisma() + 1); // Upgrade charisma by 2
+                    System.out.println("Your Charisma has increased to " + getCharisma() + "!");
+                }
+                default -> {
+                    System.out.println("Invalid choice! No skill point was used.");
+                    return; // Exit without consuming skill points
+                }
+            }
+
+            // Deduct one skill point after a valid upgrade
+            setSkillPoints(getSkillPoints() - 1);
+            System.out.println("You now have " + getSkillPoints() + " skill point(s) remaining.");
+
+        } else {
+            System.out.println("\n" + PURPLE + getName() + " you don't have any skill points!" + RESET);
+        }
+        if (getSkillPoints() > 0) {
+                useSkillPoint();
         }
     }
 

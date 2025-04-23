@@ -1,10 +1,16 @@
 package Vaninion_Main;
 
+import Vaninion_Main.adventure.Adventure;
+import Vaninion_Main.adventure.Riddle;
 import Vaninion_Main.combat.Combat;
 import Vaninion_Main.monsters.*;
 
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.Map;
 import java.util.Scanner;
 import static Vaninion_Main.ColoredConsole.*;
+
 
 public class Main {
     private static final Scanner scanner = new Scanner(System.in);
@@ -13,6 +19,7 @@ public class Main {
     private static final Monster goblin = new Goblin();
     private static final Combat combat = new Combat();
     private static final Adventure adventure = new Adventure();
+    private static final Riddle riddle = new Riddle();
 
     public static void main(String[] args) {
 
@@ -48,6 +55,7 @@ public class Main {
         player.itemAndCounts.put("mana potion", 10);
         player.itemAndCounts.put("strength potion", 10);
         player.itemAndCounts.put("defence potion", 10);
+        player.setSkillPoints(3);
 
 
         // MUST REMOVE @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
@@ -65,25 +73,26 @@ public class Main {
             System.out.println("4. " + PURPLE + "Attack" + RESET);
             System.out.println("5. " + PURPLE + "Adventure" + RESET);
             System.out.println("6. " + PURPLE + "Stats" + RESET);
+            System.out.println("7. " + PURPLE + "Riddle" + RESET);
+            System.out.println("8. " + PURPLE + "Level Up" + RESET);
             System.out.println("* " + RED + "Exit Game" + RESET);
 
 
-            //Game start
+            // Game start @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
             String choice = scanner.nextLine().toLowerCase().trim();
             switch (choice) {
+
 
                 case "1", "shop" -> shop.shop(player);
                 case "2", "fishing" -> fishing.fish(player);
                 case "3", "inventory", "inv", "i" ->  player.displayInventory();
-                case "4", "attack" -> { Monster selectedMonster = combat.npc();
-                    if (selectedMonster != null) {
-                        combat.fight(player, selectedMonster);
-                    }
-                }
+                case "4", "attack" -> combat.getMonsterAndFight(player);
                 case "5", "adventure" -> {
-                    System.out.println("Adventure not yet implemented.");
+                    System.out.println("Adventure not yet implemented."); // Break adventure down into categories? fishing/scavenge(riddle)? battle?
                 }
                 case "6", "stats" -> player.stats();
+                case "7" -> riddle.playRiddle(player);
+                case "8", "level up" -> player.useSkillPoint();
                 case "*", "leave", "quit", "exit", "exit game" -> {
                     System.out.println(YELLOW + "Are you sure you want to exit? (yes/no)" + RESET);
                     String confirm = scanner.nextLine().toLowerCase().trim();

@@ -50,10 +50,10 @@ public class Potion {
                 choice = "defence potion";
                 if (player.hasItem(choice)) {
                     player.removeItem(choice, 1);
-                    player.setDefence(player.getDefence() + 1);
+                    player.setDefense(player.getDefense() + 1);
                     drinkPotion(player, choice);
                 }
-                System.out.println("Defence: " + player.getDefence());
+                System.out.println("Defence: " + player.getDefense());
             }
             case "*", "back", "exit", "leave" -> System.out.println("Not thirsty?");
             default -> System.out.println(RED + "Invalid choice!" + RESET);

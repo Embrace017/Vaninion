@@ -5,6 +5,7 @@ import java.util.Map;
 import java.util.Scanner;
 import static Vaninion_Main.ColoredConsole.*;
 
+
 public class Fishing {
     private final Scanner scanner = new Scanner(System.in);
 

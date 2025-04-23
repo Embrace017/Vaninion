@@ -1,14 +1,17 @@
 package Vaninion_Main;
 
+import Vaninion_Main.monsters.Monster;
+
 import java.util.InputMismatchException;
 import java.util.Scanner;
 import java.util.Map;
 
 import static Vaninion_Main.ColoredConsole.*;
+import Vaninion_Main.monsters.Monster;
 
 public class Shop {
 
-    Scanner scanner = new Scanner(System.in);
+    Scanner scanner = new Scanner(System.in);]
 
     public void shop(Player player) {
         System.out.println(YELLOW + "Welcome " + player.getName() + ", to the Rusty Caboose." + RESET);
@@ -21,34 +24,20 @@ public class Shop {
             System.out.println("2. " + PURPLE + "Food" + RESET);
             System.out.println("3. " + PURPLE + "Misc" + RESET);
             System.out.println("4. " + PURPLE + "Info" + RESET);
-            System.out.println("5. " + RED + "Exit Shop" + RESET);
+            System.out.println("5. " + PURPLE + "Sell" + RESET);
+            System.out.println("* " + RED + "Exit Shop" + RESET);
             System.out.print(CYAN + "Enter your choice: " + RESET);
 
             choice = scanner.nextLine().toLowerCase().trim();
 
             switch (choice) {
-                case "1":
-                case "armour":
-                    browseArmour(player);
-                    break;
-                case "2":
-                case "food":
-                    browseFood(player);
-                    break;
-                case "3":
-                case "misc":
-                    browseMisc(player);
-                    break;
-                case "4":
-                case "info":
-                    shopInfo(player);
-                    return;
-                case "5":
-                case "exit shop", "exit", "back", "leave":
-                    System.out.println(YELLOW + "Thanks for visiting the Rusty Caboose!" + RESET);
-                    return;
-                default:
-                    System.out.println(RED + "Invalid category choice." + RESET);
+                case "1", "armour" -> browseArmour(player);
+                case "2", "food" -> browseFood(player);
+                case "3", "misc" -> browseMisc(player);
+                case "4", "info" -> shopInfo(player);
+                case "5", "sell" -> sell();
+                case "*", "exit shop", "exit", "back", "leave" -> System.out.println(YELLOW + "Thanks for visiting the Rusty Caboose!" + RESET);
+                default -> System.out.println(RED + "Invalid category choice." + RESET);
             }
         } while (true);
     }
@@ -196,9 +185,9 @@ public class Shop {
             System.out.println(YELLOW + "Your current cash: $" + player.getMoney() + RESET);
 
             System.out.println("1. " + PURPLE + "Calculator" + RESET + " - $" + GREEN + 2000 + RESET + (player.itemAndCounts.containsKey("calculator") ? " (Owned)" : ""));
-            System.out.println("2. " + PURPLE + "Basic Rod" + RESET + " - $" + GREEN + 10000 + RESET + (player.itemAndCounts.containsKey("basic rod") ? " (Owned)" : ""));
-            System.out.println("3. " + PURPLE + "Basic bait" + RESET + " - $" + GREEN + 100 + RESET + (player.itemAndCounts.getOrDefault("basic bait", 0) > 0 ? " (" + player.itemAndCounts.get("basic bait") + " Owned)" : ""));
-            System.out.println("4. " + PURPLE + "Super bait" + RESET + " - $" + GREEN + 1000 + RESET + (player.itemAndCounts.getOrDefault("super bait", 0) > 0 ? " (" + player.itemAndCounts.get("super bait") + " Owned)" : ""));
+            System.out.println("2. " + PURPLE + "Basic Rod" + RESET + " - $" + GREEN + 1000 + RESET + (player.itemAndCounts.containsKey("basic rod") ? " (Owned)" : ""));
+            System.out.println("3. " + PURPLE + "Basic bait" + RESET + " - $" + GREEN + 50 + RESET + (player.itemAndCounts.getOrDefault("basic bait", 0) > 0 ? " (" + player.itemAndCounts.get("basic bait") + " Owned)" : ""));
+            System.out.println("4. " + PURPLE + "Super bait" + RESET + " - $" + GREEN + 100 + RESET + (player.itemAndCounts.getOrDefault("super bait", 0) > 0 ? " (" + player.itemAndCounts.get("super bait") + " Owned)" : ""));
             System.out.println("5. " + RED + "Back to Shop Categories" + RESET);
             System.out.print(CYAN + "Enter the number of the item you wish to purchase: " + RESET);
 
@@ -210,13 +199,13 @@ public class Shop {
                         buyCalculator(player, 2000);
                         break;
                     case "2":
-                        buyRod(player, 10000);
+                        buyRod(player, 1000);
                         break;
                     case "3":
-                        buyBait(player, "basic bait", 100);
+                        buyBait(player, "basic bait", 500);
                         break;
                     case "4":
-                        buyBait(player, "super bait", 1000);
+                        buyBait(player, "super bait", 100);
                         break;
 
                     case "5", "exit", "back", "leave": // Back
@@ -277,5 +266,8 @@ public class Shop {
             System.out.println(RED + "Invalid input." + RESET);
             scanner.nextLine(); // Consume the invalid input
         }
+    }
+    private void sell() {
+        for (String drop : possibleDrops);
     }
 }

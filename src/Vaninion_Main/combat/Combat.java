@@ -14,6 +14,13 @@ public class Combat {
     Potion potion = new Potion();
 
     // Monster getter
+        public Monster getMonsterAndFight(Player player) {
+            Monster selectedMonster = npc();
+            if (selectedMonster != null) {
+                fight(player, selectedMonster);
+            }
+            return selectedMonster;
+        }
         public Monster npc() {
             while (true) {
                 System.out.println("\nWhat would you like to fight?");
@@ -100,7 +107,7 @@ public class Combat {
 
             // Check if monster died from player's action
             if (!monster.isAlive()) {
-                System.out.println(BLUE + BOLD + "\n========= Combat Ended =========" + RESET);
+                System.out.println(BLUE + BOLD + "\n=================== " + PURPLE + "VICTORY" + BLUE + " ===================" + RESET);
                 System.out.println(GREEN + "\nYou defeated the " +
                         PURPLE + monster.getName() + GREEN + "!" + RESET);
 
@@ -115,10 +122,14 @@ public class Combat {
                         System.out.println(PURPLE + "- " + quantity + "x " + item + RESET);
                     }
                 }
+
                 // Action after monster defeat
+                player.setMoney(player.getMoney() + player.getCharisma() + player.getLevel() * 10);
                 player.gainExperience(monster.getExp() + player.getWisdom());
+
+                // Reset
+                System.out.println(BLUE + BOLD + "\n === Next Battle with next " + monster.getName() + " begins === " + RESET);
                 monster.reset();
-                npc();
             }
 
             // Monster's turn
@@ -128,6 +139,9 @@ public class Combat {
                 return;
             }
         }
-        monster.reset();
+        if (!monster.isAlive()) {
+            monster.reset();
+            npc();
+        }
     }
     }

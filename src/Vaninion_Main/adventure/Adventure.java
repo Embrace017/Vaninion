@@ -1,4 +1,4 @@
-package Vaninion_Main;
+package Vaninion_Main.adventure;
 
 public class Adventure {
 

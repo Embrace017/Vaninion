@@ -45,7 +45,7 @@ public abstract class Monster {
         this.health = this.maxHealth;
     }
     public void attack(Player player) {
-        int damage = Math.max(1, this.strength - player.getDefence());
+        int damage = Math.max(1, this.strength - player.getDefense());
         player.setHealth(player.getHealth() - damage);
         System.out.println(" ");
         System.out.println(this.name + " attacks " + player.getName() + "for " + damage + " damage!");
