@@ -11,7 +11,7 @@ import Vaninion_Main.monsters.Monster;
 
 public class Shop {
 
-    Scanner scanner = new Scanner(System.in);]
+    Scanner scanner = new Scanner(System.in);
 
     public void shop(Player player) {
         System.out.println(YELLOW + "Welcome " + player.getName() + ", to the Rusty Caboose." + RESET);
@@ -268,6 +268,6 @@ public class Shop {
         }
     }
     private void sell() {
-        for (String drop : possibleDrops);
+        //for (String drop : possibleDrops);
     }
 }

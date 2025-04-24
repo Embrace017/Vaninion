@@ -13,12 +13,21 @@ public class Player {
     private int experience;
     private int skillPoints;
     private int health;
-    //private int maxHealth;
+    private int maxHealth;
     private int mana;
+    private int maxMana;
     private int strength;
+    private int maxStrength;
     private int defense;
+    private int maxDefense;
     private int wisdom;
     private int charisma;
+
+    // Skill stats
+    private int fishingLevel;
+    private int miningLevel;
+
+    // Map for seperate resources inv?
     protected Map<String, Integer> itemAndCounts;  // Changed to protected for subclass access
     private Random random = new Random();
     private Riddle riddleGame = new Riddle();
@@ -26,22 +35,27 @@ public class Player {
 
     public Player(String name) {
         this.name = name;
-        this.money = 1000000;
+        this.money = 100;
         this.level = 1;
         this.experience = 0;
         this.skillPoints = 0;
         this.health = 100;
-        //this.maxHealth = health;
+        this.maxHealth = health;
         this.mana = 50;
+        this.maxMana = mana;
         this.strength = 1;
+        this.maxStrength = strength;
         this.defense = 1;
+        this.maxDefense = defense;
         this.wisdom = 1;
         this.charisma = 1;
+        this.miningLevel = 1;
+        this.fishingLevel = 1;
         this.itemAndCounts = new HashMap<>();  // Initialize here in parent class
     }
 
-    // RANDOM NUMBER GEN
-    public String getRandomItem(Map<String, Double> itemMap) {
+    // RANDOM NUMBER GEN maybe move to items?
+    public String mapRng(Map<String, Double> itemMap) {
         double totalWeight = itemMap.values().stream().mapToDouble(d -> d).sum();
         double random = Math.random() * totalWeight;
         double cumulative = 0.0;
@@ -61,20 +75,32 @@ public class Player {
     public String getName() { return name; }
     public int getMoney() { return money; }
     public void setMoney(int money) { this.money = money; }
+    //HP
     public int getHealth() { return health; }
     public void setHealth(int health) { this.health = health; }
-    //public int getMaxHealth() { return maxHealth; }
-    //public void setMaxHealth(int maxHealth) { this.maxHealth = maxHealth; }
+    public int getMaxHealth() { return maxHealth; }
+    public void setMaxHealth(int maxHealth) { this.maxHealth = maxHealth; }
+    //Mana
     public int getMana() { return mana; }
     public void setMana(int mana) { this.mana = mana; }
+    public int getMaxMana() { return maxMana; }
+    public void setMaxMana(int maxMana) { this.maxMana = maxMana; }
+    //Strength
     public int getStrength() { return strength; }
     public void setStrength(int strength) { this.strength = strength; }
+    public int getMaxStrength() { return maxStrength; }
+    public void setMaxStrength(int maxStrength) { this.maxStrength = maxStrength; }
+    //Defense
     public int getDefense() { return defense; }
     public void setDefense(int defence) { this.defense = defence; }
+    public int getMaxDefense() { return maxDefense; }
+    public void setMaxDefense(int maxDefence) { this.maxDefense = maxDefence; }
+    //Wisdom
     public int getWisdom() { return wisdom; }
     public void setWisdom(int wisdom) { this.wisdom = wisdom; }
     public int getCharisma() { return charisma; }
     public void setCharisma(int charisma) { this.charisma = charisma; }
+    //Levels
     public int getLevel() { return level; }
     public void setLevel(int level) { this.level = level; }
     public int getExperience() { return experience; }
@@ -150,7 +176,7 @@ public class Player {
         while (getExperience() >= 100 * getLevel() / 2) {
             setSkillPoints(getSkillPoints() + 1);
             setLevel(getLevel() + 1);
-            setExperience(0);
+            setExperience(getExperience() - (100 * getLevel() / 2)); //hopefully only decreases current level exp and not total
             System.out.println(GREEN + "You gained a level!" + RESET);
             System.out.println(GREEN + "Your new level is " + getLevel() + "!" + RESET);
         }
@@ -174,27 +200,29 @@ public class Player {
 
             switch (choice) {
                 case "1" -> {
-                    setHealth(getHealth() + 10); // Upgrade health by 10
-                    System.out.println("Your Health has increased to " + getHealth() + "!");
+                    setMaxHealth(getMaxHealth() + 10);
+                    System.out.println("Your Health has increased to " + getMaxHealth() + "!");
                 }
                 case "2" -> {
-                    setMana(getMana() + 10); // Upgrade mana by 5
-                    System.out.println("Your Mana has increased to " + getMana() + "!");
+                    setMaxMana(getMaxMana() + 10);
+                    System.out.println("Your Mana has increased to " + getMaxMana() + "!");
                 }
                 case "3" -> {
-                    setStrength(getStrength() + 1); // Upgrade strength by 2
-                    System.out.println("Your Strength has increased to " + getStrength() + "!");
+                    setMaxStrength(getMaxStrength() + 1);
+                    setStrength(getMaxStrength());
+                    System.out.println("Your Strength has increased to " + getMaxStrength() + "!");
                 }
                 case "4" -> {
-                    setDefense(getDefense() + 1); // Upgrade defense by 2
-                    System.out.println("Your Defense has increased to " + getDefense() + "!");
+                    setMaxDefense(getMaxDefense() + 1);
+
+                    System.out.println("Your Defense has increased to " + getMaxDefense() + "!");
                 }
                 case "5" -> {
-                    setWisdom(getWisdom() + 1); // Upgrade wisdom by 2
+                    setWisdom(getWisdom() + 1);
                     System.out.println("Your Wisdom has increased to " + getWisdom() + "!");
                 }
                 case "6" -> {
-                    setCharisma(getCharisma() + 1); // Upgrade charisma by 2
+                    setCharisma(getCharisma() + 1);
                     System.out.println("Your Charisma has increased to " + getCharisma() + "!");
                 }
                 default -> {
@@ -211,7 +239,7 @@ public class Player {
             System.out.println("\n" + PURPLE + getName() + " you don't have any skill points!" + RESET);
         }
         if (getSkillPoints() > 0) {
-                useSkillPoint();
+            useSkillPoint();
         }
     }
 

@@ -19,6 +19,7 @@ public class Combat {
             if (selectedMonster != null) {
                 fight(player, selectedMonster);
             }
+            potion.potionStatReset(player);
             return selectedMonster;
         }
         public Monster npc() {

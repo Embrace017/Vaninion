@@ -86,7 +86,7 @@ public class Area {
             areaRates.put("common", 30.0);         // 30.0% (1 in 3.33)
             areaRates.put("miss", 63.0);           // leftovers
 
-            String areaRate = player.getRandomItem(areaRates);
+            String areaRate = player.mapRng(areaRates);
 
             switch (areaRate) {
                 case "monster" -> System.out.println("fight");
