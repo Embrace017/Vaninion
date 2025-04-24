@@ -126,7 +126,7 @@ public class Player {
 
     // Start inventory management methods
     public void displayInventory() {
-        System.out.println(YELLOW + "\nWhat would you like to view?" + RESET);
+        System.out.println(YELLOW + "\nWhat would you like to view? " + RESET + "\n(You can access either from, the " + BLUE + "main menu " + RESET + "with 'res' or 'reg')");
         System.out.println("1. " + PURPLE + "Regular Inventory" + RESET);
         System.out.println("2. " + PURPLE + "Resources" + RESET);
         System.out.println("3. " + PURPLE + "Both" + RESET);
@@ -135,8 +135,8 @@ public class Player {
         String choice = scanner.nextLine().toLowerCase().trim();
 
         switch (choice) {
-            case "1", "regular", "inventory" -> displayRegularInventory();
-            case "2", "resources" -> displayResourceInventory();
+            case "1", "regular" -> displayRegularInventory();
+            case "2", "resources", "resource" -> displayResourceInventory();
             case "3", "both" -> {
                 displayRegularInventory();
                 displayResourceInventory();
@@ -146,7 +146,7 @@ public class Player {
         }
     }
 
-    private void displayRegularInventory() {
+    public void displayRegularInventory() {
         if (inventory.isEmpty()) {
             System.out.println(RED + "Your regular inventory is empty!" + RESET);
             return;
@@ -161,10 +161,10 @@ public class Player {
             int count = item.getValue();
             System.out.printf(PURPLE + "%-20s" + GREEN + "x%d" + RESET + "%n", itemName, count);
         }
-        System.out.println(YELLOW + "======================\n" + RESET);
+        System.out.println(YELLOW + "=========================\n" + RESET);
     }
 
-    private void displayResourceInventory() {
+    public void displayResourceInventory() {
         if (resourceInventory.isEmpty()) {
             System.out.println(RED + "Your resource inventory is empty!" + RESET);
             return;
@@ -179,7 +179,7 @@ public class Player {
             int count = resource.getValue();
             System.out.printf(PURPLE + "%-20s" + GREEN + "x%d" + RESET + "%n", resourceName, count);
         }
-        System.out.println(YELLOW + "======================\n" + RESET);
+        System.out.println(YELLOW + "=========================\n" + RESET);
     }
 
     public void addItem(String item, int count) {
@@ -332,13 +332,17 @@ public class Player {
     }
 
     public void attack(Monster target) {
-        int number = random.nextInt(this.getStrength() * 10);
-        int damage = Math.max(1, number + this.getStrength() - target.getDefence());
+        int number = random.nextInt(this.getStrength() + this.getLevel() + 1);
+        int damage = number + this.getStrength() - target.getDefence();
         target.setHealth(target.getHealth() - damage);
         // Player damage message
         System.out.println(" ");
         System.out.println(BOLD + BLUE + "\n========= Combat Continued =========" + RESET);
         System.out.println(this.getName() + " attacks " + target.getName() + " for " + damage + " damage!");
+    }
+
+    public Map<String, Integer> getInventory() {
+        return (Map<String, Integer>) (Object) inventory;
     }
 }
 

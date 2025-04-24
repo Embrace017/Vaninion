@@ -134,7 +134,7 @@ public class Combat {
                 }
 
                 // Action after monster defeat
-                player.setMoney(player.getMoney() + player.getCharisma() + player.getWisdom() * 10);
+                player.setMoney(player.getMoney() + player.getCharisma() + player.getWisdom());
                 player.gainExperience(monster.getExp() + player.getWisdom());
 
                 // Reset

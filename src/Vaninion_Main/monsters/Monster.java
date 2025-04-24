@@ -1,7 +1,10 @@
 package Vaninion_Main.monsters;
 import Vaninion_Main.Player;
+import Vaninion_Main.Shop;
+
 import java.util.*;
 import static Vaninion_Main.ColoredConsole.*;
+import static Vaninion_Main.Shop.shopItems;
 
 public abstract class Monster {
     private String name;
@@ -12,6 +15,7 @@ public abstract class Monster {
     private int strength;
     private Map<String, Double> possibleDrops;
     private Random random;
+    Shop shop = new Shop();
 
     protected Monster(String name, int exp, int health, int defence, int strength) {
         this.name = name;
@@ -26,8 +30,10 @@ public abstract class Monster {
 
 
     // Add drops system
-    protected void addPossibleDrop(String item, double dropRate) {
+    protected void addPossibleDrop(String item, double dropRate, int price) {
         possibleDrops.put(item, dropRate);
+        if (!shopItems.containsKey(item)) // Stop price overrides
+            shopItems.put(item, price);
     }
 
     public Map<String, Integer> generateDrops() {

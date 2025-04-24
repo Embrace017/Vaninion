@@ -2,10 +2,7 @@ package Vaninion_Main;
 
 import Vaninion_Main.monsters.Monster;
 
-import java.util.HashMap;
-import java.util.InputMismatchException;
-import java.util.Scanner;
-import java.util.Map;
+import java.util.*;
 
 import static Vaninion_Main.ColoredConsole.*;
 import Vaninion_Main.monsters.Monster;
@@ -13,11 +10,10 @@ import Vaninion_Main.monsters.Monster;
 public class Shop {
 
     Scanner scanner = new Scanner(System.in);
-    private Map<String, Integer> shopItems = new HashMap<>();
+    public static Map<String, Integer> shopItems = new HashMap<>();
 
     public void shop(Player player) {
 
-        initializeShopItems();
         Map<String, Integer> shopItems = new HashMap<>();
         System.out.println(YELLOW + "Welcome " + player.getName() + ", to the Rusty Caboose." + RESET);
 
@@ -48,15 +44,6 @@ public class Shop {
                 default -> System.out.println(RED + "Invalid category choice." + RESET);
             }
         } while (true);
-    }
-    private void initializeShopItems() { // Shop sell items and prices only shows if you have item
-        // Add base prices for common drops
-        shopItems.put("gold coin", 100);
-        shopItems.put("goblin ear", 5);
-        shopItems.put("rusty dagger", 10);
-        shopItems.put("bone", 10);
-        shopItems.put("skull", 20);
-        // Add more items as needed
     }
 
 
@@ -307,9 +294,12 @@ public class Shop {
                 return;
             }
 
-            System.out.println("\n" + YELLOW + "Enter item name to sell (or 'back' to exit):" + RESET);
+            System.out.println("\n" + YELLOW + "Enter item name or 'sell all' (or 'back' to exit):" + RESET);
             String choice = scanner.nextLine().toLowerCase().trim();
-
+            if (choice.equals("sell all")) {
+                sellAll(player);
+                return;
+            }
             if (choice.equals("back") || choice.equals("exit")) {
                 return;
             }
@@ -335,4 +325,35 @@ public class Shop {
             }
         }
     }
+    public void sellAll(Player player) {
+        int totalSale = 0;
+        List<String> itemsToRemove = new ArrayList<>();  // Track items to remove after iteration
+
+        // Go through player's inventory
+        for (Map.Entry<String, Integer> entry : player.getInventory().entrySet()) {
+            String item = entry.getKey();
+            int quantity = entry.getValue();
+
+            if (shopItems.containsKey(item)) {  // Check if shop buys this item
+                int pricePerItem = shopItems.get(item);
+                int goldForItems = pricePerItem * quantity;
+                totalSale += goldForItems;
+                itemsToRemove.add(item);
+            }
+        }
+
+        // Remove sold items and give gold to player
+        for (String item : itemsToRemove) {
+            player.getInventory().remove(item);
+        }
+        player.setMoney(player.getMoney() + totalSale);
+
+        // Inform player
+        if (totalSale > 0) {
+            System.out.println(RED + "Sold all items for $"  + GREEN + totalSale + RESET);
+        } else {
+            System.out.println("No items to sell!");
+        }
+    }
+
 }

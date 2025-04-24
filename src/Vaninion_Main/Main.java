@@ -53,13 +53,8 @@ public class Main {
 
         player.addItem("basic rod", 1);
         player.addItem("basic bait", 100);
-        player.addItem("health potion", 10);
-        player.addItem("mana potion", 10);
-        player.addItem("strength potion", 10);
-        player.addItem("defence potion", 10);
-        player.addItem("copper ore", 100);
-        player.addItem("raw common fish", 10);
-        player.addItem("gold coin", 100);
+        player.addItem("health potion", 1);
+
         player.setSkillPoints(3);
 
 
@@ -99,7 +94,7 @@ public class Main {
                     System.out.println("Adventure not yet implemented."); // Break adventure down into categories? fishing/scavenge(riddle)? battle?
                 }
                 case "6", "stats" -> player.stats();
-                case "7" -> riddle.playRiddle(player);
+                case "7", "riddle" -> riddle.playRiddle(player);
                 case "8", "level up" -> player.useSkillPoint();
                 case "9", "dojo" -> new Dojo().enterDojo(player);
                 case "*", "leave", "quit", "exit", "exit game" -> {
@@ -110,6 +105,9 @@ public class Main {
                         running = false;
                     }
                 }
+                // Extras
+                case "regular", "reg" -> player.displayRegularInventory();
+                case "resource", "res" -> player.displayResourceInventory();
                 default -> {
                     System.out.println(RED + "Invalid choice! Please try again." + RESET);
 
