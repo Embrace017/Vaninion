@@ -52,7 +52,7 @@ public class Main {
         // MUST REMOVE @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
         player.addItem("basic rod", 1);
-        player.addItem("basic bait", 100);
+        player.addItem("gold coin", 10);
         player.addItem("health potion", 1);
 
         player.setSkillPoints(3);

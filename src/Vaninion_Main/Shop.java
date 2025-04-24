@@ -350,7 +350,7 @@ public class Shop {
 
         // Inform player
         if (totalSale > 0) {
-            System.out.println(RED + "Sold all items for $"  + GREEN + totalSale + RESET);
+            System.out.println(RED + "Sold all items for " + RESET + "$"  + GREEN + totalSale + RESET);
         } else {
             System.out.println("No items to sell!");
         }

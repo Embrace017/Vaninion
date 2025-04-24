@@ -31,7 +31,7 @@ public class Riddle {
         answers.add("sponge");
 
         riddles.add("What question can you never answer yes to?");
-        answers.add("are you asleep yet");
+        answers.add("are you asleep");
 
         riddles.add("What has to be broken before you can use it?");
         answers.add("egg");
@@ -123,6 +123,17 @@ public class Riddle {
             System.out.println("No riddles available right now.");
             return true; // Consider what should happen if no riddles
         }
+        try {
+
+            if (player.inventory.get("gold coin") < 10) {
+                System.out.println("You need 10 gold coins to attempt this riddle.");
+                return false;
+            }
+        }catch (Exception e){
+            System.out.println("You need 10 gold coins to attempt this riddle.");
+            return false;
+        }
+
 
         int randomIndex = random.nextInt(riddles.size());
         String currentRiddle = riddles.get(randomIndex);
@@ -140,13 +151,16 @@ public class Riddle {
             player.setWisdom(player.getWisdom() + 10);
         }
         if (playerAnswer.equals(correctAnswer.toLowerCase())) {
-            System.out.println("Correct! You solved the riddle. Wisdom increased!");
+            System.out.println(GREEN + "Correct! You solved the riddle.\n Wisdom increased!\n 10 Gold coins removed." + RESET);
             player.setWisdom(player.getWisdom() + 1);
+            player.removeItem("gold coin", 10);
             riddles.remove(randomIndex);
             answers.remove(randomIndex);
             return true; // Player answered correctly
         } else {
             System.out.println("Incorrect.");
+            player.removeItem("gold coin", 1);
+            System.out.println(RED + "One gold coin removed. Better luck next time.");
             return false; // Player answered incorrectly
         }
     }

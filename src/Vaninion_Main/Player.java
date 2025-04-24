@@ -333,12 +333,12 @@ public class Player {
 
     public void attack(Monster target) {
         int number = random.nextInt(this.getStrength() + this.getLevel() + 1);
-        int damage = number + this.getStrength() - target.getDefence();
+        int damage = Math.max(0, number - target.getDefence());
         target.setHealth(target.getHealth() - damage);
         // Player damage message
         System.out.println(" ");
         System.out.println(BOLD + BLUE + "\n========= Combat Continued =========" + RESET);
-        System.out.println(this.getName() + " attacks " + target.getName() + " for " + damage + " damage!");
+        System.out.println(GREEN + BOLD + this.getName() + " attacks " + target.getName() + " for " + damage + " damage!");
     }
 
     public Map<String, Integer> getInventory() {
