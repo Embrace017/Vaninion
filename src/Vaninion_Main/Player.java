@@ -27,8 +27,10 @@ public class Player {
     private int fishingLevel;
     private int miningLevel;
 
-    // Map for seperate resources inv?
-    protected Map<String, Integer> itemAndCounts;  // Changed to protected for subclass access
+    // Inventories
+    public Map<String, Integer> inventory;
+    public Map<String, Integer> resourceInventory;
+
     private Random random = new Random();
     private Riddle riddleGame = new Riddle();
     Scanner scanner = new Scanner(System.in);
@@ -51,7 +53,8 @@ public class Player {
         this.charisma = 1;
         this.miningLevel = 1;
         this.fishingLevel = 1;
-        this.itemAndCounts = new HashMap<>();  // Initialize here in parent class
+        this.inventory = new HashMap<>();
+        this.resourceInventory = new HashMap<>();
     }
 
     // RANDOM NUMBER GEN maybe move to items?
@@ -107,28 +110,52 @@ public class Player {
     public void setExperience(int experience) { this.experience = experience; }
     public int getSkillPoints() { return skillPoints; }
     public void setSkillPoints(int skillPoints) { this.skillPoints = skillPoints;}
-    //public Map<String, Integer> getItemAndCounts() { return itemAndCounts; }
-    //public void setItemAndCounts(Map<String, Integer> itemAndCounts) { this.itemAndCounts = itemAndCounts; }
+    //public Map<String, Integer> getItemAndCounts() { return inventory; }
+    //public void setItemAndCounts(Map<String, Integer> inventory) { this.inventory = inventory; }
 
     // Add other getters/setters as needed
 
+
+
+
+
+
+
+
+
+
     // Start inventory management methods
-    public void addItem(String item, int count) {
-        itemAndCounts.put(item, itemAndCounts.getOrDefault(item, 0) + count);
-    }
     public void displayInventory() {
-        if (itemAndCounts.isEmpty()) {
-            System.out.println(RED + "Your inventory is empty!" + RESET);
+        System.out.println(YELLOW + "\nWhat would you like to view?" + RESET);
+        System.out.println("1. " + PURPLE + "Regular Inventory" + RESET);
+        System.out.println("2. " + PURPLE + "Resources" + RESET);
+        System.out.println("3. " + PURPLE + "Both" + RESET);
+        System.out.println("4. " + RED + "Back" + RESET);
+
+        String choice = scanner.nextLine().toLowerCase().trim();
+
+        switch (choice) {
+            case "1", "regular", "inventory" -> displayRegularInventory();
+            case "2", "resources" -> displayResourceInventory();
+            case "3", "both" -> {
+                displayRegularInventory();
+                displayResourceInventory();
+            }
+            case "4", "back" -> { return; }
+            default -> System.out.println(RED + "Invalid choice!" + RESET);
+        }
+    }
+
+    private void displayRegularInventory() {
+        if (inventory.isEmpty()) {
+            System.out.println(RED + "Your regular inventory is empty!" + RESET);
             return;
         }
 
-        System.out.println(YELLOW + "\n=== Your Inventory ===" + RESET);
+        System.out.println(YELLOW + "\n=== Regular Inventory ===" + RESET);
+        List<Map.Entry<String, Integer>> sortedItems = new ArrayList<>(inventory.entrySet());
+        sortedItems.sort(Map.Entry.comparingByKey());
 
-        // Convert map entries to a list and sort it
-        List<Map.Entry<String, Integer>> sortedItems = new ArrayList<>(itemAndCounts.entrySet());
-        sortedItems.sort(Map.Entry.comparingByKey()); // Sort alphabetically by item name
-
-        // Display sorted items
         for (Map.Entry<String, Integer> item : sortedItems) {
             String itemName = ColoredConsole.capitalizeWords(item.getKey());
             int count = item.getValue();
@@ -136,26 +163,87 @@ public class Player {
         }
         System.out.println(YELLOW + "======================\n" + RESET);
     }
+
+    private void displayResourceInventory() {
+        if (resourceInventory.isEmpty()) {
+            System.out.println(RED + "Your resource inventory is empty!" + RESET);
+            return;
+        }
+
+        System.out.println(YELLOW + "\n=== Resource Inventory ===" + RESET);
+        List<Map.Entry<String, Integer>> sortedResources = new ArrayList<>(resourceInventory.entrySet());
+        sortedResources.sort(Map.Entry.comparingByKey());
+
+        for (Map.Entry<String, Integer> resource : sortedResources) {
+            String resourceName = ColoredConsole.capitalizeWords(resource.getKey());
+            int count = resource.getValue();
+            System.out.printf(PURPLE + "%-20s" + GREEN + "x%d" + RESET + "%n", resourceName, count);
+        }
+        System.out.println(YELLOW + "======================\n" + RESET);
+    }
+
+    public void addItem(String item, int count) {
+        if (isResource(item)) {
+            resourceInventory.put(item, resourceInventory.getOrDefault(item, 0) + count);
+        } else {
+            inventory.put(item, inventory.getOrDefault(item, 0) + count);
+        }
+    }
+
     public boolean removeItem(String item, int count) {
-        int currentCount = itemAndCounts.getOrDefault(item, 0);
+        if (isResource(item)) {
+            return removeFromInventory(resourceInventory, item, count);
+        } else {
+            return removeFromInventory(inventory, item, count);
+        }
+    } // Works together
+    private boolean removeFromInventory(Map<String, Integer> inventory, String item, int count) {
+        int currentCount = inventory.getOrDefault(item, 0);
         if (currentCount >= count) {
             int newCount = currentCount - count;
             if (newCount == 0) {
-                itemAndCounts.remove(item);
+                inventory.remove(item);
             } else {
-                itemAndCounts.put(item, newCount);
+                inventory.put(item, newCount);
             }
             return true;
         }
         return false;
-    }
+    } // Works together
+
     public boolean hasItem(String item) {
-        return itemAndCounts.containsKey(item);
+        if (isResource(item)) {
+            return resourceInventory.containsKey(item);
+        }
+        return inventory.containsKey(item);
     }
+
     public int getItemCount(String item) {
-        return itemAndCounts.getOrDefault(item, 0);
+        if (isResource(item)) {
+            return resourceInventory.getOrDefault(item, 0);
+        }
+        return inventory.getOrDefault(item, 0);
+    }
+
+    private boolean isResource(String item) {
+        return item.contains("ore") || // Mining
+                item.contains("bar") ||
+                item.contains("stone") ||
+                item.contains("coal") ||
+                item.contains("crystal") ||
+                item.contains("diamond") ||
+                item.contains("raw") || // Cooking
+                item.contains("cooked") ||
+                // item.contains("") ||
+                item.contains("wood");
+
     }
     // End inventory management methods
+
+
+
+
+
 
     // Expierience management methods
     public void stats() {

@@ -4,10 +4,7 @@ import java.util.Scanner;
 import Vaninion_Main.Player;
 import static Vaninion_Main.ColoredConsole.*;
 
-//edited 4/23
-
-// Add  potion.potionStatReset(player); before return; in combat.getandfight()
-// Maybe add stat drain too?
+// Maybe add stat drain too? end of fight or fights?
 
 public class Potion {
     private final Scanner scanner = new Scanner(System.in);
@@ -22,7 +19,7 @@ public class Potion {
         boolean playerTurnEnded = false;
 
         System.out.println(YELLOW + "\nPotion effects reset after battle" + RESET);
-        System.out.println(YELLOW + "\nWhat would you like to use?" + RESET);
+        System.out.println(YELLOW + "\nWhat would you like to drink?" + RESET);
         System.out.println("1. " + PURPLE + "Health Potion" + RESET);
         System.out.println("2. " + PURPLE + "Mana Potion" + RESET);
         System.out.println("3. " + PURPLE + "Strength Potion" + RESET);
@@ -55,7 +52,7 @@ public class Potion {
                 choice = "strength potion";
                 if (player.hasItem(choice) && !strengthPotion) {
                     player.removeItem(choice, 1);
-                    player.setStrength(Math.max(1, player.getStrength() + player.getStrength() / 2));
+                    player.setStrength(Math.max(player.getStrength() + 1, player.getStrength() + player.getStrength() / 2));
                     drinkPotion(player, choice);
                     strengthPotion = true;
                 }
@@ -65,7 +62,7 @@ public class Potion {
                 choice = "defence potion";
                 if (player.hasItem(choice) && !defensePotion) {
                     player.removeItem(choice, 1);
-                    player.setDefense(Math.max(1, player.getDefense() + player.getDefense() / 2));
+                    player.setDefense(Math.max(player.getDefense() + 1, player.getDefense() + player.getDefense() / 2));
                     drinkPotion(player, choice);
                     defensePotion = true;
                 }

@@ -15,9 +15,18 @@ public class Combat {
 
     // Monster getter
         public Monster getMonsterAndFight(Player player) {
+            if (player.getHealth() <=1) {
+                System.out.println(RED + "You are far too weak to fight,\n" +
+                        " perhaps you should spend the night at the Dojo."+ RESET);
+            }
             Monster selectedMonster = npc();
             if (selectedMonster != null) {
                 fight(player, selectedMonster);
+            }
+            if (player.getHealth() < 1) {
+            player.setHealth(1);
+                System.out.println(BOLD + RED + UNDERLINE + "\nYou have narrowly escaped certain death, skill point deducted." + RESET);
+                player.setSkillPoints(player.getSkillPoints() - 1);
             }
             potion.potionStatReset(player);
             return selectedMonster;
@@ -125,7 +134,7 @@ public class Combat {
                 }
 
                 // Action after monster defeat
-                player.setMoney(player.getMoney() + player.getCharisma() + player.getLevel() * 10);
+                player.setMoney(player.getMoney() + player.getCharisma() + player.getWisdom() * 10);
                 player.gainExperience(monster.getExp() + player.getWisdom());
 
                 // Reset

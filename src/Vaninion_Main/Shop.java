@@ -2,6 +2,7 @@ package Vaninion_Main;
 
 import Vaninion_Main.monsters.Monster;
 
+import java.util.HashMap;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 import java.util.Map;
@@ -12,8 +13,12 @@ import Vaninion_Main.monsters.Monster;
 public class Shop {
 
     Scanner scanner = new Scanner(System.in);
+    private Map<String, Integer> shopItems = new HashMap<>();
 
     public void shop(Player player) {
+
+        initializeShopItems();
+        Map<String, Integer> shopItems = new HashMap<>();
         System.out.println(YELLOW + "Welcome " + player.getName() + ", to the Rusty Caboose." + RESET);
 
         String choice;
@@ -35,12 +40,25 @@ public class Shop {
                 case "2", "food" -> browseFood(player);
                 case "3", "misc" -> browseMisc(player);
                 case "4", "info" -> shopInfo(player);
-                case "5", "sell" -> sell();
-                case "*", "exit shop", "exit", "back", "leave" -> System.out.println(YELLOW + "Thanks for visiting the Rusty Caboose!" + RESET);
+                case "5", "sell" -> sell(player);
+                case "*", "exit shop", "exit", "back", "leave" -> {
+                    System.out.println(YELLOW + "Thanks for visiting the Rusty Caboose!" + RESET);
+                    return;
+                }
                 default -> System.out.println(RED + "Invalid category choice." + RESET);
             }
         } while (true);
     }
+    private void initializeShopItems() { // Shop sell items and prices only shows if you have item
+        // Add base prices for common drops
+        shopItems.put("gold coin", 100);
+        shopItems.put("goblin ear", 5);
+        shopItems.put("rusty dagger", 10);
+        shopItems.put("bone", 10);
+        shopItems.put("skull", 20);
+        // Add more items as needed
+    }
+
 
     private void shopInfo(Player player) {
         System.out.println(YELLOW + "What would you like to know?" + RESET);
@@ -54,11 +72,11 @@ public class Shop {
         while (true) {
             System.out.println(YELLOW + "Your current cash: $" + player.getMoney() + RESET);
 
-            System.out.println("1. " + PURPLE + "Steel Helmet" + RESET + " - $" + GREEN + 300 + RESET + (player.itemAndCounts.getOrDefault("steel helmet", 0) > 0 ? " (" + player.itemAndCounts.get("steel helmet") + " Owned)" : ""));
-            System.out.println("2. " + PURPLE + "Steel Platebody" + RESET + " - $" + GREEN + 800 + RESET + (player.itemAndCounts.getOrDefault("steel platebody", 0) > 0 ? " (" + player.itemAndCounts.get("steel platebody") + " Owned)" : ""));
-            System.out.println("3. " + PURPLE + "Steel Platelegs" + RESET + " - $" + GREEN + 700 + RESET + (player.itemAndCounts.getOrDefault("steel platelegs", 0) > 0 ? " (" + player.itemAndCounts.get("steel platelegs") + " Owned)" : ""));
-            System.out.println("4. " + PURPLE + "Steel Shield" + RESET + " - $" + GREEN + 400 + RESET + (player.itemAndCounts.getOrDefault("steel shield", 0) > 0 ? " (" + player.itemAndCounts.get("steel shield") + " Owned)" : ""));
-            System.out.println("5. " + PURPLE + "Steel Long Sword" + RESET + " - $" + GREEN + 600 + RESET + (player.itemAndCounts.getOrDefault("steel long sword", 0) > 0 ? " (" + player.itemAndCounts.get("steel long sword") + " Owned)" : ""));
+            System.out.println("1. " + PURPLE + "Steel Helmet" + RESET + " - $" + GREEN + 300 + RESET + (player.inventory.getOrDefault("steel helmet", 0) > 0 ? " (" + player.inventory.get("steel helmet") + " Owned)" : ""));
+            System.out.println("2. " + PURPLE + "Steel Platebody" + RESET + " - $" + GREEN + 800 + RESET + (player.inventory.getOrDefault("steel platebody", 0) > 0 ? " (" + player.inventory.get("steel platebody") + " Owned)" : ""));
+            System.out.println("3. " + PURPLE + "Steel Platelegs" + RESET + " - $" + GREEN + 700 + RESET + (player.inventory.getOrDefault("steel platelegs", 0) > 0 ? " (" + player.inventory.get("steel platelegs") + " Owned)" : ""));
+            System.out.println("4. " + PURPLE + "Steel Shield" + RESET + " - $" + GREEN + 400 + RESET + (player.inventory.getOrDefault("steel shield", 0) > 0 ? " (" + player.inventory.get("steel shield") + " Owned)" : ""));
+            System.out.println("5. " + PURPLE + "Steel Long Sword" + RESET + " - $" + GREEN + 600 + RESET + (player.inventory.getOrDefault("steel long sword", 0) > 0 ? " (" + player.inventory.get("steel long sword") + " Owned)" : ""));
             System.out.println("6. " + PURPLE + "Armour Package (Helmet, Body, Legs, Shield, Sword)" + RESET + " - $" + GREEN + 2500 + RESET);
             System.out.println("7. " + RED + "Back to Shop Categories" + RESET);
             System.out.print(CYAN + BOLD + "Enter the " + RESET + "number " + CYAN + BOLD + "of the item you wish to purchase: " + RESET);
@@ -133,8 +151,8 @@ public class Shop {
         System.out.println(YELLOW + "\n--- Food ---" + RESET);
         while (true) {
             System.out.println(YELLOW + "Your current cash: $" + player.getMoney() + RESET);
-            System.out.println("1. " + PURPLE + "Beans" + RESET + " - $" + GREEN + 100 + RESET + (player.itemAndCounts.getOrDefault("beans", 0) > 0 ? " (" + player.itemAndCounts.get("beans") + " Owned)" : ""));
-            System.out.println("2. " + PURPLE + "Tacos" + RESET + " - $" + GREEN + 100 + RESET + (player.itemAndCounts.getOrDefault("tacos", 0) > 0 ? " (" + player.itemAndCounts.get("tacos") + " Owned)" : ""));
+            System.out.println("1. " + PURPLE + "Beans" + RESET + " - $" + GREEN + 100 + RESET + (player.inventory.getOrDefault("beans", 0) > 0 ? " (" + player.inventory.get("beans") + " Owned)" : ""));
+            System.out.println("2. " + PURPLE + "Tacos" + RESET + " - $" + GREEN + 100 + RESET + (player.inventory.getOrDefault("tacos", 0) > 0 ? " (" + player.inventory.get("tacos") + " Owned)" : ""));
             System.out.println("3. " + RED + "Back to Shop Categories" + RESET);
             System.out.print(CYAN + BOLD + "Enter the number of the food you wish to purchase: " + RESET);
 
@@ -184,10 +202,10 @@ public class Shop {
         while (true) {
             System.out.println(YELLOW + "Your current cash: $" + player.getMoney() + RESET);
 
-            System.out.println("1. " + PURPLE + "Calculator" + RESET + " - $" + GREEN + 2000 + RESET + (player.itemAndCounts.containsKey("calculator") ? " (Owned)" : ""));
-            System.out.println("2. " + PURPLE + "Basic Rod" + RESET + " - $" + GREEN + 1000 + RESET + (player.itemAndCounts.containsKey("basic rod") ? " (Owned)" : ""));
-            System.out.println("3. " + PURPLE + "Basic bait" + RESET + " - $" + GREEN + 50 + RESET + (player.itemAndCounts.getOrDefault("basic bait", 0) > 0 ? " (" + player.itemAndCounts.get("basic bait") + " Owned)" : ""));
-            System.out.println("4. " + PURPLE + "Super bait" + RESET + " - $" + GREEN + 100 + RESET + (player.itemAndCounts.getOrDefault("super bait", 0) > 0 ? " (" + player.itemAndCounts.get("super bait") + " Owned)" : ""));
+            System.out.println("1. " + PURPLE + "Calculator" + RESET + " - $" + GREEN + 2000 + RESET + (player.inventory.containsKey("calculator") ? " (Owned)" : ""));
+            System.out.println("2. " + PURPLE + "Basic Rod" + RESET + " - $" + GREEN + 1000 + RESET + (player.inventory.containsKey("basic rod") ? " (Owned)" : ""));
+            System.out.println("3. " + PURPLE + "Basic bait" + RESET + " - $" + GREEN + 50 + RESET + (player.inventory.getOrDefault("basic bait", 0) > 0 ? " (" + player.inventory.get("basic bait") + " Owned)" : ""));
+            System.out.println("4. " + PURPLE + "Super bait" + RESET + " - $" + GREEN + 100 + RESET + (player.inventory.getOrDefault("super bait", 0) > 0 ? " (" + player.inventory.get("super bait") + " Owned)" : ""));
             System.out.println("5. " + RED + "Back to Shop Categories" + RESET);
             System.out.print(CYAN + "Enter the number of the item you wish to purchase: " + RESET);
 
@@ -267,7 +285,54 @@ public class Shop {
             scanner.nextLine(); // Consume the invalid input
         }
     }
-    private void sell() {
-        //for (String drop : possibleDrops);
+    private void sell(Player player) {
+        while (true) {
+            System.out.println(YELLOW + "\n--- Sell Items ---" + RESET);
+            System.out.println("Your current cash: $" + player.getMoney());
+
+            // Show player's inventory with prices
+            boolean hasItems = false;
+            for (Map.Entry<String, Integer> entry : player.inventory.entrySet()) {
+                String item = entry.getKey();
+                int quantity = entry.getValue();
+                if (quantity > 0 && shopItems.containsKey(item)) {
+                    hasItems = true;
+                    int price = shopItems.get(item);
+                    System.out.println(PURPLE + item + RESET + " (x" + quantity + ") - Worth: $" + GREEN + price + RESET + " each");
+                }
+            }
+
+            if (!hasItems) {
+                System.out.println(RED + "You have no items to sell!" + RESET);
+                return;
+            }
+
+            System.out.println("\n" + YELLOW + "Enter item name to sell (or 'back' to exit):" + RESET);
+            String choice = scanner.nextLine().toLowerCase().trim();
+
+            if (choice.equals("back") || choice.equals("exit")) {
+                return;
+            }
+
+            if (player.hasItem(choice) && shopItems.containsKey(choice)) {
+                System.out.println("How many would you like to sell?");
+                try {
+                    int quantity = Integer.parseInt(scanner.nextLine().trim());
+                    if (quantity > 0 && quantity <= player.getItemCount(choice)) {
+                        int price = shopItems.get(choice) * quantity;
+                        player.removeItem(choice, quantity);
+                        player.setMoney(player.getMoney() + price);
+                        System.out.println(GREEN + "Sold " + quantity + " " + choice + " for $" + price +
+                                ". You now have $" + player.getMoney() + RESET);
+                    } else {
+                        System.out.println(RED + "Invalid quantity!" + RESET);
+                    }
+                } catch (NumberFormatException e) {
+                    System.out.println(RED + "Invalid number!" + RESET);
+                }
+            } else {
+                System.out.println(RED + "Invalid item or you don't have any to sell!" + RESET);
+            }
+        }
     }
 }

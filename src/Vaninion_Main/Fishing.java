@@ -61,7 +61,7 @@ public class Fishing {
 
     private void displayFishInventory(Player player) {
         boolean hasFish = false;
-        for (Map.Entry<String, Integer> entry : player.itemAndCounts.entrySet()) {
+        for (Map.Entry<String, Integer> entry : player.inventory.entrySet()) {
             if (isFish(entry.getKey())) {
                 if (!hasFish) {
                     System.out.println(YELLOW + "\n=== Your Fish Collection ===" + RESET);
@@ -223,11 +223,11 @@ public class Fishing {
                 if (itemCaught.equals("legendary rod")) {
                     System.out.println(BOLD + YELLOW + "INCREDIBLE! You found a " + PURPLE +
                             "Legendary Rod" + YELLOW + "!" + RESET);
-                            player.itemAndCounts.put("legendary rod", player.itemAndCounts.get("legendary rod") + 1);
+                            player.inventory.put("legendary rod", player.inventory.get("legendary rod") + 1);
                 } else if (itemCaught.equals("legendary bait")) {
                     System.out.println(BOLD + YELLOW + "Amazing! You found some " + PURPLE +
                             "Legendary Bait" + YELLOW + "!" + RESET);
-                            player.itemAndCounts.put("legendary bait", player.itemAndCounts.get("legendary bait") + 1);
+                            player.inventory.put("legendary bait", player.inventory.get("legendary bait") + 1);
                 } else {
                     System.out.println(GREEN + "You caught a " + PURPLE + itemCaught +
                             GREEN + "!" + RESET);
@@ -287,7 +287,7 @@ public class Fishing {
                 } else if (itemCaught.equals("legendary bait")) {
                     System.out.println(BOLD + YELLOW + "Fortune smiles upon you! You found 10 " +
                             PURPLE + "Legendary Bait" + YELLOW + "!" + RESET);
-                    player.itemAndCounts.put("legendary bait", player.itemAndCounts.get("legendary bait") + 10);
+                    player.inventory.put("legendary bait", player.inventory.get("legendary bait") + 10);
                 } else {
                     System.out.println(BOLD + GREEN + "You caught a " + PURPLE + itemCaught +
                             GREEN + "!" + RESET);

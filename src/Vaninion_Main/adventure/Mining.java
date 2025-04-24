@@ -11,16 +11,17 @@ public class Mining {
         Map<String, Double> ores = new HashMap<>();
         // Common
         ores.put("stone", 20.0);
-        ores.put("iron", 20.0);
+        ores.put("iron ore", 20.0);
         ores.put("coal", 20.0);
         // Uncommon
+        ores.put("copper ore", 10.0);
         ores.put("crystal", 10.0);
-        ores.put("gold", 10.0);
-        ores.put("gorganite", 10.0);
+        ores.put("gold ore", 10.0);
+        ores.put("gorganite ore", 10.0);
         // Rare
         ores.put("diamond", 1.0);
         //Megarare
-        ores.put("vanite", 0.2);
+        ores.put("vaninite ore", 0.2);
 
 
         if (player.hasItem("gold coin")) {

@@ -3,6 +3,7 @@ package Vaninion_Main;
 import Vaninion_Main.adventure.Adventure;
 import Vaninion_Main.adventure.Riddle;
 import Vaninion_Main.combat.Combat;
+import Vaninion_Main.dojo.Dojo;
 import Vaninion_Main.monsters.*;
 
 import java.util.HashMap;
@@ -22,9 +23,10 @@ public class Main {
     private static final Riddle riddle = new Riddle();
 
     public static void main(String[] args) {
-
+        System.out.println(BOLD + BLUE + "~~~ Welcome to Vaninion ~~~" + RESET);
+        System.out.println(GREEN + BOLD + "Best of luck on your adventures!" + RESET);
         // Get player name
-        System.out.println(YELLOW + "Enter your character name: " + RESET);
+        System.out.println(YELLOW + "\nEnter your character name: " + RESET);
         String name = "Ragnorok"; //scanner.nextLine().trim();
 
         // Character selection
@@ -49,12 +51,15 @@ public class Main {
         }
         // MUST REMOVE @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
-        player.itemAndCounts.put("basic rod", 1);
-        player.itemAndCounts.put("basic bait", 100);
-        player.itemAndCounts.put("health potion", 10);
-        player.itemAndCounts.put("mana potion", 10);
-        player.itemAndCounts.put("strength potion", 10);
-        player.itemAndCounts.put("defence potion", 10);
+        player.addItem("basic rod", 1);
+        player.addItem("basic bait", 100);
+        player.addItem("health potion", 10);
+        player.addItem("mana potion", 10);
+        player.addItem("strength potion", 10);
+        player.addItem("defence potion", 10);
+        player.addItem("copper ore", 100);
+        player.addItem("raw common fish", 10);
+        player.addItem("gold coin", 100);
         player.setSkillPoints(3);
 
 
@@ -75,7 +80,10 @@ public class Main {
             System.out.println("6. " + PURPLE + "Stats" + RESET);
             System.out.println("7. " + PURPLE + "Riddle" + RESET);
             System.out.println("8. " + PURPLE + "Level Up" + RESET);
+            System.out.println("9. " + PURPLE + "Dojo" + RESET);
             System.out.println("* " + RED + "Exit Game" + RESET);
+            System.out.println();
+
 
 
             // Game start @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
@@ -93,6 +101,7 @@ public class Main {
                 case "6", "stats" -> player.stats();
                 case "7" -> riddle.playRiddle(player);
                 case "8", "level up" -> player.useSkillPoint();
+                case "9", "dojo" -> new Dojo().enterDojo(player);
                 case "*", "leave", "quit", "exit", "exit game" -> {
                     System.out.println(YELLOW + "Are you sure you want to exit? (yes/no)" + RESET);
                     String confirm = scanner.nextLine().toLowerCase().trim();
