@@ -32,37 +32,44 @@ public class Mining {
 
         String ore = player.mapRng(ores);
         switch (ore) {
-            case "stone" -> mineOre(player, ore, 20, 1);
-            case "iron ore" -> mineOre(player, ore, 15, 1);
-            case "coal" -> mineOre(player, ore, 15, 1);
-            case "crystal" -> mineOre(player, ore, 10, 4);
-            case "gold ore" -> mineOre(player, ore, 10, 4);
-            case "gorganite ore" -> mineOre(player, ore, 10, 4);
-            case "diamond" -> mineOre(player, ore, 5, 10);
-            case "vaninite ore" -> mineOre(player, ore, 1, 20);
+            case "stone", "iron ore", "coal" -> mineOre(player, ore, 10, 2);
+            case "crystal", "gold ore", "gorganite ore" -> mineOre(player, ore, 5, 10);
+            case "diamond" -> mineOre(player, ore, 3, 50);
+            case "vaninite ore" -> mineOre(player, ore, 1, 250);
             default -> {
                 System.out.println("You found 5 gold coins on the ground!");
                 player.addItem("gold coin", 5);
             }
         }
     }
-    public void mineOre(Player player, String ore, int amount, int exp) {
-        int res = Math.max(1, random.nextInt(amount + player.getMiningLevel()));
-        player.setMiningExp(player.getMiningExp() + (res + player.getWisdom()) * exp);
-        System.out.println(GREEN + BOLD + "You spotted " + res + " " + ore + " rocks!" + RESET);
-        player.addItem(ore, res);
-        System.out.println("you now have " + player.getItemCount(ore) + " " + ore + " total" + RESET);
-        System.out.println(GREEN + "You gained " + (res + player.getWisdom()) * exp + " mining experience!" + RESET);
-        System.out.println(GREEN + player.getItemCount("gold coin") + " Gold coins remaining" + RESET);
+    public void mineOre(Player player, String ore, int amount, int expMultplier) {
+        int oreAmount = Math.max(1, random.nextInt(amount + player.getMiningLevel()));
+        int expAmount = (oreAmount + player.getWisdom()) * expMultplier;
+        player.setMiningExp(player.getMiningExp() + expAmount);
+        System.out.println(YELLOW + BOLD + "\n~~~ You spot " + RESET + oreAmount + BOLD + PURPLE + " " + ore + YELLOW + " in a nearby vein! ~~~" + RESET);
+        player.addItem(ore, oreAmount);
+        System.out.println(GREEN + "You gained " + RESET + expAmount + GREEN + " mining experience!" + RESET);
+        System.out.println(GREEN + "Your mining experience is now " + RESET + player.getMiningExp() + "/"+ 500 * player.getMiningLevel());
+        if (player.getMiningExp() >= 500 * player.getMiningLevel() && player.getMiningLevel() < 20) {
+            player.setMiningLevel(player.getMiningLevel() + 1);
+            System.out.println(GREEN + "You gained a mining level!" + RESET);
+            System.out.println(GREEN + "Your mining level is now " + player.getMiningLevel() + RESET);
+            player.setMiningExp(0);
+            if (player.getMiningLevel() == 20) {
+                System.out.println(GREEN + "You have reached the maximum mining level!" + RESET);
+                System.out.println(GREEN + "You are now eligible for the perfect gold ore!" + RESET);
+                mineRareOre(player);
+            }
+        }
+        System.out.println(player.getItemCount("gold coin") + YELLOW + " Gold coins remaining" + RESET);
         // Add math to check levels to maybe roll again?
     }
     public void mineUncommonOre(String ore) {
 
     }
-    public void mineRareOre(String ore) {
-
+    public void mineRareOre(Player player) {
+        System.out.println(GREEN + "You found a rare ore! You can now mine it for extra gold!" + RESET);
+        player.addItem("gold coin", random.nextInt(100) + 50);
     }
-    public void mineMegarareOre(String ore) {
 
-    }
 }

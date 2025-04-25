@@ -13,18 +13,19 @@ import static Vaninion_Main.ColoredConsole.*;
 public class Dojo {
     private final Scanner scanner = new Scanner(System.in);
     Random random = new Random();
-    private final Map<String, String> smeltingRecipes = new HashMap<>();
+    private final Map<String, Map<String, Integer>> smeltingRecipes = new HashMap<>();
     private final Map<String, String> cookingRecipes = new HashMap<>();
     private final Map<String, Map<String, Integer>> smithingRecipes = new HashMap<>(); // Changed to Map<String, Integer> for ingredients
     private boolean furnaceLit = false;
 
     public Dojo() {
         // Initialize smelting recipes with input -> output mappings
-        smeltingRecipes.put("copper ore", "copper bar");
-        smeltingRecipes.put("iron ore", "iron bar");
-        smeltingRecipes.put("gold ore", "gold bar");
-        smeltingRecipes.put("gorganite ore", "gorganite bar");
-        smeltingRecipes.put("vaninite ore", "vaninite bar");
+        smeltingRecipes.put("copper bar", Map.of("copper ore", 3, "coal", 1));
+        smeltingRecipes.put("iron bar", Map.of("iron ore", 3, "coal", 1));
+        smeltingRecipes.put("gold bar", Map.of("gold ore", 3, "coal", 1));
+        smeltingRecipes.put("gorganite bar", Map.of("gorganite ore", 3, "coal", 1));
+        smeltingRecipes.put("vaninite bar", Map.of("vaninite ore", 3, "coal", 1));
+
 
         // Initialize smithing recipes with input (ingredients -> quantity) and output
         smithingRecipes.put("copper wire", Map.of("copper bar", 1));
@@ -83,81 +84,89 @@ public class Dojo {
         System.out.println(GREEN + "Mana: " + player.getMana() + RESET);
     }
 
-    private void smelt (Player player){
-        System.out.println(BLUE + "\n=== Smelting Ores ===" + RESET);
+    private void smelt(Player player) {
+        System.out.println(BLUE + "\n====== Smelting Ores ======" + RESET);
 
-        if (!furnaceLit) {
-            if (player.getItemCount("coal") > 0) {
-                System.out.println(YELLOW + "The furnace is cold. Do you want to add coal to light it? (yes/no)" + RESET);
-                String lightChoice = scanner.nextLine().toLowerCase().trim();
-                if (lightChoice.equals("yes")) {
-                    player.removeItem("coal", 1);
-                    furnaceLit = true;
-                    System.out.println(GREEN + "You add coal to the furnace. It begins to glow." + RESET);
-                } else {
-                    System.out.println(RED + "The furnace remains unlit. You cannot smelt without fuel." + RESET);
-                    return;
-                }
-            } else {
-                System.out.println(RED + "The furnace is cold and you have no coal to light it!" + RESET);
-                return;
-            }
-        }
-
-        System.out.println(GREEN + "(One " + RESET + "bar" + GREEN + " requires three " + RESET + "Ores and one " + RESET + "Coal)" + RESET);
-
-        // Show available ores from recipes that player has
-        boolean hasOres = false;
-        for (String ore : smeltingRecipes.keySet()) {
-            int count = player.getItemCount(ore);  // This will now check resource inventory
-            if (count >= 3) { // Only show ores the player has at least 3 of
-                hasOres = true;
-                System.out.println(PURPLE + ore + RESET + " x" + count + " (can smelt " + count / 3 + ")");
-            }
-        }
-
-        if (!hasOres) {
-            System.out.println(RED + "You don't have enough ores (at least 3) to smelt!" + RESET);
+        if (smeltingRecipes.isEmpty()) {
+            System.out.println(RED + "There are no smelting recipes available." + RESET);
             return;
         }
 
-        System.out.println(YELLOW + "\nWhat would you like to smelt? (type the ore name or 'back')" + RESET);
+        // Show craftable items with available materials
+        boolean canSmeltAnything = false;
+        for (Map.Entry<String, Map<String, Integer>> recipeEntry : smeltingRecipes.entrySet()) {
+            String itemName = recipeEntry.getKey();
+            Map<String, Integer> ingredients = recipeEntry.getValue();
+
+            // Calculate maximum craftable amount
+            int maxCraftable = Integer.MAX_VALUE;
+            for (Map.Entry<String, Integer> ingredient : ingredients.entrySet()) {
+                int available = player.getItemCount(ingredient.getKey());
+                int possibleCrafts = available / ingredient.getValue();
+                maxCraftable = Math.min(maxCraftable, possibleCrafts);
+            }
+
+            if (maxCraftable > 0) {
+                canSmeltAnything = true;
+                System.out.println(PURPLE + itemName + RESET + GREEN + " (Can smelt: " + maxCraftable + ")" + RESET);
+                System.out.print(YELLOW + "  Requires: " + RESET);
+                ingredients.forEach((ing, amount) ->
+                        System.out.print(amount + " " + ing + " (" + player.getItemCount(ing) + " available), "));
+                System.out.println();
+            }
+        }
+
+        if (!canSmeltAnything) {
+            System.out.println(RED + "You don't have enough materials to smelt anything!" + RESET);
+            return;
+        }
+
+        System.out.println(YELLOW + "\nWhat would you like to smelt? (type the bar name or 'back')" + RESET);
         String choice = scanner.nextLine().toLowerCase().trim();
 
         if (choice.equals("back")) return;
 
-        if (player.hasItem(choice) && smeltingRecipes.containsKey(choice)) {
-            System.out.println("How many would you like to smelt (in sets of 3)?");
+        if (smeltingRecipes.containsKey(choice)) {
+            Map<String, Integer> ingredients = smeltingRecipes.get(choice);
+
+            System.out.println("How many would you like to smelt?");
             try {
-                int numSets = Integer.parseInt(scanner.nextLine().trim());
-                if (numSets > 0) {
-                    int requiredOre = numSets * 3;
-                    int requiredCoal = numSets; // 1 coal per bar (which is 1 set of 3 ores)
-                    if (player.getItemCount(choice) >= requiredOre && player.getItemCount("coal") >= requiredCoal) {
-                        player.removeItem(choice, requiredOre);
-                        player.removeItem("coal", requiredCoal);
-                        String barName = smeltingRecipes.get(choice);
-                        player.addItem(barName, numSets); // Output is now based on the number of sets
-                        System.out.println(GREEN + "Successfully smelted " + numSets * 3 + " " + choice + " into " + numSets + " " + barName + " using " + requiredCoal + " coal." + RESET);
-                    } else {
-                        if (player.getItemCount(choice) < requiredOre) {
-                            System.out.println(RED + "Not enough " + choice + " to smelt that many sets!" + RESET);
-                        }
-                        if (player.getItemCount("coal") < requiredCoal) {
-                            System.out.println(RED + "Not enough coal to smelt that many bars!" + RESET);
-                        }
+                int amountToSmelt = Integer.parseInt(scanner.nextLine().trim());
+                if (amountToSmelt <= 0) {
+                    System.out.println(RED + "Please enter a valid positive number." + RESET);
+                    return;
+                }
+
+                boolean canSmelt = true;
+                // Check if player has enough ingredients
+                for (Map.Entry<String, Integer> ingredientEntry : ingredients.entrySet()) {
+                    String ingredientName = ingredientEntry.getKey();
+                    int requiredAmount = ingredientEntry.getValue() * amountToSmelt;
+                    if (player.getItemCount(ingredientName) < requiredAmount) {
+                        System.out.println(RED + "Not enough " + ingredientName + ". You need " + requiredAmount + "." + RESET);
+                        canSmelt = false;
+                        break;
                     }
-                } else {
-                    System.out.println(RED + "Please enter a valid positive number of sets!" + RESET);
+                }
+
+                if (canSmelt) {
+                    // Remove ingredients
+                    for (Map.Entry<String, Integer> ingredientEntry : ingredients.entrySet()) {
+                        String ingredientName = ingredientEntry.getKey();
+                        int requiredAmount = ingredientEntry.getValue() * amountToSmelt;
+                        player.removeItem(ingredientName, requiredAmount);
+                    }
+                    // Add the result
+                    player.addItem(choice, amountToSmelt);
+                    System.out.println(GREEN + "Successfully smelted " + amountToSmelt + " " + choice + "!" + RESET);
                 }
             } catch (NumberFormatException e) {
                 System.out.println(RED + "Please enter a valid number!" + RESET);
             }
         } else {
-            System.out.println(RED + "Invalid ore type or you don't have any!" + RESET);
+            System.out.println(RED + "Invalid item to smelt!" + RESET);
         }
     }
-
 
     private void cook (Player player){
         System.out.println(BLUE + "\n=== Cookable Fish ===" + RESET);
@@ -201,8 +210,43 @@ public class Dojo {
             System.out.println(RED + "Invalid fish type or you don't have any!" + RESET);
         }
     }
-    private void smith (Player player){
+    private void smith(Player player) {
         System.out.println(BLUE + "\n=== Smithable Items ===" + RESET);
+
+        if (smithingRecipes.isEmpty()) {
+            System.out.println(RED + "There are no smithing recipes available." + RESET);
+            return;
+        }
+
+        // Show only items that can be crafted with available materials
+        boolean canCraftAnything = false;
+        for (Map.Entry<String, Map<String, Integer>> recipeEntry : smithingRecipes.entrySet()) {
+            String itemName = recipeEntry.getKey();
+            Map<String, Integer> ingredients = recipeEntry.getValue();
+
+            // Calculate maximum craftable amount
+            int maxCraftable = Integer.MAX_VALUE;
+            for (Map.Entry<String, Integer> ingredient : ingredients.entrySet()) {
+                int available = player.getItemCount(ingredient.getKey());
+                int possibleCrafts = available / ingredient.getValue();
+                maxCraftable = Math.min(maxCraftable, possibleCrafts);
+            }
+
+            if (maxCraftable > 0) {
+                canCraftAnything = true;
+                System.out.println(PURPLE + itemName + RESET + GREEN + " (Can craft: " + maxCraftable + ")" + RESET);
+                System.out.print(YELLOW + "  Requires: " + RESET);
+                ingredients.forEach((ing, amount) ->
+                        System.out.print(amount + " " + ing + " (" + player.getItemCount(ing) + " available), "));
+                System.out.println();
+            }
+        }
+
+        if (!canCraftAnything) {
+            System.out.println(RED + "You don't have enough materials to craft anything!" + RESET);
+            return;
+        }
+
 
         // Show available items to smith
         if (smithingRecipes.isEmpty()) {
