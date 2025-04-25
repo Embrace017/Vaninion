@@ -1,11 +1,10 @@
 package Vaninion_Main;
 
-import Vaninion_Main.monsters.Monster;
-
 import java.util.*;
 
 import static Vaninion_Main.ColoredConsole.*;
-import Vaninion_Main.monsters.Monster;
+
+import Vaninion_Main.player.Player;
 
 public class Shop {
 

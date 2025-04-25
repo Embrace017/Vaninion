@@ -1,55 +1,84 @@
 package Vaninion_Main.combat;
 
-import Vaninion_Main.Player;
+import Vaninion_Main.player.Ork;
+import Vaninion_Main.player.Player;
+import Vaninion_Main.player.Viking;
 import Vaninion_Main.foodAndPotions.Potion;
 import Vaninion_Main.monsters.*;
-import org.w3c.dom.ls.LSOutput;
 
 import java.util.*;
 
 import static Vaninion_Main.ColoredConsole.*;
 
 public class Combat {
+    Random random = new Random();
     private final Scanner scanner = new Scanner(System.in);
     Potion potion = new Potion();
 
     // Monster getter
-        public Monster getMonsterAndFight(Player player) {
-            if (player.getHealth() <=1) {
-                System.out.println(RED + "You are far too weak to fight,\n" +
-                        " perhaps you should spend the night at the Dojo."+ RESET);
-            }
-            Monster selectedMonster = npc();
-            if (selectedMonster != null) {
-                fight(player, selectedMonster);
-            }
-            if (player.getHealth() < 1) {
+    public Monster getMonsterAndFight(Player player) {
+        if (player.getHealth() <= 20) {
+            System.out.println(RED + "You are far too weak to fight,\n" +
+                    " perhaps you should spend the night at the Dojo." + RESET);
+        }
+        Monster selectedMonster = npc();
+        if (selectedMonster != null) {
+            fight(player, selectedMonster);
+        }
+        if (player.getHealth() < 1) {
             player.setHealth(1);
-                System.out.println(BOLD + RED + UNDERLINE + "\nYou have narrowly escaped certain death, skill point deducted." + RESET);
-                player.setSkillPoints(player.getSkillPoints() - 1);
-            }
-            potion.potionStatReset(player);
-            return selectedMonster;
+            System.out.println(BOLD + RED + UNDERLINE + "\nYou have narrowly escaped certain death, skill point deducted." + RESET);
+            player.setSkillPoints(player.getSkillPoints() - 1);
         }
-        public Monster npc() {
-            while (true) {
-                System.out.println("\nWhat would you like to fight?");
-                System.out.println("1. Goblin");
-                System.out.println("2. Skeleton");
-                System.out.println("* " + RED + "Back" + RESET);
+        potion.potionStatReset(player);
+        return selectedMonster;
+    }
 
-                String choice = scanner.nextLine().toLowerCase().trim();
-                return switch (choice) {
-                    case "1", "goblin" -> new Goblin();
-                    case "2", "skeleton" -> new Skeleton();
-                    case "*", "back", "exit", "leave" -> null;
-                    default -> {
-                        System.out.println(RED + "Invalid choice! Please try again." + RESET);
-                        yield null;
-                    }
-                };
-            }
+    public Monster npc() {
+        while (true) {
+            System.out.println(YELLOW + "\nWhat would you like to fight?" + RESET);
+            System.out.println(PURPLE + "1. " + GREEN + "Goblin" + RESET);
+            System.out.println(PURPLE + "2. " + GREEN + "Skeleton" + RESET);
+            System.out.println(PURPLE + "* " + RED + "Back" + RESET);
+
+            String choice = scanner.nextLine().toLowerCase().trim();
+            return switch (choice) {
+                case "1", "goblin" -> new Goblin();
+                case "2", "skeleton" -> new Skeleton();
+                case "*", "back", "exit", "leave" -> null;
+                default -> {
+                    System.out.println(RED + "Invalid choice! Please try again." + RESET);
+                    yield null;
+                }
+            };
         }
+    }
+    public void playerAttack(Player player, Monster target) {
+        int number = random.nextInt(player.getStrength() + player.getLevel() + 1);
+        int damage = Math.max(0, number - target.getDefence());
+        target.setHealth(target.getHealth() - damage);
+
+        // Display base attack
+        System.out.println(BLUE + "╔════════════════ ATTACK ════════════════╗");
+        System.out.println("║ " + GREEN + player.getName() + " attacks " + target.getName() +
+                " for " + damage + " damage!" + BLUE);
+
+        // Handle class-specific bonus effects
+        if (player instanceof Viking) {
+            Viking viking = (Viking) player;
+            if (viking.getBerserkStacks() > 0) {
+                int bonusDamage = viking.getBerserkStacks() * 2;
+                target.setHealth(target.getHealth() - bonusDamage);
+                System.out.println("║ " + PURPLE + "Berserk bonus damage: " + bonusDamage + "!" + BLUE);
+            }
+        } else if (player instanceof Ork) {
+            Ork ork = (Ork) player;
+            // Handle Ork's rage mechanic here
+            ork.increaseRage(10);
+        }
+
+        System.out.println("╚════════════════════════════════════════╝" + RESET);
+    }
 
     public void fight(Player player, Monster monster) {
         if (monster == null) {
@@ -58,58 +87,72 @@ public class Combat {
         }
         monster.reset();
 
-        System.out.println(BOLD + BLUE + "\n========= Combat Started =========" + RESET);
-        System.out.println("You are fighting a " + PURPLE + monster.getName() + RESET);
+        // Combat start banner
+        System.out.println(BLUE + BOLD + "\n╔═══════════════════════════════════════╗");
+        System.out.println("║" + YELLOW + "           COMBAT INITIATED            " + BLUE + "║");
+        System.out.println("╠═══════════════════════════════════════╣");
+        System.out.println("║ " + PURPLE + "Opponent: " + monster.getName() + BLUE);
+        System.out.println("╚═══════════════════════════════════════╝" + RESET);
+
 
         while (monster.isAlive() && player.getHealth() > 0) {
-            // Display current status
-            System.out.println("\n" + PURPLE + BOLD + "~*~\n" + RESET);
-            System.out.println(GREEN + "Your HP: " + player.getHealth() + RESET + " | " + PURPLE + "Your MP: " + player.getMana() + RESET);
-                    System.out.println(RED + monster.getName() + " HP: " + monster.getHealth() + RESET);
-            System.out.println(BOLD + BLUE + "^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^");
+            // Status display
+            System.out.println(BLUE + BOLD + "\n╔═══════════════════════════════════════╗");
+            System.out.println("║" + YELLOW + "               BATTLE                  " + BLUE + "║");
+            System.out.println("╠═══════════════════════════════════════╣");
+            System.out.println("║ " + GREEN + "Your HP: " + player.getHealth() + "/" + player.getMaxHealth() + BLUE);
+            System.out.println("║ " + PURPLE + "Your MP: " + player.getMana() + "/" + player.getMaxMana() + BLUE);
+            System.out.println("║ " + RED + monster.getName() + " HP: " + monster.getHealth() + BLUE);
+            System.out.println("╠═══════════════════════════════════════╣");
+            System.out.println("║" + YELLOW + " Actions:" + BLUE + "                              ║");
+            System.out.println("║ " + PURPLE + "1. Attack" + BLUE + "                             ║");
+            System.out.println("║ " + PURPLE + "2. Special Attack " + GREEN + "(20 MP)" + BLUE + "             ║");
+            System.out.println("║ " + PURPLE + "3. Use Potion" + BLUE + "                         ║");
+            System.out.println("║ " + RED + "4. Flee" + BLUE + "                               ║");
+            System.out.println("╚═══════════════════════════════════════╝" + RESET);
 
-            // Combat options
-            System.out.println(YELLOW + "\nWhat would you like to do?" + RESET);
-            System.out.println("1. " + PURPLE + "Attack" + RESET);
-            System.out.println("2. " + PURPLE + "Special Attack" + GREEN + " (Uses 20 MP)" + RESET);
-            System.out.println("3. " + PURPLE + "Use Potion" + RESET);
-            System.out.println("4. " + RED + "Flee" + RESET);
 
             String choice = scanner.nextLine().toLowerCase().trim();
             boolean playerTurnEnded = false;
 
             switch (choice) {
                 case "1", "attack" -> {
-                    player.attack(monster);
+                    playerAttack(player, monster);
                     playerTurnEnded = true;
                 }
                 case "2", "special" -> {
                     if (player.getMana() >= 20) {
-                        int damage = player.getStrength() * 2;
+                        int damage = player.getStrength() + player.getLevel() + player.getWisdom();
                         monster.setHealth(monster.getHealth() - damage);
                         player.setMana(player.getMana() - 20);
-                        System.out.println(BLUE + BOLD + "\n========= Combat Continued =========" + RESET);
-                        System.out.println(PURPLE + "You used a special attack for " + damage + " damage!" + RESET);
+                        System.out.println(BLUE + "╔═══════════ SPECIAL ATTACK ═══════════╗");
+                        System.out.println("║ " + PURPLE + "Defense ignored! " + BLUE);
+                        System.out.println("║ " + PURPLE + "Damage dealt: " + damage + BLUE);
+                        System.out.println("╚══════════════════════════════════════╝" + RESET);
+
                         playerTurnEnded = true;
                     } else {
-                        System.out.println(" ");
-                        System.out.println(BLUE + BOLD + "\n========= Please Choose again =========" + RESET);
-                        System.out.println(RED + "Not enough MP!" + RESET);
+                        System.out.println(RED + "⚠ Not enough MP! ⚠" + RESET);
                     }
                 }
                 case "3", "potion" -> potion.usePotion(player);
                 case "4", "flee" -> {
-                    if (new Random().nextDouble() < 0.5) { // 50% chance to flee
-                        System.out.println(GREEN + "You successfully fled from combat!" + RESET);
+                    if (new Random().nextDouble() < 0.5) {
+                        System.out.println(GREEN + "\n╔══════════════ ESCAPED ══════════════╗");
+                        System.out.println("║  You successfully fled from combat! ║");
+                        System.out.println("╚═════════════════════════════════════╝" + RESET);
                         return;
                     } else {
-                        System.out.println(BLUE + BOLD + "\n========= Combat Continued =========" + RESET);
-                        System.out.println(RED + "Failed to flee!" + RESET);
+                        System.out.println(RED + "\n╔══════════════ FAILED ═════════════╗");
+                        System.out.println("║      Failed to escape combat!     ║");
+                        System.out.println("╚═══════════════════════════════════╝" + RESET);
                         playerTurnEnded = true;
                     }
                 }
                 default -> System.out.println(RED + "Invalid choice!" + RESET);
             }
+
+            // Rest of your combat logic...
 
             if (!playerTurnEnded) {
                 continue; // Skip monster's turn if player didn't take action
@@ -154,4 +197,5 @@ public class Combat {
             npc();
         }
     }
-    }
+
+}

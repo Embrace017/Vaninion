@@ -1,5 +1,5 @@
 package Vaninion_Main.monsters;
-import Vaninion_Main.Player;
+import Vaninion_Main.player.Player;
 import Vaninion_Main.Shop;
 
 import java.util.*;

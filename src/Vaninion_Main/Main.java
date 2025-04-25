@@ -1,14 +1,16 @@
 package Vaninion_Main;
 
 import Vaninion_Main.adventure.Adventure;
+import Vaninion_Main.adventure.Mining;
 import Vaninion_Main.adventure.Riddle;
 import Vaninion_Main.combat.Combat;
 import Vaninion_Main.dojo.Dojo;
 import Vaninion_Main.monsters.*;
+import Vaninion_Main.player.Human;
+import Vaninion_Main.player.Ork;
+import Vaninion_Main.player.Player;
+import Vaninion_Main.player.Viking;
 
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.Map;
 import java.util.Scanner;
 import static Vaninion_Main.ColoredConsole.*;
 
@@ -16,6 +18,7 @@ import static Vaninion_Main.ColoredConsole.*;
 public class Main {
     private static final Scanner scanner = new Scanner(System.in);
     private static final Shop shop = new Shop();
+    private static final Mining mining = new Mining();
     private static final Fishing fishing = new Fishing();
     private static final Monster goblin = new Goblin();
     private static final Combat combat = new Combat();
@@ -52,11 +55,10 @@ public class Main {
         // MUST REMOVE @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
         player.addItem("basic rod", 1);
-        player.addItem("gold coin", 10);
+        player.addItem("gold coin", 100);
         player.addItem("health potion", 1);
 
         player.setSkillPoints(3);
-
 
         // MUST REMOVE @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
@@ -66,38 +68,53 @@ public class Main {
                 GREEN + "!" + RESET);
         boolean running = true;
         while (running) {
-            System.out.println(YELLOW + "\nWhat would you like to do?" + RESET);
-            System.out.println("1. " + PURPLE + "Shop" + RESET);
-            System.out.println("2. " + PURPLE + "Fishing" + RESET);
-            System.out.println("3. " + PURPLE + "Inventory" + RESET);
-            System.out.println("4. " + PURPLE + "Attack" + RESET);
-            System.out.println("5. " + PURPLE + "Adventure" + RESET);
-            System.out.println("6. " + PURPLE + "Stats" + RESET);
-            System.out.println("7. " + PURPLE + "Riddle" + RESET);
-            System.out.println("8. " + PURPLE + "Level Up" + RESET);
-            System.out.println("9. " + PURPLE + "Dojo" + RESET);
-            System.out.println("* " + RED + "Exit Game" + RESET);
-            System.out.println();
+            // Create a decorative header
+            System.out.println(BLUE + BOLD + "\n╔════════════════════════════════╗");
+            System.out.println("║" + YELLOW + "            MAIN MENU           " + BLUE + "║");
+            System.out.println("╠════════════════════════════════╣" + RESET);
 
+            // Combat & Adventure section
+            System.out.println(BLUE + "║" + PURPLE + " Combat & Adventure:" + BLUE + "            ║");
+            System.out.println("║ " + PURPLE + "1. Attack" + BLUE + "                      ║");
+            System.out.println("║ " + PURPLE + "2. Adventure" + BLUE + "                   ║");
+            System.out.println("║ " + PURPLE + "3. Riddle" + BLUE + "                      ║");
 
+            // Skills section
+            System.out.println("╟────────────────────────────────╢");
+            System.out.println("║" + PURPLE + " Skills & Activities:" + BLUE + "           ║");
+            System.out.println("║ " + PURPLE + "4. Fishing" + BLUE + "                     ║");
+            System.out.println("║ " + PURPLE + "5. Mining" + BLUE + "                      ║");
+            System.out.println("║ " + PURPLE + "6. Dojo" + BLUE + "                        ║");
 
-            // Game start @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+            // Character Management section
+            System.out.println("╟────────────────────────────────╢");
+            System.out.println("║" + PURPLE + " Character Management:" + BLUE + "          ║");
+            System.out.println("║ " + PURPLE + "7. Stats" + BLUE + "                       ║");
+            System.out.println("║ " + PURPLE + "8. Level Up" + BLUE + "                    ║");
+            System.out.println("║ " + PURPLE + "9. Inventory" + BLUE + "                   ║");
+
+            // Shop & Exit section
+            System.out.println("╟────────────────────────────────╢");
+            System.out.println("║ " + PURPLE + "S. Shop" + BLUE + "                        ║");
+            System.out.println("║ " + RED + "E. Exit Game" + BLUE + "                   ║");
+            System.out.println("╚════════════════════════════════╝" + RESET);
+
+            // Quick commands hint
+            System.out.println(CYAN + "Quick commands: 'reg' for regular inventory, 'res' for resources" + RESET);
+
             String choice = scanner.nextLine().toLowerCase().trim();
             switch (choice) {
-
-
-                case "1", "shop" -> shop.shop(player);
-                case "2", "fishing" -> fishing.fish(player);
-                case "3", "inventory", "inv", "i" ->  player.displayInventory();
-                case "4", "attack" -> combat.getMonsterAndFight(player);
-                case "5", "adventure" -> {
-                    System.out.println("Adventure not yet implemented."); // Break adventure down into categories? fishing/scavenge(riddle)? battle?
-                }
-                case "6", "stats" -> player.stats();
-                case "7", "riddle" -> riddle.playRiddle(player);
-                case "8", "level up" -> player.useSkillPoint();
-                case "9", "dojo" -> new Dojo().enterDojo(player);
-                case "*", "leave", "quit", "exit", "exit game" -> {
+                case "1", "attack" -> combat.getMonsterAndFight(player);
+                case "2", "adventure" -> System.out.println("Adventure not yet implemented.");
+                case "3", "riddle" -> riddle.playRiddle(player);
+                case "4", "fishing" -> fishing.fish(player);
+                case "5", "mining", "mine" -> mining.mine(player);
+                case "6", "dojo" -> new Dojo().enterDojo(player);
+                case "7", "stats" -> player.stats();
+                case "8", "level", "level up" -> player.useSkillPoint();
+                case "9", "inventory", "inv", "i" -> player.displayInventory();
+                case "s", "shop" -> shop.shop(player);
+                case "e", "*", "exit", "quit" -> {
                     System.out.println(YELLOW + "Are you sure you want to exit? (yes/no)" + RESET);
                     String confirm = scanner.nextLine().toLowerCase().trim();
                     if (confirm.equals("yes")) {
@@ -105,13 +122,10 @@ public class Main {
                         running = false;
                     }
                 }
-                // Extras
-                case "regular", "reg" -> player.displayRegularInventory();
-                case "resource", "res" -> player.displayResourceInventory();
-                default -> {
-                    System.out.println(RED + "Invalid choice! Please try again." + RESET);
-
-                }
+                // Quick access commands
+                case "reg", "regular" -> player.displayRegularInventory();
+                case "res", "resource" -> player.displayResourceInventory();
+                default -> System.out.println(RED + "Invalid choice! Please try again." + RESET);
             }
         }
     }

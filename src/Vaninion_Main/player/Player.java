@@ -1,10 +1,11 @@
-package Vaninion_Main;
+package Vaninion_Main.player;
+import Vaninion_Main.ColoredConsole;
 import Vaninion_Main.adventure.Riddle;
-import Vaninion_Main.monsters.*;
 
 import java.util.*;
 
 import static Vaninion_Main.ColoredConsole.*;
+//import Vaninion_Main.foodAndPotions.Food;
 
 public class Player {
     private String name;
@@ -23,13 +24,19 @@ public class Player {
     private int wisdom;
     private int charisma;
 
+
     // Skill stats
     private int fishingLevel;
+    private int fishingExp;
+    private int cookingLevel;
+    private int cookingExp;
     private int miningLevel;
+    private int miningExp;
 
     // Inventories
     public Map<String, Integer> inventory;
     public Map<String, Integer> resourceInventory;
+
 
     private Random random = new Random();
     private Riddle riddleGame = new Riddle();
@@ -51,8 +58,15 @@ public class Player {
         this.maxDefense = defense;
         this.wisdom = 1;
         this.charisma = 1;
+        // Stats
         this.miningLevel = 1;
+        this.miningExp = 0;
         this.fishingLevel = 1;
+        this.fishingExp = 0;
+        this.cookingLevel = 1;
+        this.cookingExp = 0;
+
+        // Inventories
         this.inventory = new HashMap<>();
         this.resourceInventory = new HashMap<>();
     }
@@ -73,55 +87,175 @@ public class Player {
     }
 
 
-
     // Getters and setters
-    public String getName() { return name; }
-    public int getMoney() { return money; }
-    public void setMoney(int money) { this.money = money; }
-    //HP
-    public int getHealth() { return health; }
-    public void setHealth(int health) { this.health = health; }
-    public int getMaxHealth() { return maxHealth; }
-    public void setMaxHealth(int maxHealth) { this.maxHealth = maxHealth; }
-    //Mana
-    public int getMana() { return mana; }
-    public void setMana(int mana) { this.mana = mana; }
-    public int getMaxMana() { return maxMana; }
-    public void setMaxMana(int maxMana) { this.maxMana = maxMana; }
-    //Strength
-    public int getStrength() { return strength; }
-    public void setStrength(int strength) { this.strength = strength; }
-    public int getMaxStrength() { return maxStrength; }
-    public void setMaxStrength(int maxStrength) { this.maxStrength = maxStrength; }
-    //Defense
-    public int getDefense() { return defense; }
-    public void setDefense(int defence) { this.defense = defence; }
-    public int getMaxDefense() { return maxDefense; }
-    public void setMaxDefense(int maxDefence) { this.maxDefense = maxDefence; }
-    //Wisdom
-    public int getWisdom() { return wisdom; }
-    public void setWisdom(int wisdom) { this.wisdom = wisdom; }
-    public int getCharisma() { return charisma; }
-    public void setCharisma(int charisma) { this.charisma = charisma; }
-    //Levels
-    public int getLevel() { return level; }
-    public void setLevel(int level) { this.level = level; }
-    public int getExperience() { return experience; }
-    public void setExperience(int experience) { this.experience = experience; }
-    public int getSkillPoints() { return skillPoints; }
-    public void setSkillPoints(int skillPoints) { this.skillPoints = skillPoints;}
-    //public Map<String, Integer> getItemAndCounts() { return inventory; }
-    //public void setItemAndCounts(Map<String, Integer> inventory) { this.inventory = inventory; }
+    public String getName() {
+        return name;
+    }
+
+    public int getMoney() {
+        return money;
+    }
+
+    public void setMoney(int money) {
+        this.money = money;
+    }
+
+    // HP
+    public int getHealth() {
+        return health;
+    }
+
+    public void setHealth(int health) {
+        this.health = health;
+    }
+
+    public int getMaxHealth() {
+        return maxHealth;
+    }
+
+    public void setMaxHealth(int maxHealth) {
+        this.maxHealth = maxHealth;
+    }
+
+    // Mana
+    public int getMana() {
+        return mana;
+    }
+
+    public void setMana(int mana) {
+        this.mana = mana;
+    }
+
+    public int getMaxMana() {
+        return maxMana;
+    }
+
+    public void setMaxMana(int maxMana) {
+        this.maxMana = maxMana;
+    }
+
+    // Strength
+    public int getStrength() {
+        return strength;
+    }
+
+    public void setStrength(int strength) {
+        this.strength = strength;
+    }
+
+    public int getMaxStrength() {
+        return maxStrength;
+    }
+
+    public void setMaxStrength(int maxStrength) {
+        this.maxStrength = maxStrength;
+    }
+
+    // efense
+    public int getDefense() {
+        return defense;
+    }
+
+    public void setDefense(int defence) {
+        this.defense = defence;
+    }
+
+    public int getMaxDefense() {
+        return maxDefense;
+    }
+
+    public void setMaxDefense(int maxDefence) {
+        this.maxDefense = maxDefence;
+    }
+
+    // Wisdom
+    public int getWisdom() {
+        return wisdom;
+    }
+
+    public void setWisdom(int wisdom) {
+        this.wisdom = wisdom;
+    }
+
+    public int getCharisma() {
+        return charisma;
+    }
+
+    public void setCharisma(int charisma) {
+        this.charisma = charisma;
+    }
+
+    // Levels
+    public int getLevel() {
+        return level;
+    } // Player level
+
+    public void setLevel(int level) {
+        this.level = level;
+    } // Player level
+
+    public int getExperience() {
+        return experience;
+    } // Player level experience
+
+    public void setExperience(int experience) {
+        this.experience = experience;
+    }
+
+    public int getSkillPoints() {
+        return skillPoints;
+    } // Skill points from level up
+
+    public void setSkillPoints(int skillPoints) {
+        this.skillPoints = skillPoints;
+    }
+    // Fishing
+    public int getFishingLevel() {
+        return fishingLevel;
+    }
+    public void setFishingLevel(int fishingLevel) {
+        this.fishingLevel = fishingLevel;
+    }
+    public int getFishingExp() {
+        return fishingExp;
+    }
+    public void setFishingExp(int fishingExp) {
+        this.fishingExp = fishingExp;
+    }
+    // Cooking
+    public int getCookingLevel() {
+        return cookingLevel;
+    }
+    public void setCookingLevel(int cookingLevel) {
+        this.cookingLevel = cookingLevel;
+    }
+    public int getCookingExp() {
+        return cookingExp;
+    }
+    public void setCookingExp(int cookingExp) {
+        this.cookingExp = cookingExp;
+    }
+    // Mining
+    public int getMiningLevel() {
+        return miningLevel;
+    }
+    public void setMiningLevel(int miningLevel) {
+        this.miningLevel = miningLevel;
+    }
+    public int getMiningExp() {
+        return miningExp;
+    }
+    public void setMiningExp(int miningExp) {
+        this.miningExp = miningExp;
+    }
 
     // Add other getters/setters as needed
 
 
-
-
-
-
-
-
+    public void heal(int amount) {
+        setHealth(Math.min(getMaxHealth(), getHealth() + amount));
+        System.out.println("Healed for " + amount + " health. Current health: " + getHealth());
+    }
 
 
     // Start inventory management methods
@@ -141,7 +275,9 @@ public class Player {
                 displayRegularInventory();
                 displayResourceInventory();
             }
-            case "4", "back" -> { return; }
+            case "4", "back" -> {
+                return;
+            }
             default -> System.out.println(RED + "Invalid choice!" + RESET);
         }
     }
@@ -197,6 +333,7 @@ public class Player {
             return removeFromInventory(inventory, item, count);
         }
     } // Works together
+
     private boolean removeFromInventory(Map<String, Integer> inventory, String item, int count) {
         int currentCount = inventory.getOrDefault(item, 0);
         if (currentCount >= count) {
@@ -216,14 +353,14 @@ public class Player {
             return resourceInventory.containsKey(item);
         }
         return inventory.containsKey(item);
-    }
+    } // True or false
 
     public int getItemCount(String item) {
         if (isResource(item)) {
             return resourceInventory.getOrDefault(item, 0);
         }
         return inventory.getOrDefault(item, 0);
-    }
+    } // Count of item in inventory
 
     private boolean isResource(String item) {
         return item.contains("ore") || // Mining
@@ -239,10 +376,6 @@ public class Player {
 
     }
     // End inventory management methods
-
-
-
-
 
 
     // Expierience management methods
@@ -269,6 +402,7 @@ public class Player {
             System.out.println(GREEN + "Your new level is " + getLevel() + "!" + RESET);
         }
     }
+
     // Level up logic
     public void useSkillPoint() {
         if (getSkillPoints() > 0) {
@@ -331,92 +465,15 @@ public class Player {
         }
     }
 
-    public void attack(Monster target) {
-        int number = random.nextInt(this.getStrength() + this.getLevel() + 1);
-        int damage = Math.max(0, number - target.getDefence());
-        target.setHealth(target.getHealth() - damage);
-        // Player damage message
-        System.out.println(" ");
-        System.out.println(BOLD + BLUE + "\n========= Combat Continued =========" + RESET);
-        System.out.println(GREEN + BOLD + this.getName() + " attacks " + target.getName() + " for " + damage + " damage!");
-    }
-
     public Map<String, Integer> getInventory() {
         return (Map<String, Integer>) (Object) inventory;
     }
+
+    public void applyEffect(String confusion, int i) {
+    }
+
+    public void addEffect(String wisdom, int i, int i1) {
+    }
+
 }
 
-class Human extends Player {
-    private String bonusSkill;
-    public Human(String name) {
-        super(name);
-        setHealth(getHealth() + 50);
-        bonusSkill = "diplomacy";
-    }
-
-    public void useRacialAbility() {
-        System.out.println(getName() + " uses their " + bonusSkill + " to influence others.");
-        setCharisma(getCharisma() + 1);  // Temporary charisma boost
-    }
-}
-
-class Ork extends Player {
-    private int rage;
-    private static final int MAX_RAGE = 100;
-
-    public Ork(String name) {
-        super(name);
-        this.rage = 0;
-        // Set Ork-specific stats
-        setHealth(getHealth() + 20);  // Orks are tougher
-        setStrength(getStrength() + 2);  // Orks are stronger
-    }
-
-    @Override
-    public void attack(Monster target) {
-        super.attack(target);
-        this.rage = Math.min(MAX_RAGE, this.rage + 10);
-        System.out.println(getName() + "'s rage increases to " + rage + "!");
-    }
-
-    public void useRacialAbility() {
-        System.out.println(getName() + " unleashes a mighty roar!");
-        if (rage >= 50) {
-            System.out.println("RAGE BONUS ACTIVATED!");
-            setStrength(getStrength() + 2);
-            rage = 0;
-        }
-    }
-}
-
-class Viking extends Player {
-    private int berserkStacks;
-    private static final int MAX_BERSERK_STACKS = 5;
-
-    public Viking(String name) {
-        super(name);
-        this.berserkStacks = 0;
-        // Set Viking-specific stats
-        setHealth(getHealth() + 10);  // Vikings are hardy
-        setStrength(getStrength() + 1);  // Vikings start stronger
-    }
-
-    @Override
-    public void attack(Monster target) {
-        super.attack(target);
-        if (berserkStacks > 0) {
-            int bonusDamage = berserkStacks * 2;
-            target.setHealth(target.getHealth() - bonusDamage);
-            System.out.println("Berserk bonus damage: " + bonusDamage + "!");
-        }
-    }
-
-    public void useRacialAbility() {
-        if (berserkStacks < MAX_BERSERK_STACKS) {
-            this.berserkStacks++;
-            System.out.println(getName() + " enters a berserk state! (Stacks: " + berserkStacks + ")");
-        } else {
-            System.out.println(getName() + " is already at maximum berserk power!");
-        }
-    }
-}

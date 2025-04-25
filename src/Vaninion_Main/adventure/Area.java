@@ -1,6 +1,6 @@
 package Vaninion_Main.adventure;
 
-import Vaninion_Main.Player;
+import Vaninion_Main.player.Player;
 
 import java.util.HashMap;
 import java.util.Map;
