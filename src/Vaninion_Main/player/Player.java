@@ -33,6 +33,11 @@ public class Player {
     private int miningLevel;
     private int miningExp;
 
+    // Temp stats
+    private int tempStrength = 0;
+    private int tempMaxHealth = 0;
+
+
     // Inventories
     public Map<String, Integer> inventory;
     public Map<String, Integer> resourceInventory;
@@ -110,7 +115,7 @@ public class Player {
     }
 
     public int getMaxHealth() {
-        return maxHealth;
+        return maxHealth + tempMaxHealth;
     }
 
     public void setMaxHealth(int maxHealth) {
@@ -249,8 +254,34 @@ public class Player {
         this.miningExp = miningExp;
     }
 
+    // Temp stats
+    public int getTempStrength() {
+        return tempStrength;
+    }
+
+    public void setTempStrength(int tempStrength) {
+        this.tempStrength = tempStrength;
+    }
+
+    public int getTempMaxHealth() {
+        return tempMaxHealth;
+    }
+
+    public void setTempMaxHealth(int tempMaxHealth) {
+        this.tempMaxHealth = tempMaxHealth;
+    }
+
+    // You might want to modify the getMaxHealth method to include temporary boosts
+
     // Add other getters/setters as needed
 
+
+    public void resetTemporaryEffects() {
+        tempStrength = 0;
+        tempMaxHealth = 0;
+        // Reset any fishing level boosts here as well
+        // You might want to store the base fishing level separately
+    }
 
     public void heal(int amount) {
         setHealth(Math.min(getMaxHealth(), getHealth() + amount));

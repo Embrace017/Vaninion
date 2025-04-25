@@ -1,5 +1,6 @@
 package Vaninion_Main.dojo;
 
+import Vaninion_Main.foodAndPotions.Food;
 import Vaninion_Main.player.Player;
 
 
@@ -11,6 +12,7 @@ import java.util.Random;
 import static Vaninion_Main.ColoredConsole.*;
 
 public class Dojo {
+    private static final Food food = new Food();
     private final Scanner scanner = new Scanner(System.in);
     Random random = new Random();
     private final Map<String, Map<String, Integer>> smeltingRecipes = new HashMap<>();
@@ -18,44 +20,62 @@ public class Dojo {
     private final Map<String, Map<String, Integer>> smithingRecipes = new HashMap<>(); // Changed to Map<String, Integer> for ingredients
     private boolean furnaceLit = false;
 
+    // Update to the existing Dojo constructor to add new cooking recipes
     public Dojo() {
         // Initialize smelting recipes with input -> output mappings
-        smeltingRecipes.put("copper bar", Map.of("copper ore", 3, "coal", 1));
-        smeltingRecipes.put("iron bar", Map.of("iron ore", 3, "coal", 1));
-        smeltingRecipes.put("gold bar", Map.of("gold ore", 3, "coal", 1));
-        smeltingRecipes.put("gorganite bar", Map.of("gorganite ore", 3, "coal", 1));
-        smeltingRecipes.put("vaninite bar", Map.of("vaninite ore", 3, "coal", 1));
+        smeltingRecipes.put("iron bar", Map.of("iron ore", 3, "coal", 3));
 
+        smeltingRecipes.put("copper bar", Map.of("copper ore", 3, "coal", 5));
+
+        smeltingRecipes.put("gold bar", Map.of("gold ore", 3, "coal", 10));
+
+        smeltingRecipes.put("gorganite bar", Map.of("gorganite ore", 3,
+                "coal", 50,
+                "gold bar", 10,
+                "copper bar", 10));
+
+        smeltingRecipes.put("vaninite bar", Map.of("vaninite ore", 3,
+                "gorganite bar", 20,
+                "gold bar", 20,
+                "coal", 100));
 
         // Initialize smithing recipes with input (ingredients -> quantity) and output
         smithingRecipes.put("copper wire", Map.of("copper bar", 1));
         smithingRecipes.put("iron shield", Map.of("iron bar", 3));
-        smithingRecipes.put("steel sword", Map.of("iron bar", 3, "coal", 6)); // Example with multiple ingredients
+        smithingRecipes.put("steel sword", Map.of("iron bar", 3, "coal", 6));
 
-        // Initialize cooking recipes with input -> output mappings
-        cookingRecipes.put("raw common fish", "cooked common fish");
-        cookingRecipes.put("raw uncommon fish", "cooked uncommon fish");
-        cookingRecipes.put("raw rare fish", "cooked rare fish");
-        cookingRecipes.put("raw legendary fish", "cooked legendary fish");
+        // Initialize cooking recipes for fish
+        cookingRecipes.put("raw lake minnow", "cooked lake minnow");
+        cookingRecipes.put("raw river perch", "cooked river perch");
+        cookingRecipes.put("raw steel snapper", "cooked steel snapper");
+        cookingRecipes.put("raw crystal bass", "cooked crystal bass");
+        cookingRecipes.put("raw shadow pike", "cooked shadow pike");
+        cookingRecipes.put("raw magma ray", "cooked magma ray");
+        cookingRecipes.put("raw frost barracuda", "cooked Frost Barracuda");
+        cookingRecipes.put("raw thunder eel", "cooked thunder eel");
+        // Note: We're not adding Leviathan and Kraken as requested
     }
     public void enterDojo (Player player) {
         while (true) {
             System.out.println(YELLOW + "\n=== Welcome to the Dojo ===" + RESET);
             System.out.println("1. " + PURPLE + "Rest" + RESET);
-            //System.out.println("2. " + PURPLE + "Eat Food" + RESET);
+            System.out.println("2. " + PURPLE + "Eat Food" + RESET);
             System.out.println("3. " + PURPLE + "Smelt Ores" + RESET);
             System.out.println("4. " + PURPLE + "Cook Fish" + RESET);
             System.out.println("5. " + PURPLE + "Smith Items" + RESET); // Changed option name
             System.out.println("* " + RED + "Leave Dojo" + RESET); // Renumbered leave option
+            System.out.println(CYAN + "\n'reg' & 'res' for inventories" + RESET);
 
             String choice = scanner.nextLine().toLowerCase().trim();
 
             switch (choice) {
                 case "1", "rest" -> rest(player);
-                //case "2", "eat" -> food.eat(player);
+                case "2", "eat" -> eatFood(player);
                 case "3", "smelt" -> smelt(player);
                 case "4", "cook" -> cook(player);
-                case "5", "smith" -> smith(player); // Call the smith method
+                case "5", "smith" -> smith(player);
+                case "res" -> player.displayResourceInventory();
+                case "reg" -> player.displayRegularInventory();
                 case "*", "leave", "exit", "back" -> {
                     System.out.println(YELLOW + "Leaving the Dojo..." + RESET);
                     return;
@@ -83,6 +103,21 @@ public class Dojo {
         System.out.println(GREEN + "HP restored: " + res + ". total: " + player.getHealth() + "." + RESET);
         System.out.println(GREEN + "Mana: " + player.getMana() + RESET);
     }
+
+    private void eatFood(Player player) {
+        System.out.println(BLUE + "\n=== Eat Food ===" + RESET);
+
+        // Display available food
+        food.displayAvailableFood(player);
+
+        System.out.println(YELLOW + "\nWhat would you like to eat? (type the food name or 'back')" + RESET);
+        String choice = scanner.nextLine().trim();
+
+        if (choice.equalsIgnoreCase("back")) return;
+
+        food.consumeFood(player, choice);
+    }
+
 
     private void smelt(Player player) {
         System.out.println(BLUE + "\n====== Smelting Ores ======" + RESET);

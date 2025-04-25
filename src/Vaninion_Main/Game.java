@@ -1,21 +1,17 @@
 package Vaninion_Main;
 
-import Vaninion_Main.adventure.Adventure;
-import Vaninion_Main.adventure.Mining;
-import Vaninion_Main.adventure.Riddle;
+import Vaninion_Main.adventure.*;
 import Vaninion_Main.combat.Combat;
 import Vaninion_Main.dojo.Dojo;
 import Vaninion_Main.monsters.*;
-import Vaninion_Main.player.Human;
-import Vaninion_Main.player.Ork;
-import Vaninion_Main.player.Player;
-import Vaninion_Main.player.Viking;
+import Vaninion_Main.player.*;
 
+import java.util.Map;
 import java.util.Scanner;
 import static Vaninion_Main.ColoredConsole.*;
 
 
-public class Main {
+public class Game {
     private static final Scanner scanner = new Scanner(System.in);
     private static final Shop shop = new Shop();
     private static final Mining mining = new Mining();
@@ -27,6 +23,7 @@ public class Main {
 
     public static void main(String[] args) {
         System.out.println(BOLD + BLUE + "~~~ Welcome to Vaninion ~~~" + RESET);
+
         System.out.println(GREEN + BOLD + "Best of luck on your adventures!" + RESET);
         // Get player name
         System.out.println(YELLOW + "\nEnter your character name: " + RESET);
@@ -55,8 +52,8 @@ public class Main {
         // MUST REMOVE @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
         player.addItem("basic rod", 1);
-        player.addItem("gold coin", 100);
-        player.addItem("health potion", 1);
+        player.addItem("basic bait", 10000);
+
 
         player.setSkillPoints(3);
 
@@ -68,6 +65,8 @@ public class Main {
                 GREEN + "!" + RESET);
         boolean running = true;
         while (running) {
+
+            System.out.println();
             // Create a decorative header
             System.out.println(BLUE + BOLD + "\n╔════════════════════════════════╗");
             System.out.println("║" + YELLOW + "            MAIN MENU           " + BLUE + "║");
@@ -100,14 +99,14 @@ public class Main {
             System.out.println("╚════════════════════════════════╝" + RESET);
 
             // Quick commands hint
-            System.out.println(CYAN + "Quick commands: 'reg' for regular inventory, 'res' for resources" + RESET);
+            System.out.println(CYAN + "'reg', 'res', 'both' for inventories" + RESET);
 
             String choice = scanner.nextLine().toLowerCase().trim();
             switch (choice) {
                 case "1", "attack" -> combat.getMonsterAndFight(player);
                 case "2", "adventure" -> System.out.println("Adventure not yet implemented.");
                 case "3", "riddle" -> riddle.playRiddle(player);
-                case "4", "fishing" -> fishing.fish(player);
+                case "4", "fishing", "fish" -> fishing.fish(player);
                 case "5", "mining", "mine" -> mining.mine(player);
                 case "6", "dojo" -> new Dojo().enterDojo(player);
                 case "7", "stats" -> player.stats();
@@ -125,6 +124,16 @@ public class Main {
                 // Quick access commands
                 case "reg", "regular" -> player.displayRegularInventory();
                 case "res", "resource" -> player.displayResourceInventory();
+                case "both" -> {
+                    player.displayResourceInventory();
+                    player.displayRegularInventory();
+                }
+
+
+                //Dev Commands
+                case "catchRates" -> System.out.println(fishing.calculateTotalCatchRate());
+
+
                 default -> System.out.println(RED + "Invalid choice! Please try again." + RESET);
             }
         }

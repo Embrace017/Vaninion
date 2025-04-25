@@ -104,17 +104,17 @@ public class Shop {
         int packagePrice = 2500;
         if (player.getMoney() >= packagePrice) {
             player.setMoney(player.getMoney() - packagePrice);
-            player.addItem("steel helmet", 1);
-            player.addItem("steel platebody", 1);
-            player.addItem("steel platelegs", 1);
-            player.addItem("steel shield", 1);
-            player.addItem("steel long sword", 1);
+            player.addItem("iron helmet", 1);
+            player.addItem("iron platebody", 1);
+            player.addItem("iron platelegs", 1);
+            player.addItem("iron shield", 1);
+            player.addItem("iron sword", 1);
             System.out.println(GREEN + "You bought the Armour Package for $" + YELLOW + packagePrice + GREEN + ". You now have:" + RESET);
-            System.out.println(YELLOW + "  - Steel Helmet" + GREEN + ": " + player.getItemCount("steel helmet"));
-            System.out.println(YELLOW + "  - Steel Platebody" + GREEN + ": " + player.getItemCount("steel platebody"));
-            System.out.println(YELLOW + "  - Steel Platelegs" + GREEN + ": " + player.getItemCount("steel platelegs"));
-            System.out.println(YELLOW + "  - Steel Shield" + GREEN + ": " + player.getItemCount("steel shield"));
-            System.out.println(YELLOW + "  - Steel Long Sword" + GREEN + ": " + player.getItemCount("steel long sword") + RESET);
+            System.out.println(YELLOW + "  - iron Helmet" + GREEN + ": " + player.getItemCount("iron helmet"));
+            System.out.println(YELLOW + "  - iron Platebody" + GREEN + ": " + player.getItemCount("iron platebody"));
+            System.out.println(YELLOW + "  - iron Platelegs" + GREEN + ": " + player.getItemCount("iron platelegs"));
+            System.out.println(YELLOW + "  - iron Shield" + GREEN + ": " + player.getItemCount("iron shield"));
+            System.out.println(YELLOW + "  - iron  Sword" + GREEN + ": " + player.getItemCount("iron sword") + RESET);
             System.out.println(GREEN + "Your remaining cash: $" + YELLOW + player.getMoney() + RESET);
         } else {
             System.out.println(RED + "Not enough money for the Armour Package!" + RESET);
@@ -189,7 +189,7 @@ public class Shop {
             System.out.println(YELLOW + "Your current cash: $" + player.getMoney() + RESET);
 
             System.out.println("1. " + PURPLE + "Calculator" + RESET + " - $" + GREEN + 2000 + RESET + (player.inventory.containsKey("calculator") ? " (Owned)" : ""));
-            System.out.println("2. " + PURPLE + "Basic Rod" + RESET + " - $" + GREEN + 1000 + RESET + (player.inventory.containsKey("basic rod") ? " (Owned)" : ""));
+            System.out.println("2. " + PURPLE + "Basic Rod" + RESET + " - $" + GREEN + 2000 + RESET + (player.inventory.containsKey("basic rod") ? " (Owned)" : ""));
             System.out.println("3. " + PURPLE + "Basic bait" + RESET + " - $" + GREEN + 50 + RESET + (player.inventory.getOrDefault("basic bait", 0) > 0 ? " (" + player.inventory.get("basic bait") + " Owned)" : ""));
             System.out.println("4. " + PURPLE + "Super bait" + RESET + " - $" + GREEN + 100 + RESET + (player.inventory.getOrDefault("super bait", 0) > 0 ? " (" + player.inventory.get("super bait") + " Owned)" : ""));
             System.out.println("5. " + RED + "Back to Shop Categories" + RESET);
