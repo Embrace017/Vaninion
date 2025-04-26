@@ -83,18 +83,23 @@ public class Armour {
     public static final Armour IRON_SHIELD = new Armour("iron shield", 1, 0, 0, 0, 1, 0);
 
     // Steel armor
-    public static final Armour steelHelmet = new Armour("steel helmet", 3, 2, 5, 5, 1, 0);
-    public static final Armour steelChestplate = new Armour("steel chestplate", 3, 2, 5, 5, 1, 0);
-    public static final Armour steelLeggings = new Armour("steel leggings", 3, 2, 5, 5, 1, 0);
-    public static final Armour steelShield = new Armour("steel shield", 3, 2, 5, 5, 1, 0);
+    public static final Armour STEEL_HELMET = new Armour("steel helmet", 3, 2, 5, 5, 1, 0);
+    public static final Armour STEEL_CHESTPLATE = new Armour("steel chestplate", 3, 2, 5, 5, 1, 0);
+    public static final Armour STEEL_LEGGINGS = new Armour("steel leggings", 3, 2, 5, 5, 1, 0);
+    public static final Armour STEEL_SHIELD = new Armour("steel shield", 3, 2, 5, 5, 1, 0);
     // Gorganite
-    public static final Armour gorganiteHelmet = new Armour("gorganite helmet", 10, 10, 10, 10, 1, 0);
-    public static final Armour gorganiteChestplate = new Armour("gorganite chestplate", 10, 10, 10, 10, 1, 0);
-    public static final Armour gorganiteLeggings = new Armour("gorganite leggins", 10, 10, 10, 10, 1, 0);
-    public static final Armour gorganiteShield = new Armour("gorganite shield", 10, 10, 10, 10, 1, 0);
+    public static final Armour GORGANITE_HELMET = new Armour("gorganite helmet", 10, 10, 10, 10, 1, 0);
+    public static final Armour GORGANITE_CHESTPLATE = new Armour("gorganite chestplate", 10, 10, 10, 10, 1, 0);
+    public static final Armour GORGANITE_LEGGINGS = new Armour("gorganite leggins", 10, 10, 10, 10, 1, 0);
+    public static final Armour GORGANITE_SHIELD = new Armour("gorganite shield", 10, 10, 10, 10, 1, 0);
     // Vaninite
-    public static final Armour vaniniteHelmet = new Armour("vaninite helmet", 100, 100, 100, 100, 1, 0);
-    public static final Armour vaniniteChestplate = new Armour("vaninite chestplate", 100, 100, 100, 100, 1, 0);
-    public static final Armour vaniniteLeggings = new Armour("vaninite leggins", 100, 100, 100, 100, 1, 0);
-    public static final Armour vaniniteShield = new Armour("vaninite sheild", 100, 100, 100, 100, 1, 0);
+    public static final Armour VANINITE_HELMET = new Armour("vaninite helmet", 100, 100, 100, 100, 1, 0);
+    public static final Armour VANINITE_CHESTPLATE = new Armour("vaninite chestplate", 100, 100, 100, 100, 1, 0);
+    public static final Armour VANINITE_LEGGINGS = new Armour("vaninite leggins", 100, 100, 100, 100, 1, 0);
+    public static final Armour VANINITE_SHIELD = new Armour("vaninite sheild", 100, 100, 100, 100, 1, 0);
+
+
+    // Misc
+    public static final Armour WOLF_MASK = new Armour("wolf mask", 10, 0, 10, 10, 1, 0);
+
 }

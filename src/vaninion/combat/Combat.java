@@ -1,8 +1,6 @@
 package vaninion.combat;
 
-import vaninion.monsters.Goblin;
-import vaninion.monsters.Monster;
-import vaninion.monsters.Skeleton;
+import vaninion.monsters.*;
 import vaninion.players.player.Ork;
 import vaninion.players.Player;
 import vaninion.players.player.Viking;
@@ -21,7 +19,9 @@ public class Combat {
 
     private String currentBattleCondition = "normal";
     private int comboCounter = 0;
+    private boolean comboInitiatedMsg = false;
     private int maxCombo = 0;  // Tracks highest combo achieved
+    private int basePower = 0;
 
     public Monster getMonsterAndFight(Player player) {
         if (player.getHealth() <= 20) {
@@ -65,11 +65,12 @@ public class Combat {
         boolean isCritical = random.nextDouble() < (0.15 + (player.getWisdom() * 0.01));
 
         // Base damage calculation
-        int baseNumber = random.nextInt(player.getStrength() + player.getLevel());
+        basePower = random.nextInt(player.getStrength() + player.getLevel());
 
         // Combo damage calculation
-        int comboDamage = Math.min(comboCounter * 2, 10 + player.getWisdom() * 2);
-
+        int comboDamage = Math.min(basePower * comboCounter, 10 + player.getWisdom() * 2);
+        if (basePower == 0)
+            comboDamage = 0;
         // Miss chance in fog
         if (currentBattleCondition.equals("foggy") && random.nextDouble() < 0.3) {
             System.out.println(GREY + "The fog causes you to miss!" + RESET);
@@ -78,15 +79,16 @@ public class Combat {
 
         // Calculate total damage
 
-        int totalDamage = Math.max(1, baseNumber - target.getDefence()) + comboDamage;
-        if (random.nextDouble() < 0.1 - (player.getWisdom() * 0.05)) {
-            totalDamage = 0;
-        }
+        int totalDamage = Math.max(0, basePower + comboDamage - target.getDefence());
+
 
         // Apply critical hit
-        if (isCritical) {
-            totalDamage *= 2;
+        if (totalDamage != 0){
+            if (isCritical) {
+                totalDamage *= 2;
+            }
         }
+
 
         // Apply sunny bonus
         if (currentBattleCondition.equals("sunny")) {
@@ -98,7 +100,7 @@ public class Combat {
         target.setHealth(target.getHealth() - totalDamage);
 
         // Display combat information
-        displayAttackInfo(player, target, baseNumber, comboDamage, totalDamage, isCritical);
+        displayAttackInfo(player, target, basePower, comboDamage, totalDamage, isCritical);
 
         // Handle class-specific effects
         handleClassEffects(player, target);
@@ -114,18 +116,24 @@ public class Combat {
         System.out.println(BLUE + "╔════════════════ ATTACK ════════════════╗");
         System.out.println("║ " + GREEN + player.getName() + YELLOW + attackMessage + RED + target.getName() + BLUE);
 
-
+        System.out.println("║ " +  BOLD + BRIGHT_GREEN + "Power: " + basePower + BLUE);
         if (comboCounter == 1) {
-            System.out.println("║ " + BRIGHT_CYAN + "Combo Initiated." + BLUE);
+            if (!comboInitiatedMsg) {
+                System.out.println("║ " + BRIGHT_CYAN + "Combo Initiated." + BLUE);
+                comboInitiatedMsg = true;
+            }
         }
 
         if (comboDamage > 0) {
-            System.out.println("║ " + YELLOW + "Combo bonus: +" + comboDamage + BLUE);
+            System.out.println("║ " + CYAN + "Combo bonus: +" + comboDamage + BLUE);
         }
 
-        if (isCritical) {
-            System.out.println("║ " + BRIGHT_YELLOW + "CRITICAL HIT!" + BLUE);
+        if (totalDamage != 0) {
+            if (isCritical) {
+                System.out.println("║ " + BRIGHT_YELLOW + "CRITICAL HIT!" + BLUE);
+            }
         }
+
 
         System.out.println("║ " + PURPLE + "Total damage: " + totalDamage + BLUE);
         System.out.println("╚════════════════════════════════════════╝" + RESET);
@@ -150,6 +158,7 @@ public class Combat {
 
         monster.reset();
         comboCounter = 0;
+        comboInitiatedMsg = false;
         displayCombatStart(monster);
 
         boolean playerGuarding = false;
@@ -207,7 +216,7 @@ public class Combat {
         System.out.println("║ " + PURPLE + "Your MP: " + player.getMana() + "/" + player.getMaxMana() + BLUE);
         System.out.println("║ " + RED + monster.getName() + " HP: " + monster.getHealth() + BLUE);
         if (comboCounter > 0) {
-            System.out.println("║ " + YELLOW + "Combo Counter: " + comboCounter + BLUE);
+            System.out.println("║ " + CYAN + "Combo Counter: " + comboCounter + BLUE);
             System.out.println("║ " + YELLOW + "Max Combo: " + maxCombo + BLUE);
         }
         System.out.println("╠═══════════════════════════════════════╣");
@@ -262,6 +271,7 @@ public class Combat {
         // Reset for next battle
         monster.reset();
         comboCounter = 0;
+        comboInitiatedMsg = false;
         maxCombo = 0;
     }
 
@@ -305,6 +315,7 @@ public class Combat {
             case "1", "attack" -> {
                 if (random.nextDouble() < 0.1 + player.getWisdom() * 0.05 )
                     comboCounter++;
+
 
                 maxCombo = Math.max(maxCombo, comboCounter);
                 playerAttack(player, monster);
@@ -370,12 +381,16 @@ public class Combat {
             System.out.println(YELLOW + "\nChoose your opponent:" + RESET);
             System.out.println("1. " + GREEN + "Goblin" + RESET);
             System.out.println("2. " + GREEN + "Skeleton" + RESET);
+            System.out.println("3. " + GREEN + "Werewolf" + RESET);
+            System.out.println("4. " + GREEN + "Giant Tarantula" + RESET);
             System.out.println("*. " + RED + "Back" + RESET);
 
             String choice = scanner.nextLine().toLowerCase().trim();
             return switch (choice) {
                 case "1", "goblin" -> new Goblin();
                 case "2", "skeleton" -> new Skeleton();
+                case "3", "werewolf" -> new Werewolf();
+                case "4", "giant tarantula" -> new Tarantula();
                 case "*", "back", "exit", "leave" -> null;
                 default -> {
                     System.out.println(RED + "Invalid choice!" + RESET);

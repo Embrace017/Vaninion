@@ -59,7 +59,7 @@ public class Game {
 
         player.setMoney(100);
         player.addItem("iron helmet", 1);
-        player.addItem("copper wire", 21);
+        player.addItem("gorganite bar", 21);
 
         // MUST REMOVE @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 

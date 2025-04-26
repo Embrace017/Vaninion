@@ -26,6 +26,12 @@ public abstract class Monster {
         this.strength = strength;
         this.possibleDrops = new HashMap<>();
         this.random = new Random();
+
+        // All monsters drop table:
+        addPossibleDrop("gorganite bar", 1.0, 1000);
+        addPossibleDrop("health potion", 5.0, 100);
+        addPossibleDrop("mana potion", 5.0, 100);
+        addPossibleDrop("strength potion", 5.0, 100);
     }
 
 

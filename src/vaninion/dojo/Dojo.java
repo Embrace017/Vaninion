@@ -11,61 +11,17 @@ import java.util.Random;
 
 import static vaninion.ColoredConsole.*;
 
-public class Dojo {
+public class Dojo extends Recipes {
     private static final Food food = new Food();
+    private final Recipes recipes = new Recipes();
     private final Scanner scanner = new Scanner(System.in);
     Random random = new Random();
-    private final Map<String, Map<String, Integer>> smeltingRecipes = new HashMap<>();
-    private final Map<String, String> cookingRecipes = new HashMap<>();
-    private final Map<String, Map<String, Integer>> smithingRecipes = new HashMap<>(); // Changed to Map<String, Integer> for ingredients
+
     private boolean furnaceLit = false;
 
     // Update to the existing Dojo constructor to add new cooking recipes
     public Dojo() {
-        // Initialize smelting recipes with input -> output mappings
-        smeltingRecipes.put("steel bar", Map.of("iron ore", 3, "coal", 3));
-        smeltingRecipes.put("copper bar", Map.of("copper ore", 3, "coal", 5));
-        smeltingRecipes.put("gold bar", Map.of("gold ore", 3, "coal", 10));
-        smeltingRecipes.put("gorganite bar", Map.of("gorganite ore", 3,
-                "coal", 50,
-                "gold bar", 10,
-                "copper bar", 10));
-        smeltingRecipes.put("vaninite bar", Map.of("vaninite ore", 3,
-                "gorganite bar", 20,
-                "gold bar", 20,
-                "coal", 100));
-
-        // Initialize smithing recipes with input (ingredients -> quantity) and output
-        smithingRecipes.put("copper wire", Map.of("copper bar", 1));
-        // Steel items
-        smithingRecipes.put("steel sword", Map.of("steel bar", 5));
-        smithingRecipes.put("steel helmet", Map.of("steel bar", 5));
-        smithingRecipes.put("steel chestplate", Map.of("steel bar", 5));
-        smithingRecipes.put("steel leggings", Map.of("steel bar", 5));
-        smithingRecipes.put("steel shield", Map.of("steel bar", 5));
-        // Gorganite
-        smithingRecipes.put("gorganite sword", Map.of("gorganite bar", 20));
-        smithingRecipes.put("gorganite helmet", Map.of("gorganite bar", 20));
-        smithingRecipes.put("gorganite chestplate", Map.of("gorganite bar", 20));
-        smithingRecipes.put("gorganite leggings", Map.of("gorganite bar", 20));
-        smithingRecipes.put("gorganite shield", Map.of("gorganite bar", 20));
-        // Vaninite
-        smithingRecipes.put("vaninite sword", Map.of("vaninite bar", 5));
-        smithingRecipes.put("vaninite helmet", Map.of("vaninite bar", 5));
-        smithingRecipes.put("vaninite chestplate", Map.of("vaninite bar", 5));
-        smithingRecipes.put("vaninite leggings", Map.of("vaninite bar", 5));
-
-
-        // Initialize cooking recipes for fish
-        cookingRecipes.put("raw lake minnow", "cooked lake minnow");
-        cookingRecipes.put("raw river perch", "cooked river perch");
-        cookingRecipes.put("raw steel snapper", "cooked steel snapper");
-        cookingRecipes.put("raw crystal bass", "cooked crystal bass");
-        cookingRecipes.put("raw shadow pike", "cooked shadow pike");
-        cookingRecipes.put("raw magma ray", "cooked magma ray");
-        cookingRecipes.put("raw frost barracuda", "cooked Frost Barracuda");
-        cookingRecipes.put("raw thunder eel", "cooked thunder eel");
-        // Note: We're not adding Leviathan and Kraken as requested
+    recipes.initializeRecipes();
     }
     public void enterDojo (Player player) {
         while (true) {
@@ -74,8 +30,7 @@ public class Dojo {
             System.out.println("2. " + PURPLE + "Eat Food" + RESET);
             System.out.println("3. " + PURPLE + "Smelt Ores" + RESET);
             System.out.println("4. " + PURPLE + "Cook Fish" + RESET);
-            System.out.println("5. " + PURPLE + "Smith Items" + RESET); // Changed option name
-            System.out.println("6. " + PURPLE + "Show Equipment" + RESET);
+            System.out.println("5. " + PURPLE + "Craft Items" + RESET); // Changed option name
             System.out.println("* " + RED + "Leave Dojo" + RESET); // Renumbered leave option
             System.out.println(CYAN + "\n'reg', 'res', 'armour' for inventories" + RESET);
 
@@ -86,7 +41,7 @@ public class Dojo {
                 case "2", "eat" -> eatFood(player);
                 case "3", "smelt" -> smelt(player);
                 case "4", "cook" -> cook(player);
-                case "5", "smith" -> smith(player);
+                case "5", "Craft" -> craft(player);
                 case "armour" -> player.displayArmourInventory();
                 case "res" -> player.displayResourceInventory();
                 case "reg" -> player.displayRegularInventory();
@@ -99,7 +54,7 @@ public class Dojo {
         }
     }
 
-    private void rest (Player player){
+    private void rest (Player player) {
         int res = 0;
         System.out.println(BLUE + "\n===== Resting =====" + RESET);
         if (player.getHealth() < player.getMaxHealth() / 2) {
@@ -112,7 +67,7 @@ public class Dojo {
             System.out.println(RED + "Health too high too rest. Get back to work!" + RESET);
             return;
         }
-        player.setMana(random.nextInt(player.getMana()));
+        player.setMana(random.nextInt(player.getMana() + 1));
         System.out.println(GREEN + "You feel much better... along with a weird magical sensation." + RESET);
         System.out.println(GREEN + "HP restored: " + res + ". total: " + player.getHealth() + "." + RESET);
         System.out.println(GREEN + "Mana: " + player.getMana() + RESET);
@@ -135,7 +90,6 @@ public class Dojo {
 
     private void smelt(Player player) {
         System.out.println(BLUE + "\n====== Smelting Ores ======" + RESET);
-
         if (smeltingRecipes.isEmpty()) {
             System.out.println(RED + "There are no smelting recipes available." + RESET);
             return;
@@ -217,7 +171,7 @@ public class Dojo {
         }
     }
 
-    private void cook (Player player){
+    private void cook (Player player) {
         System.out.println(BLUE + "\n=== Cookable Fish ===" + RESET);
 
         // Show available raw fish from recipes that player has
@@ -259,17 +213,17 @@ public class Dojo {
             System.out.println(RED + "Invalid fish type or you don't have any!" + RESET);
         }
     }
-    private void smith(Player player) {
-        System.out.println(BLUE + "\n=== Smithable Items ===" + RESET);
+    private void craft(Player player) {
+        System.out.println(BLUE + "\n=== Craftable Items ===" + RESET);
 
-        if (smithingRecipes.isEmpty()) {
-            System.out.println(RED + "There are no smithing recipes available." + RESET);
+        if (craftingRecipes.isEmpty()) {
+            System.out.println(RED + "There are no crafting recipes available." + RESET);
             return;
         }
 
         // Show only items that can be crafted with available materials
         boolean canCraftAnything = false;
-        for (Map.Entry<String, Map<String, Integer>> recipeEntry : smithingRecipes.entrySet()) {
+        for (Map.Entry<String, Map<String, Integer>> recipeEntry : craftingRecipes.entrySet()) {
             String itemName = recipeEntry.getKey();
             Map<String, Integer> ingredients = recipeEntry.getValue();
 
@@ -297,13 +251,13 @@ public class Dojo {
         }
 
 
-        // Show available items to smith
-        if (smithingRecipes.isEmpty()) {
-            System.out.println(RED + "There are no smithing recipes available." + RESET);
+        // Show available items to craft
+        if (craftingRecipes.isEmpty()) {
+            System.out.println(RED + "There are no crafting recipes available." + RESET);
             return;
         }
 
-        for (Map.Entry<String, Map<String, Integer>> recipeEntry : smithingRecipes.entrySet()) {
+        for (Map.Entry<String, Map<String, Integer>> recipeEntry : craftingRecipes.entrySet()) {
             String itemName = recipeEntry.getKey();
             System.out.println(PURPLE + itemName + RESET);
             System.out.print(YELLOW + "  Requires: " + RESET);
@@ -313,19 +267,19 @@ public class Dojo {
             System.out.println();
         }
 
-        System.out.println(YELLOW + "\nWhat would you like to smith? (type the item name or 'back')" + RESET);
+        System.out.println(YELLOW + "\nWhat would you like to craft? (type the item name or 'back')" + RESET);
         String choice = scanner.nextLine().toLowerCase().trim();
 
         if (choice.equals("back")) return;
 
-        if (smithingRecipes.containsKey(choice)) {
-            Map<String, Integer> ingredients = smithingRecipes.get(choice);
-            boolean canSmith = true;
+        if (craftingRecipes.containsKey(choice)) {
+            Map<String, Integer> ingredients = craftingRecipes.get(choice);
+            boolean canCraft = true;
 
-            System.out.println("How many would you like to smith?");
+            System.out.println("How many would you like to craft?");
             try {
-                int amountToSmith = Integer.parseInt(scanner.nextLine().trim());
-                if (amountToSmith <= 0) {
+                int amountToCraft = Integer.parseInt(scanner.nextLine().trim());
+                if (amountToCraft <= 0) {
                     System.out.println(RED + "Please enter a valid positive number." + RESET);
                     return;
                 }
@@ -333,30 +287,30 @@ public class Dojo {
                 // Check if the player has enough ingredients
                 for (Map.Entry<String, Integer> ingredientEntry : ingredients.entrySet()) {
                     String ingredientName = ingredientEntry.getKey();
-                    int requiredAmount = ingredientEntry.getValue() * amountToSmith;
+                    int requiredAmount = ingredientEntry.getValue() * amountToCraft;
                     if (player.getItemCount(ingredientName) < requiredAmount) {
                         System.out.println(RED + "Not enough " + ingredientName + ". You need " + requiredAmount + "." + RESET);
-                        canSmith = false;
+                        canCraft = false;
                         break;
                     }
                 }
 
                 // If the player has enough ingredients, remove them and add the crafted item
-                if (canSmith) {
+                if (canCraft) {
                     for (Map.Entry<String, Integer> ingredientEntry : ingredients.entrySet()) {
                         String ingredientName = ingredientEntry.getKey();
-                        int requiredAmount = ingredientEntry.getValue() * amountToSmith;
+                        int requiredAmount = ingredientEntry.getValue() * amountToCraft;
                         player.removeItem(ingredientName, requiredAmount);
                     }
-                    player.addItem(choice, amountToSmith);
-                    System.out.println(GREEN + "Successfully crafted " + amountToSmith + " " + choice + "!" + RESET);
+                    player.addItem(choice, amountToCraft);
+                    System.out.println(GREEN + "Successfully crafted " + amountToCraft + " " + choice + "!" + RESET);
                 }
 
             } catch (NumberFormatException e) {
                 System.out.println(RED + "Please enter a valid number!" + RESET);
             }
         } else {
-            System.out.println(RED + "Invalid item to smith!" + RESET);
+            System.out.println(RED + "Invalid item to craft!" + RESET);
         }
     }
     private void showEquipmentMenu(Player player) {

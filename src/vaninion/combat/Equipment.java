@@ -104,6 +104,7 @@ public class Equipment {
 
         // Check all static Armour fields in Armour class
         switch (itemName) {
+
             // Iron gear
             case "iron sword" -> armourPiece = Armour.IRON_SWORD;
             case "iron helmet" -> armourPiece = Armour.IRON_HELMET;
@@ -113,24 +114,28 @@ public class Equipment {
 
             // Steel gear
             case "steel sword" -> armourPiece = Armour.STEEL_SWORD;
-            case "steel helmet" -> armourPiece = Armour.steelHelmet;
-            case "steel chestplate" -> armourPiece = Armour.steelChestplate;
-            case "steel leggings" -> armourPiece = Armour.steelLeggings;
-            case "steel shield" -> armourPiece = Armour.steelShield;
+            case "steel helmet" -> armourPiece = Armour.STEEL_HELMET;
+            case "steel chestplate" -> armourPiece = Armour.STEEL_CHESTPLATE;
+            case "steel leggings" -> armourPiece = Armour.STEEL_LEGGINGS;
+            case "steel shield" -> armourPiece = Armour.STEEL_SHIELD;
 
             // Gorganite gear
             case "gorganite sword" -> armourPiece = Armour.GORGANITE_SWORD;
-            case "gorganite helmet" -> armourPiece = Armour.gorganiteHelmet;
-            case "gorganite chestplate" -> armourPiece = Armour.gorganiteChestplate;
-            case "gorganite leggings" -> armourPiece = Armour.gorganiteLeggings;
-            case "gorganite shield" -> armourPiece = Armour.gorganiteShield;
+            case "gorganite helmet" -> armourPiece = Armour.GORGANITE_HELMET;
+            case "gorganite chestplate" -> armourPiece = Armour.GORGANITE_CHESTPLATE;
+            case "gorganite leggings" -> armourPiece = Armour.GORGANITE_LEGGINGS;
+            case "gorganite shield" -> armourPiece = Armour.GORGANITE_SHIELD;
 
             // Vaninite gear
             case "vaninite sword" -> armourPiece = Armour.VANINITE_SWORD;
-            case "vaninite helmet" -> armourPiece = Armour.vaniniteHelmet;
-            case "vaninite chestplate" -> armourPiece = Armour.vaniniteChestplate;
-            case "vaninite leggings" -> armourPiece = Armour.vaniniteLeggings;
-            case "vaninite shield" -> armourPiece = Armour.vaniniteShield;
+            case "vaninite helmet" -> armourPiece = Armour.VANINITE_HELMET;
+            case "vaninite chestplate" -> armourPiece = Armour.VANINITE_CHESTPLATE;
+            case "vaninite leggings" -> armourPiece = Armour.VANINITE_LEGGINGS;
+            case "vaninite shield" -> armourPiece = Armour.VANINITE_SHIELD;
+
+            // MISC
+            case "wolf mask" -> armourPiece = Armour.WOLF_MASK;
+
 
             default -> {
                 System.out.println(RED + "This item cannot be equipped!" + RESET);
