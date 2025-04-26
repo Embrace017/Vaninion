@@ -1,10 +1,11 @@
-package Vaninion_Main;
+package vaninion;
 
 import java.util.*;
 
-import static Vaninion_Main.ColoredConsole.*;
+import static vaninion.ColoredConsole.*;
 
-import Vaninion_Main.player.Player;
+import vaninion.combat.Armour;
+import vaninion.players.Player;
 
 public class Shop {
 
@@ -12,6 +13,8 @@ public class Shop {
     public static Map<String, Integer> shopItems = new HashMap<>();
 
     public void shop(Player player) {
+
+        customSellItems();
 
         Map<String, Integer> shopItems = new HashMap<>();
         System.out.println(YELLOW + "Welcome " + player.getName() + ", to the Rusty Caboose." + RESET);
@@ -58,12 +61,12 @@ public class Shop {
         while (true) {
             System.out.println(YELLOW + "Your current cash: $" + player.getMoney() + RESET);
 
-            System.out.println("1. " + PURPLE + "Steel Helmet" + RESET + " - $" + GREEN + 300 + RESET + (player.inventory.getOrDefault("steel helmet", 0) > 0 ? " (" + player.inventory.get("steel helmet") + " Owned)" : ""));
-            System.out.println("2. " + PURPLE + "Steel Platebody" + RESET + " - $" + GREEN + 800 + RESET + (player.inventory.getOrDefault("steel platebody", 0) > 0 ? " (" + player.inventory.get("steel platebody") + " Owned)" : ""));
-            System.out.println("3. " + PURPLE + "Steel Platelegs" + RESET + " - $" + GREEN + 700 + RESET + (player.inventory.getOrDefault("steel platelegs", 0) > 0 ? " (" + player.inventory.get("steel platelegs") + " Owned)" : ""));
-            System.out.println("4. " + PURPLE + "Steel Shield" + RESET + " - $" + GREEN + 400 + RESET + (player.inventory.getOrDefault("steel shield", 0) > 0 ? " (" + player.inventory.get("steel shield") + " Owned)" : ""));
-            System.out.println("5. " + PURPLE + "Steel Long Sword" + RESET + " - $" + GREEN + 600 + RESET + (player.inventory.getOrDefault("steel long sword", 0) > 0 ? " (" + player.inventory.get("steel long sword") + " Owned)" : ""));
-            System.out.println("6. " + PURPLE + "Armour Package (Helmet, Body, Legs, Shield, Sword)" + RESET + " - $" + GREEN + 2500 + RESET);
+            System.out.println("1. " + PURPLE + "iron Helmet" + RESET + " - $" + GREEN + 100 + RESET + (player.inventory.getOrDefault("iron helmet", 0) > 0 ? " (" + player.inventory.get("iron helmet") + " Owned)" : ""));
+            System.out.println("2. " + PURPLE + "iron Platebody" + RESET + " - $" + GREEN + 150 + RESET + (player.inventory.getOrDefault("iron platebody", 0) > 0 ? " (" + player.inventory.get("iron platebody") + " Owned)" : ""));
+            System.out.println("3. " + PURPLE + "iron Platelegs" + RESET + " - $" + GREEN + 100 + RESET + (player.inventory.getOrDefault("iron platelegs", 0) > 0 ? " (" + player.inventory.get("iron platelegs") + " Owned)" : ""));
+            System.out.println("4. " + PURPLE + "iron Shield" + RESET + " - $" + GREEN + 100 + RESET + (player.inventory.getOrDefault("iron shield", 0) > 0 ? " (" + player.inventory.get("iron shield") + " Owned)" : ""));
+            System.out.println("5. " + PURPLE + "iron Sword" + RESET + " - $" + GREEN + 150 + RESET + (player.inventory.getOrDefault("iron sword", 0) > 0 ? " (" + player.inventory.get("iron sword") + " Owned)" : ""));
+            System.out.println("6. " + PURPLE + "Armour Package (Helmet, Body, Legs, Shield, Sword)" + RESET + " - $" + GREEN + 500 + RESET);
             System.out.println("7. " + RED + "Back to Shop Categories" + RESET);
             System.out.print(CYAN + BOLD + "Enter the " + RESET + "number " + CYAN + BOLD + "of the item you wish to purchase: " + RESET);
 
@@ -71,20 +74,20 @@ public class Shop {
 
             try {
                 switch (armourChoice) {
-                    case "1": // Steel Helmet
-                        buyArmour(player, "steel helmet", 300);
+                    case "1":
+                        buyArmour(player, "iron helmet", 100);
                         break;
-                    case "2": // Steel Platebody
-                        buyArmour(player, "steel platebody", 800);
+                    case "2":
+                        buyArmour(player, "iron platebody", 150);
                         break;
-                    case "3": // Steel Platelegs
-                        buyArmour(player, "steel platelegs", 700);
+                    case "3":
+                        buyArmour(player, "iron platelegs", 100);
                         break;
-                    case "4": // Steel Shield
-                        buyArmour(player, "steel shield", 400);
+                    case "4":
+                        buyArmour(player, "iron shield", 100);
                         break;
-                    case "5": // Steel Long Sword
-                        buyArmour(player, "steel long sword", 600);
+                    case "5":
+                        buyArmour(player, "iron sword", 150);
                         break;
                     case "6": // Armour Package
                         buyArmourPackage(player);
@@ -271,7 +274,14 @@ public class Shop {
             scanner.nextLine(); // Consume the invalid input
         }
     }
+    private void customSellItems() {
+        shopItems.putIfAbsent("copper wire", 175); // Manual shop items
+    }
     private void sell(Player player) {
+
+        customSellItems();
+
+
         while (true) {
             System.out.println(YELLOW + "\n--- Sell Items ---" + RESET);
             System.out.println("Your current cash: $" + player.getMoney());

@@ -1,10 +1,10 @@
-package Vaninion_Main.foodAndPotions;
+package vaninion.foodAndPotions;
 
-import Vaninion_Main.player.Player;
+import vaninion.players.Player;
 import java.util.HashMap;
 import java.util.Map;
 
-import static Vaninion_Main.ColoredConsole.*;
+import static vaninion.ColoredConsole.*;
 
 public class Food {
     // Map to store food effects: foodName -> Map of stat effects

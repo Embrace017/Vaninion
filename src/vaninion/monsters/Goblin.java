@@ -1,4 +1,4 @@
-package Vaninion_Main.monsters;
+package vaninion.monsters;
 
 public class Goblin extends Monster {
     public Goblin() {
@@ -7,7 +7,6 @@ public class Goblin extends Monster {
         addPossibleDrop("gold coin", 10.0, 100);
         addPossibleDrop("goblin ear", 100.0, 5);
         addPossibleDrop("rusty dagger", 50.0, 10);
-
 
     }
 }

@@ -1,7 +1,7 @@
-package Vaninion_Main.dojo;
+package vaninion.dojo;
 
-import Vaninion_Main.foodAndPotions.Food;
-import Vaninion_Main.player.Player;
+import vaninion.foodAndPotions.Food;
+import vaninion.players.Player;
 
 
 import java.util.HashMap;
@@ -9,7 +9,7 @@ import java.util.Map;
 import java.util.Scanner;
 import java.util.Random;
 
-import static Vaninion_Main.ColoredConsole.*;
+import static vaninion.ColoredConsole.*;
 
 public class Dojo {
     private static final Food food = new Food();
@@ -23,17 +23,13 @@ public class Dojo {
     // Update to the existing Dojo constructor to add new cooking recipes
     public Dojo() {
         // Initialize smelting recipes with input -> output mappings
-        smeltingRecipes.put("iron bar", Map.of("iron ore", 3, "coal", 3));
-
+        smeltingRecipes.put("steel bar", Map.of("iron ore", 3, "coal", 3));
         smeltingRecipes.put("copper bar", Map.of("copper ore", 3, "coal", 5));
-
         smeltingRecipes.put("gold bar", Map.of("gold ore", 3, "coal", 10));
-
         smeltingRecipes.put("gorganite bar", Map.of("gorganite ore", 3,
                 "coal", 50,
                 "gold bar", 10,
                 "copper bar", 10));
-
         smeltingRecipes.put("vaninite bar", Map.of("vaninite ore", 3,
                 "gorganite bar", 20,
                 "gold bar", 20,
@@ -41,8 +37,24 @@ public class Dojo {
 
         // Initialize smithing recipes with input (ingredients -> quantity) and output
         smithingRecipes.put("copper wire", Map.of("copper bar", 1));
-        smithingRecipes.put("iron shield", Map.of("iron bar", 3));
-        smithingRecipes.put("steel sword", Map.of("iron bar", 3, "coal", 6));
+        // Steel items
+        smithingRecipes.put("steel sword", Map.of("steel bar", 5));
+        smithingRecipes.put("steel helmet", Map.of("steel bar", 5));
+        smithingRecipes.put("steel chestplate", Map.of("steel bar", 5));
+        smithingRecipes.put("steel leggings", Map.of("steel bar", 5));
+        smithingRecipes.put("steel shield", Map.of("steel bar", 5));
+        // Gorganite
+        smithingRecipes.put("gorganite sword", Map.of("gorganite bar", 20));
+        smithingRecipes.put("gorganite helmet", Map.of("gorganite bar", 20));
+        smithingRecipes.put("gorganite chestplate", Map.of("gorganite bar", 20));
+        smithingRecipes.put("gorganite leggings", Map.of("gorganite bar", 20));
+        smithingRecipes.put("gorganite shield", Map.of("gorganite bar", 20));
+        // Vaninite
+        smithingRecipes.put("vaninite sword", Map.of("vaninite bar", 5));
+        smithingRecipes.put("vaninite helmet", Map.of("vaninite bar", 5));
+        smithingRecipes.put("vaninite chestplate", Map.of("vaninite bar", 5));
+        smithingRecipes.put("vaninite leggings", Map.of("vaninite bar", 5));
+
 
         // Initialize cooking recipes for fish
         cookingRecipes.put("raw lake minnow", "cooked lake minnow");
@@ -63,8 +75,9 @@ public class Dojo {
             System.out.println("3. " + PURPLE + "Smelt Ores" + RESET);
             System.out.println("4. " + PURPLE + "Cook Fish" + RESET);
             System.out.println("5. " + PURPLE + "Smith Items" + RESET); // Changed option name
+            System.out.println("6. " + PURPLE + "Show Equipment" + RESET);
             System.out.println("* " + RED + "Leave Dojo" + RESET); // Renumbered leave option
-            System.out.println(CYAN + "\n'reg' & 'res' for inventories" + RESET);
+            System.out.println(CYAN + "\n'reg', 'res', 'armour' for inventories" + RESET);
 
             String choice = scanner.nextLine().toLowerCase().trim();
 
@@ -74,6 +87,7 @@ public class Dojo {
                 case "3", "smelt" -> smelt(player);
                 case "4", "cook" -> cook(player);
                 case "5", "smith" -> smith(player);
+                case "armour" -> player.displayArmourInventory();
                 case "res" -> player.displayResourceInventory();
                 case "reg" -> player.displayRegularInventory();
                 case "*", "leave", "exit", "back" -> {
@@ -345,4 +359,34 @@ public class Dojo {
             System.out.println(RED + "Invalid item to smith!" + RESET);
         }
     }
+    private void showEquipmentMenu(Player player) {
+        Scanner scanner = new Scanner(System.in);
+
+        while (true) {
+            System.out.println(YELLOW + "\n=== Equipment Menu ===" + RESET);
+            System.out.println("Currently Equipped:");
+            System.out.println("1. Helmet: " + (player.getEquipment().getHelmet() != null ? PURPLE + "Equipped" + RESET : RED + "Empty" + RESET));
+            System.out.println("2. Chestplate: " + (player.getEquipment().getChestplate() != null ? PURPLE + "Equipped" + RESET : RED + "Empty" + RESET));
+            System.out.println("3. Leggings: " + (player.getEquipment().getLeggings() != null ? PURPLE + "Equipped" + RESET : RED + "Empty" + RESET));
+            System.out.println("4. Shield: " + (player.getEquipment().getShield() != null ? PURPLE + "Equipped" + RESET : RED + "Empty" + RESET));
+            System.out.println("5. Weapon: " + (player.getEquipment().getWeapon() != null ? PURPLE + "Equipped" + RESET : RED + "Empty" + RESET));
+            System.out.println("6. Back");
+
+            System.out.print(CYAN + "Choose slot to manage (1-5): " + RESET);
+            String choice = scanner.nextLine().trim();
+
+            if (choice.equals("6")) break;
+
+            if (choice.matches("[1-5]")) {
+                showEquipmentSlotOptions(player, Integer.parseInt(choice));
+            }
+        }
+    }
+
+    private void showEquipmentSlotOptions(Player player, int slot) {
+        // Show available items for that slot from player's inventory
+        // Allow equipping/unequipping items
+        // Update player stats when equipment changes
+    }
+
 }

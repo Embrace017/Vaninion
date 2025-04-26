@@ -1,12 +1,12 @@
-package Vaninion_Main;
+package vaninion;
 
-import Vaninion_Main.player.Player;
+import vaninion.players.Player;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 import java.util.Scanner;
-import static Vaninion_Main.ColoredConsole.*;
+import static vaninion.ColoredConsole.*;
 
 
 public class Fishing {

@@ -1,8 +1,8 @@
-package Vaninion_Main.foodAndPotions;
+package vaninion.foodAndPotions;
 
 import java.util.Scanner;
-import Vaninion_Main.player.Player;
-import static Vaninion_Main.ColoredConsole.*;
+import vaninion.players.Player;
+import static vaninion.ColoredConsole.*;
 
 // Maybe add stat drain too? end of fight or fights?
 

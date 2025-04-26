@@ -1,4 +1,4 @@
-package Vaninion_Main.monsters;
+package vaninion.monsters;
 
 public class Skeleton extends Monster {
     public Skeleton() {

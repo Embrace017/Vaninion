@@ -1,10 +1,10 @@
-package Vaninion_Main.monsters;
-import Vaninion_Main.player.Player;
-import Vaninion_Main.Shop;
+package vaninion.monsters;
+import vaninion.players.Player;
+import vaninion.Shop;
 
 import java.util.*;
-import static Vaninion_Main.ColoredConsole.*;
-import static Vaninion_Main.Shop.shopItems;
+import static vaninion.ColoredConsole.*;
+import static vaninion.Shop.shopItems;
 
 public abstract class Monster {
     private String name;
@@ -53,9 +53,9 @@ public abstract class Monster {
     public void attack(Player player) {
         int damage = random.nextInt(Math.max(0, this.strength - player.getDefense()));
         player.setHealth(player.getHealth() - damage);
-        System.out.println(" ");
-        System.out.println(RED + BOLD + this.name + " attacks " + player.getName() + "for " + damage + " damage!");
-        //System.out.println(BOLD + BLUE + "^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^");
+
+        System.out.println("\n" + RED + BOLD + this.name + " attacks " + player.getName() + " for " + damage + " damage!");
+        System.out.println(BOLD + BLUE + "^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^");
     }
 
     public boolean isAlive() {

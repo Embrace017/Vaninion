@@ -1,12 +1,12 @@
-package Vaninion_Main.adventure;
+package vaninion.adventure;
 
-import Vaninion_Main.player.Player;
+import vaninion.players.Player;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
 
-import static Vaninion_Main.ColoredConsole.*;
+import static vaninion.ColoredConsole.*;
 
 public class Area {
     private final Scanner scanner = new Scanner(System.in);

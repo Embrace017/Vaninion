@@ -1,4 +1,6 @@
-package Vaninion_Main.player;
+package vaninion.players.player;
+
+import vaninion.players.Player;
 
 public class Human extends Player {
     private String bonusSkill;

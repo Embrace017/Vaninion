@@ -1,4 +1,4 @@
-package Vaninion_Main;
+package vaninion;
 
 public class ColoredConsole {
     public static final String RESET = "\u001B[0m";

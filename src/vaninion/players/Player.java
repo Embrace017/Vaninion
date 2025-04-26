@@ -1,10 +1,11 @@
-package Vaninion_Main.player;
-import Vaninion_Main.ColoredConsole;
-import Vaninion_Main.adventure.Riddle;
+package vaninion.players;
+import vaninion.ColoredConsole;
+import vaninion.adventure.Riddle;
+import vaninion.combat.Equipment;
 
 import java.util.*;
 
-import static Vaninion_Main.ColoredConsole.*;
+import static vaninion.ColoredConsole.*;
 //import Vaninion_Main.foodAndPotions.Food;
 
 public class Player {
@@ -23,6 +24,9 @@ public class Player {
     private int maxDefense;
     private int wisdom;
     private int charisma;
+
+    // Equipment
+    private Equipment equipment;
 
 
     // Skill stats
@@ -53,9 +57,9 @@ public class Player {
         this.level = 1;
         this.experience = 0;
         this.skillPoints = 0;
-        this.health = 100;
+        this.health = 50;
         this.maxHealth = health;
-        this.mana = 50;
+        this.mana = 20;
         this.maxMana = mana;
         this.strength = 1;
         this.maxStrength = strength;
@@ -71,12 +75,15 @@ public class Player {
         this.cookingLevel = 1;
         this.cookingExp = 0;
 
+        // Equipment
+        this.equipment = new Equipment();
+
         // Inventories
         this.inventory = new HashMap<>();
         this.resourceInventory = new HashMap<>();
     }
 
-    // RANDOM NUMBER GEN maybe move to items?
+
     public String mapRng(Map<String, Double> itemMap) {
         double totalWeight = itemMap.values().stream().mapToDouble(d -> d).sum();
         double random = Math.random() * totalWeight;
@@ -109,15 +116,12 @@ public class Player {
     public int getHealth() {
         return health;
     }
-
     public void setHealth(int health) {
         this.health = health;
     }
-
     public int getMaxHealth() {
-        return maxHealth + tempMaxHealth;
+        return maxHealth + tempMaxHealth + equipment.getTotalHealthBoost();
     }
-
     public void setMaxHealth(int maxHealth) {
         this.maxHealth = maxHealth;
     }
@@ -126,49 +130,40 @@ public class Player {
     public int getMana() {
         return mana;
     }
-
     public void setMana(int mana) {
         this.mana = mana;
     }
-
     public int getMaxMana() {
-        return maxMana;
+        return maxMana + equipment.getTotalManaBoost();
     }
-
     public void setMaxMana(int maxMana) {
         this.maxMana = maxMana;
     }
 
     // Strength
     public int getStrength() {
-        return strength;
+        return strength + equipment.getTotalStrengthBoost();
     }
-
     public void setStrength(int strength) {
         this.strength = strength;
     }
-
     public int getMaxStrength() {
         return maxStrength;
     }
-
     public void setMaxStrength(int maxStrength) {
         this.maxStrength = maxStrength;
     }
 
-    // efense
+    // Defense
     public int getDefense() {
-        return defense;
+        return defense + equipment.getTotalDefenceBoost();
     }
-
     public void setDefense(int defence) {
         this.defense = defence;
     }
-
     public int getMaxDefense() {
         return maxDefense;
     }
-
     public void setMaxDefense(int maxDefence) {
         this.maxDefense = maxDefence;
     }
@@ -177,15 +172,12 @@ public class Player {
     public int getWisdom() {
         return wisdom;
     }
-
     public void setWisdom(int wisdom) {
         this.wisdom = wisdom;
     }
-
     public int getCharisma() {
         return charisma;
     }
-
     public void setCharisma(int charisma) {
         this.charisma = charisma;
     }
@@ -194,23 +186,18 @@ public class Player {
     public int getLevel() {
         return level;
     } // Player level
-
     public void setLevel(int level) {
         this.level = level;
     } // Player level
-
     public int getExperience() {
         return experience;
     } // Player level experience
-
     public void setExperience(int experience) {
         this.experience = experience;
     }
-
     public int getSkillPoints() {
         return skillPoints;
     } // Skill points from level up
-
     public void setSkillPoints(int skillPoints) {
         this.skillPoints = skillPoints;
     }
@@ -258,17 +245,19 @@ public class Player {
     public int getTempStrength() {
         return tempStrength;
     }
-
     public void setTempStrength(int tempStrength) {
         this.tempStrength = tempStrength;
     }
-
     public int getTempMaxHealth() {
         return tempMaxHealth;
     }
-
     public void setTempMaxHealth(int tempMaxHealth) {
         this.tempMaxHealth = tempMaxHealth;
+    }
+
+    // Equipment
+    public Equipment getEquipment() {
+        return equipment;
     }
 
     // You might want to modify the getMaxHealth method to include temporary boosts
@@ -287,39 +276,18 @@ public class Player {
         setHealth(Math.min(getMaxHealth(), getHealth() + amount));
         System.out.println("Healed for " + amount + " health. Current health: " + getHealth());
     }
-
-
-    // Start inventory management methods
-    public void displayInventory() {
-        System.out.println(YELLOW + "\nWhat would you like to view? " + RESET + "\n(You can access either from, the " + BLUE + "main menu " + RESET + "with 'res' or 'reg')");
-        System.out.println("1. " + PURPLE + "Regular Inventory" + RESET);
-        System.out.println("2. " + PURPLE + "Resources" + RESET);
-        System.out.println("3. " + PURPLE + "Both" + RESET);
-        System.out.println("4. " + RED + "Back" + RESET);
-
-        String choice = scanner.nextLine().toLowerCase().trim();
-
-        switch (choice) {
-            case "1", "regular" -> displayRegularInventory();
-            case "2", "resources", "resource" -> displayResourceInventory();
-            case "3", "both" -> {
-                displayRegularInventory();
-                displayResourceInventory();
-            }
-            case "4", "back" -> {
-                return;
-            }
-            default -> System.out.println(RED + "Invalid choice!" + RESET);
-        }
+    public void equipItem(String itemName) {
+        equipment.equipItemByName(itemName, this);
     }
 
+    // Start inventory management methods
     public void displayRegularInventory() {
         if (inventory.isEmpty()) {
-            System.out.println(RED + "Your regular inventory is empty!" + RESET);
+            System.out.println(RED + "Your inventory is empty!" + RESET);
             return;
         }
 
-        System.out.println(YELLOW + "\n=== Regular Inventory ===" + RESET);
+        System.out.println(YELLOW + "\n=== Full Inventory ===" + RESET);
         List<Map.Entry<String, Integer>> sortedItems = new ArrayList<>(inventory.entrySet());
         sortedItems.sort(Map.Entry.comparingByKey());
 
@@ -356,6 +324,41 @@ public class Player {
             inventory.put(item, inventory.getOrDefault(item, 0) + count);
         }
     }
+    public void displayArmourInventory() {
+        if (inventory.isEmpty()) {
+            System.out.println(RED + "Your inventory is empty!" + RESET);
+            return;
+        }
+
+        System.out.println(YELLOW + "\n=== Armour Inventory ===" + RESET);
+        List<Map.Entry<String, Integer>> sortedItems = new ArrayList<>(inventory.entrySet());
+        sortedItems.sort(Map.Entry.comparingByKey());
+        boolean hasArmour = false;
+
+        for (Map.Entry<String, Integer> item : sortedItems) {
+            String itemName = item.getKey().toLowerCase();
+            if (isArmourItem(itemName)) {
+                hasArmour = true;
+                int count = item.getValue();
+                System.out.printf(PURPLE + "%-20s" + GREEN + "x%d" + RESET + "%n",
+                        ColoredConsole.capitalizeWords(itemName), count);
+            }
+        }
+
+        if (!hasArmour) {
+            System.out.println(RED + "No armour items in inventory!" + RESET);
+        }
+        System.out.println(YELLOW + "=========================\n" + RESET);
+    }
+
+    private boolean isArmourItem(String itemName) {
+        return itemName.contains("helmet") ||
+                itemName.contains("chestplate") ||
+                itemName.contains("leggings") ||
+                itemName.contains("shield") ||
+                itemName.contains("sword");
+    }
+
 
     public boolean removeItem(String item, int count) {
         if (isResource(item)) {
@@ -413,7 +416,7 @@ public class Player {
     public void stats() {
         System.out.println(YELLOW + "\n====== " + getName() + "'s Stats ======" + RESET);
         System.out.println(GREEN + "Level: " + getLevel() + RESET);
-        System.out.println(GREEN + "Experience: " + getExperience() + "/" + (1000 * getLevel()) + RESET);
+        System.out.println(GREEN + "Experience: " + getExperience() + "/" + (500 * getLevel()) + RESET);
         System.out.println(GREEN + "Skill Points: " + getSkillPoints() + RESET);
         System.out.println(GREEN + "Health: " + getHealth() + RESET);
         System.out.println(GREEN + "Mana: " + getMana() + RESET);
@@ -425,10 +428,10 @@ public class Player {
 
     public void gainExperience(int expGained) {
         setExperience(getExperience() + expGained);
-        while (getExperience() >= 100 * getLevel() / 2) {
+        if (getExperience() >= 100 * getLevel() / 2) {
             setSkillPoints(getSkillPoints() + 1);
             setLevel(getLevel() + 1);
-            setExperience(getExperience() - (100 * getLevel() / 2)); //hopefully only decreases current level exp and not total
+            setExperience(getExperience() - ((100 * (getLevel() - 1)) / 2)); //hopefully only decreases current level exp and not total
             System.out.println(GREEN + "You gained a level!" + RESET);
             System.out.println(GREEN + "Your new level is " + getLevel() + "!" + RESET);
         }

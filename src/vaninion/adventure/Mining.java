@@ -1,9 +1,9 @@
-package Vaninion_Main.adventure;
+package vaninion.adventure;
 
-import Vaninion_Main.player.Player;
+import vaninion.players.Player;
 import java.util.*;
 
-import static Vaninion_Main.ColoredConsole.*;
+import static vaninion.ColoredConsole.*;
 
 public class Mining {
     private Random random = new Random();

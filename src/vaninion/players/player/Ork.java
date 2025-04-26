@@ -1,4 +1,6 @@
-package Vaninion_Main.player;
+package vaninion.players.player;
+
+import vaninion.players.Player;
 
 public class Ork extends Player {
     private int rage;

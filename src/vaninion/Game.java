@@ -1,14 +1,17 @@
-package Vaninion_Main;
+package vaninion;
 
-import Vaninion_Main.adventure.*;
-import Vaninion_Main.combat.Combat;
-import Vaninion_Main.dojo.Dojo;
-import Vaninion_Main.monsters.*;
-import Vaninion_Main.player.*;
+import vaninion.adventure.*;
+import vaninion.combat.Combat;
+import vaninion.combat.Equipment;
+import vaninion.dojo.Dojo;
+import vaninion.monsters.*;
+import vaninion.players.*;
+import vaninion.players.player.Human;
+import vaninion.players.player.Ork;
+import vaninion.players.player.Viking;
 
-import java.util.Map;
 import java.util.Scanner;
-import static Vaninion_Main.ColoredConsole.*;
+import static vaninion.ColoredConsole.*;
 
 
 public class Game {
@@ -20,6 +23,8 @@ public class Game {
     private static final Combat combat = new Combat();
     private static final Adventure adventure = new Adventure();
     private static final Riddle riddle = new Riddle();
+    private static final Equipment equipment = new Equipment();
+
 
     public static void main(String[] args) {
         System.out.println(BOLD + BLUE + "~~~ Welcome to Vaninion ~~~" + RESET);
@@ -51,11 +56,10 @@ public class Game {
         }
         // MUST REMOVE @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
-        player.addItem("basic rod", 1);
-        player.addItem("basic bait", 10000);
 
-
-        player.setSkillPoints(3);
+        player.setMoney(100);
+        player.addItem("iron helmet", 1);
+        player.addItem("copper wire", 21);
 
         // MUST REMOVE @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
@@ -90,7 +94,7 @@ public class Game {
             System.out.println("║" + PURPLE + " Character Management:" + BLUE + "          ║");
             System.out.println("║ " + PURPLE + "7. Stats" + BLUE + "                       ║");
             System.out.println("║ " + PURPLE + "8. Level Up" + BLUE + "                    ║");
-            System.out.println("║ " + PURPLE + "9. Inventory" + BLUE + "                   ║");
+            System.out.println("║ " + PURPLE + "9. Equipment" + BLUE + "                   ║");
 
             // Shop & Exit section
             System.out.println("╟────────────────────────────────╢");
@@ -99,7 +103,7 @@ public class Game {
             System.out.println("╚════════════════════════════════╝" + RESET);
 
             // Quick commands hint
-            System.out.println(CYAN + "'reg', 'res', 'both' for inventories" + RESET);
+            System.out.println(CYAN + "'inv', 'res', 'armour', for inventories" + RESET);
 
             String choice = scanner.nextLine().toLowerCase().trim();
             switch (choice) {
@@ -111,7 +115,7 @@ public class Game {
                 case "6", "dojo" -> new Dojo().enterDojo(player);
                 case "7", "stats" -> player.stats();
                 case "8", "level", "level up" -> player.useSkillPoint();
-                case "9", "inventory", "inv", "i" -> player.displayInventory();
+                case "9", "equipment", "equip" -> equipMenu(player);
                 case "s", "shop" -> shop.shop(player);
                 case "e", "*", "exit", "quit" -> {
                     System.out.println(YELLOW + "Are you sure you want to exit? (yes/no)" + RESET);
@@ -122,19 +126,43 @@ public class Game {
                     }
                 }
                 // Quick access commands
-                case "reg", "regular" -> player.displayRegularInventory();
+                case "inv", "inventory" -> player.displayRegularInventory();
                 case "res", "resource" -> player.displayResourceInventory();
-                case "both" -> {
-                    player.displayResourceInventory();
-                    player.displayRegularInventory();
-                }
+                case "armour" -> player.displayArmourInventory();
 
 
                 //Dev Commands
-                case "catchRates" -> System.out.println(fishing.calculateTotalCatchRate());
+                case "catchrates" -> System.out.println(fishing.calculateTotalCatchRate());
 
 
                 default -> System.out.println(RED + "Invalid choice! Please try again." + RESET);
+            }
+        }
+    }
+
+    public static void equipMenu(Player player) {
+        boolean equipMenu = true;
+        while (equipMenu) {
+            System.out.println(YELLOW + "\n=== Equipment Menu ===" + RESET);
+            System.out.println("1. " + PURPLE + "Equip Items" + RESET);
+            System.out.println("2. " + PURPLE + "View Armour" + RESET);
+            System.out.println("3. " + PURPLE + "View Equipment Status" + RESET);
+            System.out.println("*. " + RED + "Back" + RESET);
+
+            String equipChoice = scanner.nextLine().toLowerCase().trim();
+            switch (equipChoice) {
+                case "1", "equip" -> {
+                    player.displayArmourInventory();
+                    System.out.println(GREEN + "Enter the name of the item to equip (or 'back' to return):" + RESET);
+                    String itemToEquip = scanner.nextLine().toLowerCase().trim();
+                    if (!itemToEquip.equals("back")) {
+                        player.equipItem(itemToEquip);
+                    }
+                }
+                case "2", "armour" -> player.displayArmourInventory();
+                case "3", "status" -> System.out.println(player.getEquipment().getEquipmentStatus());
+                case "*", "back" -> equipMenu = false;
+                default -> System.out.println(RED + "Invalid choice!" + RESET);
             }
         }
     }
