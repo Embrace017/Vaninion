@@ -9,7 +9,7 @@ import static vaninion.ColoredConsole.*;
 //import Vaninion_Main.foodAndPotions.Food;
 
 public class Player {
-    private String name;
+    private final String name;
     private int money;
     private int level;
     private int experience;
@@ -47,10 +47,6 @@ public class Player {
     public Map<String, Integer> resourceInventory;
 
 
-    private Random random = new Random();
-    private Riddle riddleGame = new Riddle();
-    Scanner scanner = new Scanner(System.in);
-
     public Player(String name) {
         this.name = name;
         this.money = 100;
@@ -81,6 +77,7 @@ public class Player {
         // Inventories
         this.inventory = new HashMap<>();
         this.resourceInventory = new HashMap<>();
+
     }
 
 
@@ -353,10 +350,16 @@ public class Player {
 
     private boolean isArmourItem(String itemName) {
         return itemName.contains("helmet") ||
+                itemName.contains("mask") ||
+                itemName.contains("hat") ||
+
                 itemName.contains("chestplate") ||
                 itemName.contains("leggings") ||
                 itemName.contains("shield") ||
+                itemName.contains("staff") ||
+
                 itemName.contains("sword");
+
     }
 
 
@@ -405,7 +408,6 @@ public class Player {
                 item.contains("diamond") ||
                 item.contains("raw") || // Cooking
                 item.contains("cooked") ||
-                // item.contains("") ||
                 item.contains("wood");
 
     }
@@ -424,6 +426,9 @@ public class Player {
         System.out.println(GREEN + "Defence: " + getDefense() + RESET);
         System.out.println(GREEN + "Wisdom: " + getWisdom() + RESET);
         System.out.println(GREEN + "Charisma: " + getCharisma() + RESET);
+        System.out.println(GREEN + "Mining: " + getMiningLevel() + RESET);
+        System.out.println(GREEN + "Cooking: " + getCookingLevel() + RESET);
+        System.out.println(GREEN + "Fishing: " + getFishingLevel() + RESET);
     }
 
     public void gainExperience(int expGained) {

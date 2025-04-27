@@ -6,7 +6,7 @@ public class Human extends Player {
     private String bonusSkill;
     public Human(String name) {
         super(name);
-        setHealth(getMaxHealth() + 50);
+        //setHealth(getMaxHealth() + 20);
         bonusSkill = "diplomacy";
     }
 

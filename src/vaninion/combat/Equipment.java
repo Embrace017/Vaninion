@@ -3,27 +3,27 @@ import vaninion.players.Player;
 import static vaninion.ColoredConsole.*;
 
 public class Equipment {
-    private Armour helmet;
-    private Armour chestplate;
-    private Armour leggings;
-    private Armour shield;
-    private Armour weapon;
+    private ArmourStats helmet;
+    private ArmourStats chestplate;
+    private ArmourStats leggings;
+    private ArmourStats shield;
+    private ArmourStats weapon;
 
     // Getters and setters
-    public Armour getHelmet() { return helmet; }
-    public void equipHelmet(Armour helmet) { this.helmet = helmet; }
+    public ArmourStats getHelmet() { return helmet; }
+    public void equipHelmet(ArmourStats helmet) { this.helmet = helmet; }
 
-    public Armour getChestplate() { return chestplate; }
-    public void equipChestplate(Armour chestplate) { this.chestplate = chestplate; }
+    public ArmourStats getChestplate() { return chestplate; }
+    public void equipChestplate(ArmourStats chestplate) { this.chestplate = chestplate; }
 
-    public Armour getLeggings() { return leggings; }
-    public void equipLeggings(Armour leggings) { this.leggings = leggings; }
+    public ArmourStats getLeggings() { return leggings; }
+    public void equipLeggings(ArmourStats leggings) { this.leggings = leggings; }
 
-    public Armour getShield() { return shield; }
-    public void equipShield(Armour shield) { this.shield = shield; }
+    public ArmourStats getShield() { return shield; }
+    public void equipShield(ArmourStats shield) { this.shield = shield; }
 
-    public Armour getWeapon() { return weapon; }
-    public void equipWeapon(Armour weapon) { this.weapon = weapon; }
+    public ArmourStats getWeapon() { return weapon; }
+    public void equipWeapon(ArmourStats weapon) { this.weapon = weapon; }
 
     // Calculate total defense boost from all equipped items
     public int getTotalDefenceBoost() {
@@ -100,41 +100,42 @@ public class Equipment {
         }
 
         // Find the matching Armour object
-        Armour armourPiece = null;
+        ArmourStats armourPiece = null;
 
         // Check all static Armour fields in Armour class
         switch (itemName) {
 
             // Iron gear
-            case "iron sword" -> armourPiece = Armour.IRON_SWORD;
-            case "iron helmet" -> armourPiece = Armour.IRON_HELMET;
-            case "iron chestplate" -> armourPiece = Armour.IRON_CHESTPLATE;
-            case "iron leggings" -> armourPiece = Armour.IRON_LEGGINGS;
-            case "iron shield" -> armourPiece = Armour.IRON_SHIELD;
+            case "iron sword" -> armourPiece = ArmourStats.IRON_SWORD;
+            case "iron helmet" -> armourPiece = ArmourStats.IRON_HELMET;
+            case "iron chestplate" -> armourPiece = ArmourStats.IRON_CHESTPLATE;
+            case "iron leggings" -> armourPiece = ArmourStats.IRON_LEGGINGS;
+            case "iron shield" -> armourPiece = ArmourStats.IRON_SHIELD;
 
             // Steel gear
-            case "steel sword" -> armourPiece = Armour.STEEL_SWORD;
-            case "steel helmet" -> armourPiece = Armour.STEEL_HELMET;
-            case "steel chestplate" -> armourPiece = Armour.STEEL_CHESTPLATE;
-            case "steel leggings" -> armourPiece = Armour.STEEL_LEGGINGS;
-            case "steel shield" -> armourPiece = Armour.STEEL_SHIELD;
+            case "steel sword" -> armourPiece = ArmourStats.STEEL_SWORD;
+            case "steel helmet" -> armourPiece = ArmourStats.STEEL_HELMET;
+            case "steel chestplate" -> armourPiece = ArmourStats.STEEL_CHESTPLATE;
+            case "steel leggings" -> armourPiece = ArmourStats.STEEL_LEGGINGS;
+            case "steel shield" -> armourPiece = ArmourStats.STEEL_SHIELD;
 
             // Gorganite gear
-            case "gorganite sword" -> armourPiece = Armour.GORGANITE_SWORD;
-            case "gorganite helmet" -> armourPiece = Armour.GORGANITE_HELMET;
-            case "gorganite chestplate" -> armourPiece = Armour.GORGANITE_CHESTPLATE;
-            case "gorganite leggings" -> armourPiece = Armour.GORGANITE_LEGGINGS;
-            case "gorganite shield" -> armourPiece = Armour.GORGANITE_SHIELD;
+            case "gorganite sword" -> armourPiece = ArmourStats.GORGANITE_SWORD;
+            case "gorganite helmet" -> armourPiece = ArmourStats.GORGANITE_HELMET;
+            case "gorganite chestplate" -> armourPiece = ArmourStats.GORGANITE_CHESTPLATE;
+            case "gorganite leggings" -> armourPiece = ArmourStats.GORGANITE_LEGGINGS;
+            case "gorganite shield" -> armourPiece = ArmourStats.GORGANITE_SHIELD;
 
             // Vaninite gear
-            case "vaninite sword" -> armourPiece = Armour.VANINITE_SWORD;
-            case "vaninite helmet" -> armourPiece = Armour.VANINITE_HELMET;
-            case "vaninite chestplate" -> armourPiece = Armour.VANINITE_CHESTPLATE;
-            case "vaninite leggings" -> armourPiece = Armour.VANINITE_LEGGINGS;
-            case "vaninite shield" -> armourPiece = Armour.VANINITE_SHIELD;
+            case "vaninite sword" -> armourPiece = ArmourStats.VANINITE_SWORD;
+            case "vaninite helmet" -> armourPiece = ArmourStats.VANINITE_HELMET;
+            case "vaninite chestplate" -> armourPiece = ArmourStats.VANINITE_CHESTPLATE;
+            case "vaninite leggings" -> armourPiece = ArmourStats.VANINITE_LEGGINGS;
+            case "vaninite shield" -> armourPiece = ArmourStats.VANINITE_SHIELD;
 
             // MISC
-            case "wolf mask" -> armourPiece = Armour.WOLF_MASK;
+            case "starter helmet" -> armourPiece = ArmourStats.STARTER_HELMET;
+            case "werewolf mask" -> armourPiece = ArmourStats.WEREWOLF_MASK;
 
 
             default -> {
@@ -143,10 +144,10 @@ public class Equipment {
             }
         }
         // Store the currently equipped item to swap
-        Armour currentItem = null;
+        ArmourStats currentItem = null;
 
         // Equip the armor based on its type and get the current item
-        if (itemName.contains("helmet")) {
+        if (itemName.contains("helmet") || itemName.contains("mask") || itemName.contains("hat")) {
             currentItem = getHelmet();
             equipHelmet(armourPiece);
         } else if (itemName.contains("chestplate")) {
@@ -158,7 +159,7 @@ public class Equipment {
         } else if (itemName.contains("shield")) {
             currentItem = getShield();
             equipShield(armourPiece);
-        } else if (itemName.contains("sword")) {
+        } else if (itemName.contains("sword") || itemName.contains("staff")) {
             currentItem = getWeapon();
             equipWeapon(armourPiece);
         }

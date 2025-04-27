@@ -57,7 +57,10 @@ public abstract class Monster {
         this.health = this.maxHealth;
     }
     public void attack(Player player) {
-        int damage = random.nextInt(Math.max(0, this.strength - player.getDefense()));
+
+        int damageRange = Math.max(1, this.strength - player.getDefense());
+        int damage = damageRange > 1 ? random.nextInt(damageRange) : 0;
+
         player.setHealth(player.getHealth() - damage);
 
         System.out.println("\n" + RED + BOLD + this.name + " attacks " + player.getName() + " for " + damage + " damage!");

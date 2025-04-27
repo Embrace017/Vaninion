@@ -1,4 +1,4 @@
-package vaninion.dojo;
+package vaninion.dojo.crafting;
 
 import java.util.HashMap;
 import java.util.Map;

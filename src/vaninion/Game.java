@@ -23,7 +23,7 @@ public class Game {
     private static final Combat combat = new Combat();
     private static final Adventure adventure = new Adventure();
     private static final Riddle riddle = new Riddle();
-    private static final Equipment equipment = new Equipment();
+
 
 
     public static void main(String[] args) {
@@ -33,7 +33,16 @@ public class Game {
         // Get player name
         System.out.println(YELLOW + "\nEnter your character name: " + RESET);
         String name = "Ragnorok"; //scanner.nextLine().trim();
-
+        if (name.equals("hannah")) {
+            while (true) {
+                try {
+                    System.out.println(BRIGHT_PURPLE + BOLD + "AND THEN YOU LAID AN EGG!!!" + RESET);
+                    Thread.sleep(200);
+                    System.out.println(BRIGHT_PURPLE_BACKGROUND + BRIGHT_BLACK+ BOLD + "AND THEN YOU LAID AN EGG!!!" + RESET);
+                    Thread.sleep(200);
+                }catch (Exception e) {}
+            }
+        }
         // Character selection
         Player player = null;
         while (player == null) {
@@ -58,8 +67,10 @@ public class Game {
 
 
         player.setMoney(100);
-        player.addItem("iron helmet", 1);
-        player.addItem("gorganite bar", 21);
+        player.addItem("starterinv" +
+                " helmet", 1);
+
+
 
         // MUST REMOVE @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 

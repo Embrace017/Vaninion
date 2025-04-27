@@ -4,7 +4,6 @@ import java.util.*;
 
 import static vaninion.ColoredConsole.*;
 
-import vaninion.combat.Armour;
 import vaninion.players.Player;
 
 public class Shop {
@@ -62,8 +61,8 @@ public class Shop {
             System.out.println(YELLOW + "Your current cash: $" + player.getMoney() + RESET);
 
             System.out.println("1. " + PURPLE + "iron Helmet" + RESET + " - $" + GREEN + 100 + RESET + (player.inventory.getOrDefault("iron helmet", 0) > 0 ? " (" + player.inventory.get("iron helmet") + " Owned)" : ""));
-            System.out.println("2. " + PURPLE + "iron Platebody" + RESET + " - $" + GREEN + 150 + RESET + (player.inventory.getOrDefault("iron platebody", 0) > 0 ? " (" + player.inventory.get("iron platebody") + " Owned)" : ""));
-            System.out.println("3. " + PURPLE + "iron Platelegs" + RESET + " - $" + GREEN + 100 + RESET + (player.inventory.getOrDefault("iron platelegs", 0) > 0 ? " (" + player.inventory.get("iron platelegs") + " Owned)" : ""));
+            System.out.println("2. " + PURPLE + "iron chestplate" + RESET + " - $" + GREEN + 150 + RESET + (player.inventory.getOrDefault("iron chestplate", 0) > 0 ? " (" + player.inventory.get("iron chestplate") + " Owned)" : ""));
+            System.out.println("3. " + PURPLE + "iron leggings" + RESET + " - $" + GREEN + 100 + RESET + (player.inventory.getOrDefault("iron leggings", 0) > 0 ? " (" + player.inventory.get("iron leggings") + " Owned)" : ""));
             System.out.println("4. " + PURPLE + "iron Shield" + RESET + " - $" + GREEN + 100 + RESET + (player.inventory.getOrDefault("iron shield", 0) > 0 ? " (" + player.inventory.get("iron shield") + " Owned)" : ""));
             System.out.println("5. " + PURPLE + "iron Sword" + RESET + " - $" + GREEN + 150 + RESET + (player.inventory.getOrDefault("iron sword", 0) > 0 ? " (" + player.inventory.get("iron sword") + " Owned)" : ""));
             System.out.println("6. " + PURPLE + "Armour Package (Helmet, Body, Legs, Shield, Sword)" + RESET + " - $" + GREEN + 500 + RESET);
@@ -78,10 +77,10 @@ public class Shop {
                         buyArmour(player, "iron helmet", 100);
                         break;
                     case "2":
-                        buyArmour(player, "iron platebody", 150);
+                        buyArmour(player, "iron chestplate", 150);
                         break;
                     case "3":
-                        buyArmour(player, "iron platelegs", 100);
+                        buyArmour(player, "iron leggings", 100);
                         break;
                     case "4":
                         buyArmour(player, "iron shield", 100);
@@ -108,14 +107,14 @@ public class Shop {
         if (player.getMoney() >= packagePrice) {
             player.setMoney(player.getMoney() - packagePrice);
             player.addItem("iron helmet", 1);
-            player.addItem("iron platebody", 1);
-            player.addItem("iron platelegs", 1);
+            player.addItem("iron chestplate", 1);
+            player.addItem("iron leggings", 1);
             player.addItem("iron shield", 1);
             player.addItem("iron sword", 1);
             System.out.println(GREEN + "You bought the Armour Package for $" + YELLOW + packagePrice + GREEN + ". You now have:" + RESET);
             System.out.println(YELLOW + "  - iron Helmet" + GREEN + ": " + player.getItemCount("iron helmet"));
-            System.out.println(YELLOW + "  - iron Platebody" + GREEN + ": " + player.getItemCount("iron platebody"));
-            System.out.println(YELLOW + "  - iron Platelegs" + GREEN + ": " + player.getItemCount("iron platelegs"));
+            System.out.println(YELLOW + "  - iron chestplate" + GREEN + ": " + player.getItemCount("iron chestplate"));
+            System.out.println(YELLOW + "  - iron leggings" + GREEN + ": " + player.getItemCount("iron leggings"));
             System.out.println(YELLOW + "  - iron Shield" + GREEN + ": " + player.getItemCount("iron shield"));
             System.out.println(YELLOW + "  - iron  Sword" + GREEN + ": " + player.getItemCount("iron sword") + RESET);
             System.out.println(GREEN + "Your remaining cash: $" + YELLOW + player.getMoney() + RESET);

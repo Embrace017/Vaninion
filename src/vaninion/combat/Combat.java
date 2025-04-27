@@ -1,5 +1,12 @@
 package vaninion.combat;
 
+//Add special to combat interface
+
+
+
+
+
+
 import vaninion.monsters.*;
 import vaninion.players.player.Ork;
 import vaninion.players.Player;
@@ -24,7 +31,7 @@ public class Combat {
     private int basePower = 0;
 
     public Monster getMonsterAndFight(Player player) {
-        if (player.getHealth() <= 20) {
+        if (player.getHealth() <= 10) {
             System.out.println(RED + "You are far too weak to fight,\n" +
                     " perhaps you should spend the night at the Dojo." + RESET);
             return null;
@@ -54,7 +61,7 @@ public class Combat {
             case "foggy" ->
                     System.out.println("║ " + GREY + "Dense fog reduces accuracy!" + BLUE);
             case "sunny" ->
-                    System.out.println("║ " + YELLOW + "The sun's energy boosts all damage you!" + BLUE);
+                    System.out.println("║ " + YELLOW + "The sun's energy empowers you!" + BLUE);
             default ->
                     System.out.println("║ " + GREEN + "Normal conditions" + BLUE);
         }
@@ -72,7 +79,7 @@ public class Combat {
         if (basePower == 0)
             comboDamage = 0;
         // Miss chance in fog
-        if (currentBattleCondition.equals("foggy") && random.nextDouble() < 0.3) {
+        if (currentBattleCondition.equals("foggy") && random.nextDouble() < 0.3 - player.getWisdom() * 0.01) {
             System.out.println(GREY + "The fog causes you to miss!" + RESET);
             return;
         }
@@ -275,6 +282,7 @@ public class Combat {
         maxCombo = 0;
     }
 
+
     private void handleMonsterTurn(Player player, Monster monster, boolean playerGuarding) {
         if (!monster.isAlive()) {
             return;
@@ -298,7 +306,7 @@ public class Combat {
     // ... [Previous helper methods remain the same]
 
     private void handleBattleConditions(Player player, Monster monster) {
-        if (currentBattleCondition.equals("stormy") && random.nextDouble() < 0.1) {
+        if (currentBattleCondition.equals("stormy") && random.nextDouble() < 0.15 - player.getWisdom() * 0.01) {
             int lightningDamage = random.nextInt(10) + player.getLevel();
             if (random.nextBoolean()) {
                 player.setHealth(player.getHealth() - lightningDamage);
