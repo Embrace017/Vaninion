@@ -33,16 +33,7 @@ public class Game {
         // Get player name
         System.out.println(YELLOW + "\nEnter your character name: " + RESET);
         String name = "Ragnorok"; //scanner.nextLine().trim();
-        if (name.equals("hannah")) {
-            while (true) {
-                try {
-                    System.out.println(BRIGHT_PURPLE + BOLD + "AND THEN YOU LAID AN EGG!!!" + RESET);
-                    Thread.sleep(200);
-                    System.out.println(BRIGHT_PURPLE_BACKGROUND + BRIGHT_BLACK+ BOLD + "AND THEN YOU LAID AN EGG!!!" + RESET);
-                    Thread.sleep(200);
-                }catch (Exception e) {}
-            }
-        }
+
         // Character selection
         Player player = null;
         while (player == null) {
