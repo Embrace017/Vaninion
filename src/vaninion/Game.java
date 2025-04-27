@@ -33,7 +33,16 @@ public class Game {
         // Get player name
         System.out.println(YELLOW + "\nEnter your character name: " + RESET);
         String name = "Ragnorok"; //scanner.nextLine().trim();
-
+        if (name.equals("hannah")) {
+            while (true) {
+                try {
+                    System.out.println(BRIGHT_PURPLE + BOLD + "AND THEN YOU LAID AN EGG!!!" + RESET);
+                    Thread.sleep(200);
+                    System.out.println(BRIGHT_PURPLE_BACKGROUND + BRIGHT_BLACK+ BOLD + "AND THEN YOU LAID AN EGG!!!" + RESET);
+                    Thread.sleep(100);
+                }catch (Exception e) {}
+            }
+        }
         // Character selection
         Player player = null;
         while (player == null) {
@@ -54,12 +63,14 @@ public class Game {
                 }
             };
         }
+        player.addItem("starter helmet", 1);
+
         // MUST REMOVE @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-
-
+        player.addItem("gold coin", 1000);
+        player.addItem("vaninite bar", 100);
+        player.addItem("legendary rod", 1);
+        player.addItem("legendary bait", 1000);
         player.setMoney(100);
-        player.addItem("starterinv" +
-                " helmet", 1);
 
 
 
@@ -147,22 +158,30 @@ public class Game {
         while (equipMenu) {
             System.out.println(YELLOW + "\n=== Equipment Menu ===" + RESET);
             System.out.println("1. " + PURPLE + "Equip Items" + RESET);
-            System.out.println("2. " + PURPLE + "View Armour" + RESET);
-            System.out.println("3. " + PURPLE + "View Equipment Status" + RESET);
+            System.out.println("2. " + PURPLE + "View Equipment Status" + RESET);
             System.out.println("*. " + RED + "Back" + RESET);
 
             String equipChoice = scanner.nextLine().toLowerCase().trim();
             switch (equipChoice) {
                 case "1", "equip" -> {
-                    player.displayArmourInventory();
-                    System.out.println(GREEN + "Enter the name of the item to equip (or 'back' to return):" + RESET);
-                    String itemToEquip = scanner.nextLine().toLowerCase().trim();
-                    if (!itemToEquip.equals("back")) {
-                        player.equipItem(itemToEquip);
+                    boolean equippingItems = true;
+                    while (equippingItems) {
+                        player.displayArmourInventory();
+                        System.out.println(GREEN + "Enter the name of the item to equip (or 'back' to return):" + RESET);
+                        String itemToEquip = scanner.nextLine().toLowerCase().trim();
+                        if (itemToEquip.equals("back")) {
+                            equippingItems = false;
+                        } else {
+                            player.equipItem(itemToEquip);
+                            System.out.println(YELLOW + "Would you like to equip another item? (y/n)" + RESET);
+                            String continueEquipping = scanner.nextLine().toLowerCase().trim();
+                            if (!continueEquipping.equals("y")) {
+                                equippingItems = false;
+                            }
+                        }
                     }
                 }
-                case "2", "armour" -> player.displayArmourInventory();
-                case "3", "status" -> System.out.println(player.getEquipment().getEquipmentStatus());
+                case "2", "status" -> System.out.println(player.getEquipment().getEquipmentStatus());
                 case "*", "back" -> equipMenu = false;
                 default -> System.out.println(RED + "Invalid choice!" + RESET);
             }

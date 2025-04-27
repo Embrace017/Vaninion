@@ -75,7 +75,7 @@ public class Combat {
         basePower = random.nextInt(player.getStrength() + player.getLevel());
 
         // Combo damage calculation
-        int comboDamage = Math.min(basePower * comboCounter, 10 + player.getWisdom() * 2);
+        int comboDamage = Math.min(basePower * comboCounter, player.getWisdom() * 2);
         if (basePower == 0)
             comboDamage = 0;
         // Miss chance in fog
@@ -142,7 +142,7 @@ public class Combat {
         }
 
 
-        System.out.println("║ " + PURPLE + "Total damage: " + totalDamage + BLUE);
+        System.out.println("║ " + PURPLE + "Total damage: " + totalDamage + RESET + BOLD +" (After enemy defence)" + BLUE);
         System.out.println("╚════════════════════════════════════════╝" + RESET);
     }
 
@@ -191,7 +191,13 @@ public class Combat {
 
             if (!monster.isAlive()) {
                 handleVictory(player, monster);
-                break;
+                // Reset monster to fight again instead of breaking out of combat
+                // Note: monster.reset() is already called in handleVictory
+                // Reset combo-related variables for the next fight
+                maxCombo = 0;
+                System.out.println(YELLOW + "\nAnother " + monster.getName() + " appears! Get ready to fight again!" + RESET);
+                displayCombatStart(monster);
+                continue;
             }
 
             handleMonsterTurn(player, monster, playerGuarding);
@@ -208,10 +214,8 @@ public class Combat {
         System.out.println(BLUE + BOLD + "\n╔═══════════════════════════════════════╗");
         System.out.println("║" + YELLOW + "           COMBAT INITIATED            " + BLUE + "║");
         System.out.println("╠═══════════════════════════════════════╣");
-        System.out.println("║ " + PURPLE + "Opponent: " + monster.getName() + BLUE);
-        System.out.println("║ " + RED + "Strength: " + monster.getStrength() + BLUE);
-        System.out.println("║ " + RED + "Defense: " + monster.getDefence() + BLUE);
-        System.out.println("║ " + GREEN + "Health: " + monster.getHealth() + BLUE);
+        System.out.println("║ " + PURPLE + "Opponent: " + monster.getName() + RED + " Strength: " + monster.getStrength()+ BLUE);
+        System.out.println("║ " + RED + "Defense: " + monster.getDefence() + GREEN + " Health: " + monster.getHealth()  + BLUE);
         System.out.println("╚═══════════════════════════════════════╝" + RESET);
     }
 
@@ -219,12 +223,10 @@ public class Combat {
         System.out.println(BLUE + BOLD + "\n╔═══════════════════════════════════════╗");
         System.out.println("║" + YELLOW + "               BATTLE                  " + BLUE + "║");
         System.out.println("╠═══════════════════════════════════════╣");
-        System.out.println("║ " + GREEN + "Your HP: " + player.getHealth() + "/" + player.getMaxHealth() + BLUE);
-        System.out.println("║ " + PURPLE + "Your MP: " + player.getMana() + "/" + player.getMaxMana() + BLUE);
-        System.out.println("║ " + RED + monster.getName() + " HP: " + monster.getHealth() + BLUE);
+        System.out.println("║ " + GREEN + "Your HP: " + player.getHealth() + "/" + player.getMaxHealth() + PURPLE + " Your MP: " + player.getMana() + "/" + player.getMaxMana()+ BLUE);
+        System.out.println("║ " + RED + monster.getName() + " HP Remaining: " + BRIGHT_WHITE + monster.getHealth() + BLUE);
         if (comboCounter > 0) {
             System.out.println("║ " + CYAN + "Combo Counter: " + comboCounter + BLUE);
-            System.out.println("║ " + YELLOW + "Max Combo: " + maxCombo + BLUE);
         }
         System.out.println("╠═══════════════════════════════════════╣");
         System.out.println("║" + YELLOW + " Actions:" + BLUE + "                              ║");
@@ -275,6 +277,11 @@ public class Combat {
 
         System.out.println(YELLOW + "Total Rewards: " + moneyBonus + " gold and " + expBonus + " experience!" + RESET);
         System.out.println(BRIGHT_PURPLE_BACKGROUND + BOLD + BLACK + player.getExperience() + "/" + 100 * player.getLevel() + BRIGHT_PURPLE_BACKGROUND + " Level exp" + RESET);
+        if (player.getSkillPoints() == 1) {
+            System.out.println(YELLOW + "Unused skill point!" + RESET);
+        } else if (player.getSkillPoints() > 1) {
+            System.out.println(YELLOW + "Unused skill points!" + RESET);
+        }
         // Reset for next battle
         monster.reset();
         comboCounter = 0;

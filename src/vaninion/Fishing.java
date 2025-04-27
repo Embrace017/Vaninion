@@ -8,31 +8,48 @@ import java.util.Random;
 import java.util.Scanner;
 import static vaninion.ColoredConsole.*;
 
-
 public class Fishing {
     private final Scanner scanner = new Scanner(System.in);
-    public final Map<String, Double> catchRates = new HashMap<>();
-    Random random = new Random();
-
+    private final Map<String, Double> catchRates = new HashMap<>();
+    private final Random random = new Random();
 
     public Fishing() {
         initializeCatchRates();
-
-
     }
 
     public void fish(Player player) {
-
         System.out.println(YELLOW + "Welcome to fishing!" + RESET);
+
         // Show current fish in inventory
         System.out.println(BOLD + GREEN + "Your current catches:" + RESET);
         displayFishInventory(player);
-        // Show current bait
-        System.out.println(CYAN + "Basic Bait: " + player.getItemCount("basic bait") + RESET);
-        System.out.println(CYAN + "Super Bait: " + player.getItemCount("super bait") + RESET);
-        System.out.println(CYAN + "Legendary Bait: " + player.getItemCount("legendary bait") + RESET);
-        smallLake(player);
 
+        // Show current fishing equipment
+        displayFishingEquipment(player);
+
+        // Start fishing at the small lake
+        smallLake(player);
+    }
+
+    private void displayFishingEquipment(Player player) {
+        // Show available rods
+        System.out.println(YELLOW + "\n=== Your Fishing Equipment ===" + RESET);
+        System.out.println(PURPLE + "Rods:" + RESET);
+        if (player.hasItem("basic rod")) {
+            System.out.println(CYAN + "- Basic Rod" + (player.hasItem("basic rod") ? GREEN + " (Available)" : RED + " (Not Available)") + RESET);
+        }
+        if (player.hasItem("super rod")) {
+            System.out.println(CYAN + "- Super Rod" + (player.hasItem("super rod") ? GREEN + " (Available)" : RED + " (Not Available)") + RESET);
+        }
+        if (player.hasItem("legendary rod")) {
+            System.out.println(CYAN + "- Legendary Rod" + (player.hasItem("legendary rod") ? GREEN + " (Available)" : RED + " (Not Available)") + RESET);
+        }
+
+        // Show available bait
+        System.out.println(PURPLE + "\nBait:" + RESET);
+        System.out.println(CYAN + "- Basic Bait: " + player.getItemCount("basic bait") + RESET);
+        System.out.println(CYAN + "- Super Bait: " + player.getItemCount("super bait") + RESET);
+        System.out.println(CYAN + "- Legendary Bait: " + player.getItemCount("legendary bait") + RESET);
     }
     public double calculateTotalCatchRate() {
         double total = 0.0;
@@ -40,6 +57,106 @@ public class Fishing {
             total += rate;
         }
         return total;
+    }
+
+    /**
+     * Calculate catch rate bonus based on the rod type
+     * @param player The player
+     * @return Multiplier for catch rates (1.0 = no bonus)
+     */
+    private double getRodBonus(Player player) {
+        if (player.hasItem("legendary rod")) {
+            return 1000.0; // Legendary rod doubles catch rates for rare fish
+        } else if (player.hasItem("super rod")) {
+            return 100.0; // Super rod gives 50% bonus to catch rates
+        } else {
+            return 1.0; // Basic rod has no bonus
+        }
+    }
+
+    /**
+     * Calculate quantity bonus based on the bait type
+     * @param baitType The type of bait being used
+     * @return Multiplier for fish quantity (1.0 = no bonus)
+     */
+    private double getBaitBonus(String baitType) {
+        return switch (baitType) {
+            case "legendary bait" -> 10.0; // Legendary bait multiplies the catch quantity by 10
+            case "super bait" -> 2.0;     // Super bait doubles the catch quantity
+            default -> 1.0;               // Basic bait has no bonus
+        };
+    }
+
+    /**
+     * Let the player choose which bait type to use
+     * @param player The player
+     * @return The selected bait type or null if canceled
+     */
+    private String chooseBaitType(Player player) {
+        System.out.println(YELLOW + "\n=== Choose Bait Type ===" + RESET);
+
+        // Display available bait options
+        boolean hasBasicBait = player.getItemCount("basic bait") > 0;
+        boolean hasSuperBait = player.getItemCount("super bait") > 0;
+        boolean hasLegendaryBait = player.getItemCount("legendary bait") > 0;
+
+        if (hasBasicBait) {
+            System.out.println("1. " + CYAN + "Basic Bait" + GREEN + " (x" + player.getItemCount("basic bait") + ")" + RESET + 
+                              " - Normal fishing");
+        }
+
+        if (hasSuperBait) {
+            System.out.println("2. " + CYAN + "Super Bait" + GREEN + " (x" + player.getItemCount("super bait") + ")" + RESET + 
+                              " - " + PURPLE + "Doubles" + RESET + " catch quantity");
+        }
+
+        if (hasLegendaryBait) {
+            System.out.println("3. " + CYAN + "Legendary Bait" + GREEN + " (x" + player.getItemCount("legendary bait") + ")" + RESET + 
+                              " - " + PURPLE + "10x" + RESET + " catch quantity");
+        }
+
+        System.out.println("*. " + RED + "Cancel" + RESET);
+
+        // Get player choice
+        String choice = scanner.nextLine().toLowerCase().trim();
+
+        return switch (choice) {
+            case "1", "basic", "basic bait" -> hasBasicBait ? "basic bait" : null;
+            case "2", "super", "super bait" -> hasSuperBait ? "super bait" : null;
+            case "3", "legendary", "legendary bait" -> hasLegendaryBait ? "legendary bait" : null;
+            case "*", "cancel", "back", "exit" -> null;
+            default -> {
+                System.out.println(RED + "Invalid choice!" + RESET);
+                yield null;
+            }
+        };
+    }
+
+    /**
+     * Apply rod bonus to catch rates for better fish
+     * @param player The player
+     * @param fishName The name of the fish
+     * @return Modified catch rate
+     */
+    private double getModifiedCatchRate(Player player, String fishName, double baseRate) {
+        double rodBonus = getRodBonus(player);
+
+        // Apply rod bonus differently based on fish rarity
+        if (fishName.equals("Abyssal Leviathan") || 
+            fishName.equals("Spectral Kraken") || 
+            fishName.equals("Thunder Eel") || 
+            fishName.equals("Frost Barracuda")) {
+            // Legendary rod has a bigger impact on rare fish
+            return baseRate * rodBonus * 1.5;
+        } else if (fishName.equals("Magma Ray") || 
+                  fishName.equals("Shadow Pike") || 
+                  fishName.equals("Crystal Bass")) {
+            // Medium impact on uncommon fish
+            return baseRate * rodBonus * 1.2;
+        } else {
+            // Smaller impact on common fish
+            return baseRate * rodBonus;
+        }
     }
     private void initializeCatchRates() {
         catchRates.put("Abyssal Leviathan", 0.0001);     // 0.0001% (1 in 1,000,000)
@@ -77,9 +194,13 @@ public class Fishing {
     }
 
     private boolean isFish(String item) {
-        return item.contains("fish") || item.equals("bass") || item.equals("sunfish") ||
-                item.equals("salmon") || item.equals("catfish") || item.equals("pike") ||
-                item.equals("anglerfish") || item.equals("sturgeon") || item.equals("giant squid");
+        // Check for raw and cooked versions of all fish types
+        return item.contains("raw") || item.contains("cooked") || 
+               item.contains("Abyssal Leviathan") || item.contains("Spectral Kraken") ||
+               item.contains("Thunder Eel") || item.contains("Frost Barracuda") ||
+               item.contains("Magma Ray") || item.contains("Shadow Pike") ||
+               item.contains("Crystal Bass") || item.contains("Steel Snapper") ||
+               item.contains("River Perch") || item.contains("Lake Minnow");
     }
 
     private void smallLake(Player player) {
@@ -87,23 +208,35 @@ public class Fishing {
                 (!player.hasItem("super rod")) &&
                 (!player.hasItem("legendary rod"))) {
 
-            System.out.println(RED + "You need a basic Rod to fish here!" + RESET);
-            return;
-        }
-        if (player.getItemCount("basic bait") <= 0) {
-            System.out.println(RED + "You need basic Bait to fish here!" + RESET);
+            System.out.println(RED + "You need a fishing rod to fish here!" + RESET);
             return;
         }
 
-        System.out.println(BRIGHT_BLACK_BACKGROUND + "How many bait would you like to use? (1-20)" + RESET);
-        int baitChoice;
+        // Check if player has any type of bait
+        boolean hasBait = player.getItemCount("basic bait") > 0 || 
+                          player.getItemCount("super bait") > 0 || 
+                          player.getItemCount("legendary bait") > 0;
+
+        if (!hasBait) {
+            System.out.println(RED + "You need some bait to fish here!" + RESET);
+            return;
+        }
+
+        // Let player choose bait type
+        String baitType = chooseBaitType(player);
+        if (baitType == null) {
+            return; // Player canceled or invalid selection
+        }
+
+        System.out.println(BRIGHT_BLACK_BACKGROUND + "How many " + baitType + " would you like to use? (1-20)" + RESET);
+        int baitAmount;
         try {
-            baitChoice = Integer.parseInt(scanner.nextLine().trim());
-            if (baitChoice < 1 || baitChoice > 20) {
+            baitAmount = Integer.parseInt(scanner.nextLine().trim());
+            if (baitAmount < 1 || baitAmount > 20) {
                 System.out.println(RED + "Please choose between 1 and 20 bait." + RESET);
                 return;
             }
-            if (baitChoice > player.getItemCount("basic bait")) {
+            if (baitAmount > player.getItemCount(baitType)) {
                 System.out.println(RED + "You don't have that much bait!" + RESET);
                 return;
             }
@@ -112,12 +245,19 @@ public class Fishing {
             return;
         }
 
-        for (int i = 0; i < baitChoice; i++) {
+        // Get bait bonus for the selected bait type
+        double baitBonus = getBaitBonus(baitType);
 
+        for (int i = 0; i < baitAmount; i++) {
             try {
-                System.out.println(BLUE + BOLD + "~~~ You cast your rod in the Small Lake ~~~" + RESET);
-                player.removeItem("basic bait", 1);
-                int res = Math.max(1, random.nextInt(player.getFishingLevel()));
+                System.out.println(i + 1);
+                System.out.println(BLUE + BOLD + "~~~ You cast your rod in the Small Lake using " + baitType + " ~~~" + RESET);
+                Thread.sleep(1000 / player.getFishingLevel());
+                player.removeItem(baitType, 1);
+
+                // Apply bait bonus to catch quantity
+                int baseQuantity = Math.max(1, random.nextInt(player.getFishingLevel()));
+                int res = (int) Math.max(1, baseQuantity * baitBonus);
                 String itemCaught = player.mapRng(catchRates);
                 switch (itemCaught) {
                     case null -> System.out.println(YELLOW + "You didn't even get a bite." + RESET);
@@ -126,41 +266,35 @@ public class Fishing {
                         player.addItem("mythical card", 1);
                         // Maybe initialize combat?
                     }
-                    case "Spectral Kraken" -> {
-                        player.addItem("raw spectral kraken", res);
+                    case "Spectral Kraken" -> player.addItem("raw spectral kraken", res);
                         // Maybe initialize combat?
-                    }
-                    case "Thunder Eel" -> {
-                        player.addItem("raw thunder eel", res);
-                    }
-                    case "Frost Barracuda" -> {
-                        player.addItem("raw frost barracuda", res);
-                    }
-                    case "Magma Ray" -> {
-                        player.addItem("raw magma ray", res);
-                    }
-                    case "Shadow Pike" -> {
-                        player.addItem("raw shadow pike", res);
-                    }
-                    case "Crystal Bass" -> {
-                        player.addItem("raw crystal bass", res);
-                    }
-                    case "Steel Snapper" -> {
-                        player.addItem("raw steel snapper", res);
-                    }
-                    case "River Perch" -> {
-                        player.addItem("raw river perch", res);
-                    }
-                    case "Lake Minnow" -> {
-                        player.addItem("raw lake minnow", res);
-                    }
+                    case "Thunder Eel" -> player.addItem("raw thunder eel", res);
+                    case "Frost Barracuda" -> player.addItem("raw frost barracuda", res);
+                    case "Magma Ray" -> player.addItem("raw magma ray", res);
+                    case "Shadow Pike" -> player.addItem("raw shadow pike", res);
+                    case "Crystal Bass" -> player.addItem("raw crystal bass", res);
+                    case "Steel Snapper" -> player.addItem("raw steel snapper", res);
+                    case "River Perch" -> player.addItem("raw river perch", res);
+                    case "Lake Minnow" -> player.addItem("raw lake minnow", res);
                     case "seaweed" -> {
                         player.addItem("seaweed", res);
                         player.setFishingExp(player.getFishingExp() + 10);
                     }
                     default -> System.out.println("You didn't see any fish");
                 }
-                System.out.println("You caught " + player.getFishingLevel() + " " + itemCaught + "!\n");
+                // Display catch message with bait bonus information
+                if (baitBonus > 1.0) {
+                    System.out.println("You caught " + res + " " + itemCaught + "! " + 
+                                      PURPLE + "(Bonus from " + baitType + ")" + RESET + "\n");
+                } else {
+                    System.out.println("You caught " + res + " " + itemCaught + "!\n");
+                }
+                player.setFishingExp(player.getFishingExp() + res * 10);
+                if (player.getFishingExp() > 500 * player.getFishingLevel()){
+                    player.setFishingLevel(player.getFishingLevel() + 1);
+                    System.out.println(GREEN + "You gained a level!" + RESET);
+                    System.out.println(PURPLE + "Fishing Level: " + player.getFishingLevel() + RESET);
+                }
             } catch (Exception e) {
                 System.out.println("Error");
             }

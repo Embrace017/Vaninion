@@ -1,5 +1,6 @@
 package vaninion.adventure;
 
+
 import vaninion.players.Player;
 import java.util.*;
 
@@ -8,6 +9,7 @@ import static vaninion.ColoredConsole.*;
 public class Mining {
     private Random random = new Random();
     private Map<String, Double> ores = new HashMap<>();
+    Scanner scanner = new Scanner(System.in);
 
     public Mining() {
         // Initialize ores map in constructor
@@ -28,20 +30,34 @@ public class Mining {
             System.out.println("You need at least one Gold Coin to enter the mine");
             return;
         }
-        player.removeItem("gold coin", 1);
-
-        String ore = player.mapRng(ores);
-        switch (ore) {
-            case "stone", "iron ore", "coal" -> mineOre(player, ore, 10, 2);
-            case "crystal", "gold ore", "gorganite ore" -> mineOre(player, ore, 5, 10);
-            case "diamond" -> mineOre(player, ore, 3, 50);
-            case "vaninite ore" -> mineOre(player, ore, 1, 250);
-            default -> {
-                System.out.println("You found 5 gold coins on the ground!");
-                player.addItem("gold coin", 5);
+        System.out.println(BRIGHT_YELLOW + "How many gold coins would you like to use?" + RESET);
+        try {
+            int choice = scanner.nextInt();
+        for (int i = 0; i < choice; i++) {
+            System.out.println(" ");
+            System.out.println(i + 1);
+            System.out.println(BRIGHT_CYAN + "~~~ You swing your pickaxe! ~~~" + RESET);
+            Thread.sleep(1000 / player.getMiningLevel());
+            player.removeItem("gold coin", 1);
+            String ore = player.mapRng(ores);
+            switch (ore) {
+                case "stone", "iron ore", "coal" -> mineOre(player, ore, 10, 4);
+                case "crystal", "gold ore", "gorganite ore" -> mineOre(player, ore, 5, 20);
+                case "diamond" -> mineOre(player, ore, 3, 100);
+                case "vaninite ore" -> mineOre(player, ore, 1, 1000);
+                default -> {
+                    System.out.println(BRIGHT_BLACK + BRIGHT_WHITE_BACKGROUND + "You found 5 gold coins on the ground!" + RESET);
+                    player.addItem("gold coin", 5);
+                }
             }
+            Thread.sleep(1000 / player.getMiningLevel());
         }
+        } catch (InputMismatchException e) {
+            System.out.println(RED + "Invalid input.");
+        } catch (Exception e) {}
     }
+
+
     public void mineOre(Player player, String ore, int amount, int expMultplier) {
         int oreAmount = Math.max(1, random.nextInt(amount + player.getMiningLevel()));
         int expAmount = (oreAmount + player.getWisdom()) * expMultplier;
@@ -52,6 +68,7 @@ public class Mining {
         System.out.println(GREEN + "Your mining experience is now " + RESET + player.getMiningExp() + "/"+ 500 * player.getMiningLevel());
         if (player.getMiningExp() >= 500 * player.getMiningLevel() && player.getMiningLevel() < 20) {
             player.setMiningLevel(player.getMiningLevel() + 1);
+            player.setLevel(player.getLevel() + 1);
             System.out.println(GREEN + "You gained a mining level!" + RESET);
             System.out.println(GREEN + "Your mining level is now " + player.getMiningLevel() + RESET);
             player.setMiningExp(0);

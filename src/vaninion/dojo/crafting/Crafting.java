@@ -15,11 +15,6 @@ import static vaninion.ColoredConsole.YELLOW;
 public class Crafting extends Recipes {
 
 
-    public final Map<String, String> cookingRecipes = new java.util.HashMap<>();
-    public final Map<String, Map<String, Integer>> smeltingRecipes = new java.util.HashMap<>();
-    public final Map<String, Map<String, Integer>> craftingRecipes = new java.util.HashMap<>();
-
-
     private final java.util.Scanner scanner = new java.util.Scanner(System.in);
 
     protected void smelt(Player player) {
@@ -148,7 +143,6 @@ public class Crafting extends Recipes {
         }
     }
     protected void craft(Player player) {
-        initializeRecipes();
         System.out.println(BLUE + "\n=== Craftable Items ===" + RESET);
 
         if (craftingRecipes.isEmpty()) {
@@ -156,8 +150,12 @@ public class Crafting extends Recipes {
             return;
         }
 
-        // Show only items that can be crafted with available materials
+        // Show all recipes with improved formatting
         boolean canCraftAnything = false;
+        System.out.println(YELLOW + "╔════════════════════════════════════════════════════════════╗" + RESET);
+        System.out.println(YELLOW + "║ " + PURPLE + "ITEM NAME                  " + YELLOW + "│ " + GREEN + "INGREDIENTS                    " + YELLOW + "║" + RESET);
+        System.out.println(YELLOW + "╠════════════════════════════════════════════════════════════╣" + RESET);
+
         for (Map.Entry<String, Map<String, Integer>> recipeEntry : craftingRecipes.entrySet()) {
             String itemName = recipeEntry.getKey();
             Map<String, Integer> ingredients = recipeEntry.getValue();
@@ -170,36 +168,41 @@ public class Crafting extends Recipes {
                 maxCraftable = Math.min(maxCraftable, possibleCrafts);
             }
 
+            // Format item name with craftable amount
+            String displayName = PURPLE + String.format("%-25s", itemName) + RESET;
             if (maxCraftable > 0) {
                 canCraftAnything = true;
-                System.out.println(PURPLE + itemName + RESET + GREEN + " (Can craft: " + maxCraftable + ")" + RESET);
-                System.out.print(YELLOW + "  Requires: " + RESET);
-                ingredients.forEach((ing, amount) ->
-                        System.out.print(amount + " " + ing + " (" + player.getItemCount(ing) + " available), "));
-                System.out.println();
+                displayName += GREEN + " (Can craft: " + maxCraftable + ")" + RESET;
             }
+
+            System.out.println(YELLOW + "║ " + displayName + YELLOW + "│                                  ║" + RESET);
+
+            // Display ingredients with better formatting
+            boolean firstIngredient = true;
+            for (Map.Entry<String, Integer> ingredient : ingredients.entrySet()) {
+                String ingName = ingredient.getKey();
+                int required = ingredient.getValue();
+                int available = player.getItemCount(ingName);
+
+                String prefix = firstIngredient ? YELLOW + "║ " + RESET + "                          " + YELLOW + "│ " + RESET : 
+                                                YELLOW + "║ " + RESET + "                          " + YELLOW + "│ " + RESET;
+
+                String ingredientText = String.format("%d %s", required, ingName);
+                String availableText = String.format("(%d available)", available);
+
+                String color = available >= required ? GREEN : RED;
+                System.out.println(prefix + color + String.format("%-20s %-10s", ingredientText, availableText) + YELLOW + " ║" + RESET);
+
+                firstIngredient = false;
+            }
+
+            System.out.println(YELLOW + "╟────────────────────────────────────────────────────────────╢" + RESET);
         }
+        System.out.println(YELLOW + "╚════════════════════════════════════════════════════════════╝" + RESET);
 
         if (!canCraftAnything) {
             System.out.println(RED + "You don't have enough materials to craft anything!" + RESET);
             return;
-        }
-
-
-        // Show available items to craft
-        if (craftingRecipes.isEmpty()) {
-            System.out.println(RED + "There are no crafting recipes available." + RESET);
-            return;
-        }
-
-        for (Map.Entry<String, Map<String, Integer>> recipeEntry : craftingRecipes.entrySet()) {
-            String itemName = recipeEntry.getKey();
-            System.out.println(PURPLE + itemName + RESET);
-            System.out.print(YELLOW + "  Requires: " + RESET);
-            for (Map.Entry<String, Integer> ingredientEntry : recipeEntry.getValue().entrySet()) {
-                System.out.print(ingredientEntry.getValue() + " " + ingredientEntry.getKey() + ", ");
-            }
-            System.out.println();
         }
 
         System.out.println(YELLOW + "\nWhat would you like to craft? (type the item name or 'back')" + RESET);

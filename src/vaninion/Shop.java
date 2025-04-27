@@ -103,7 +103,7 @@ public class Shop {
     }
 
     private void buyArmourPackage(Player player) {
-        int packagePrice = 2500;
+        int packagePrice = 500;
         if (player.getMoney() >= packagePrice) {
             player.setMoney(player.getMoney() - packagePrice);
             player.addItem("iron helmet", 1);
@@ -208,7 +208,7 @@ public class Shop {
                         buyRod(player, 1000);
                         break;
                     case "3":
-                        buyBait(player, "basic bait", 500);
+                        buyBait(player, "basic bait", 50);
                         break;
                     case "4":
                         buyBait(player, "super bait", 100);
@@ -275,6 +275,8 @@ public class Shop {
     }
     private void customSellItems() {
         shopItems.putIfAbsent("copper wire", 175); // Manual shop items
+        shopItems.putIfAbsent("starter helmet", 10);
+
     }
     private void sell(Player player) {
 

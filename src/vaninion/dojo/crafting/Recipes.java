@@ -9,6 +9,10 @@ public class Recipes {
     public final Map<String, String> cookingRecipes = new HashMap<>();
     public final Map<String, Map<String, Integer>> craftingRecipes = new HashMap<>(); // Changed to Map<String, Integer> for ingredients
 
+    public Recipes() {
+        initializeRecipes();
+    }
+
     public void initializeRecipes() {
 
         // Initialize smelting recipes with input -> output mappings

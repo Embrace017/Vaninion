@@ -53,7 +53,7 @@ public class Player {
         this.level = 1;
         this.experience = 0;
         this.skillPoints = 0;
-        this.health = 50;
+        this.health = 40;
         this.maxHealth = health;
         this.mana = 20;
         this.maxMana = mana;
@@ -418,22 +418,22 @@ public class Player {
     public void stats() {
         System.out.println(YELLOW + "\n====== " + getName() + "'s Stats ======" + RESET);
         System.out.println(GREEN + "Level: " + getLevel() + RESET);
-        System.out.println(GREEN + "Experience: " + getExperience() + "/" + (500 * getLevel()) + RESET);
+        System.out.println(GREEN + "Experience: " + getExperience() + "/" + (100 * getLevel()) + RESET);
         System.out.println(GREEN + "Skill Points: " + getSkillPoints() + RESET);
-        System.out.println(GREEN + "Health: " + getHealth() + RESET);
+        System.out.println(getHealth() < getMaxHealth() / 2 ? RED : GREEN + "Health: " + getHealth() + "/" + getMaxHealth() + RESET);
         System.out.println(GREEN + "Mana: " + getMana() + RESET);
         System.out.println(GREEN + "Strength: " + getStrength() + RESET);
         System.out.println(GREEN + "Defence: " + getDefense() + RESET);
         System.out.println(GREEN + "Wisdom: " + getWisdom() + RESET);
         System.out.println(GREEN + "Charisma: " + getCharisma() + RESET);
         System.out.println(GREEN + "Mining: " + getMiningLevel() + RESET);
-        System.out.println(GREEN + "Cooking: " + getCookingLevel() + RESET);
+        //System.out.println(GREEN + "Cooking: " + getCookingLevel() + RESET);
         System.out.println(GREEN + "Fishing: " + getFishingLevel() + RESET);
     }
 
     public void gainExperience(int expGained) {
         setExperience(getExperience() + expGained);
-        if (getExperience() >= 100 * getLevel() / 2) {
+        if (getExperience() >= 100 * getLevel()) {
             setSkillPoints(getSkillPoints() + 1);
             setLevel(getLevel() + 1);
             setExperience(getExperience() - ((100 * (getLevel() - 1)) / 2)); //hopefully only decreases current level exp and not total
