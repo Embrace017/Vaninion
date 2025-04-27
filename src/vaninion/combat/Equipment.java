@@ -133,6 +133,22 @@ public class Equipment {
             case "vaninite leggings" -> armourPiece = ArmourStats.VANINITE_LEGGINGS;
             case "vaninite shield" -> armourPiece = ArmourStats.VANINITE_SHIELD;
 
+            // Dragon gear
+            case "dragon sword" -> armourPiece = ArmourStats.DRAGON_SWORD;
+            case "dragon helmet" -> armourPiece = ArmourStats.DRAGON_HELMET;
+            case "dragon chestplate" -> armourPiece = ArmourStats.DRAGON_CHESTPLATE;
+            case "dragon leggings" -> armourPiece = ArmourStats.DRAGON_LEGGINGS;
+            case "dragon shield" -> armourPiece = ArmourStats.DRAGON_SHIELD;
+
+            // Mage gear
+            case "fire staff" -> armourPiece = ArmourStats.FIRE_STAFF;
+            case "ice staff" -> armourPiece = ArmourStats.ICE_STAFF;
+            case "lightning staff" -> armourPiece = ArmourStats.LIGHTNING_STAFF;
+            case "mage hat" -> armourPiece = ArmourStats.MAGE_HAT;
+            case "mage robe" -> armourPiece = ArmourStats.MAGE_ROBE;
+            case "mage pants" -> armourPiece = ArmourStats.MAGE_PANTS;
+            case "mage amulet" -> armourPiece = ArmourStats.MAGE_AMULET;
+
             // MISC
             case "starter helmet" -> armourPiece = ArmourStats.STARTER_HELMET;
             case "werewolf mask" -> armourPiece = ArmourStats.WEREWOLF_MASK;

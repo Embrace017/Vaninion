@@ -18,37 +18,29 @@ public class Crafting extends Recipes {
     private final java.util.Scanner scanner = new java.util.Scanner(System.in);
 
     protected void smelt(Player player) {
-        System.out.println(BLUE + "\n====== Smelting Ores ======" + RESET);
+        System.out.println(BLUE + "\n====== Smelting Menu ======" + RESET);
         if (smeltingRecipes.isEmpty()) {
             System.out.println(RED + "There are no smelting recipes available." + RESET);
             return;
         }
 
-        // Show craftable items with available materials
-        boolean canSmeltAnything = false;
-        for (Map.Entry<String, Map<String, Integer>> recipeEntry : smeltingRecipes.entrySet()) {
-            String itemName = recipeEntry.getKey();
-            Map<String, Integer> ingredients = recipeEntry.getValue();
+        // Menu for choosing what to display
+        System.out.println("1. " + GREEN + "Show Smeltable Items Only" + RESET + " (items you can smelt now)");
+        System.out.println("2. " + YELLOW + "Show All Smelting Recipes" + RESET + " (including items you can't smelt yet)");
+        System.out.println("*. " + RED + "Back" + RESET);
 
-            // Calculate maximum craftable amount
-            int maxCraftable = Integer.MAX_VALUE;
-            for (Map.Entry<String, Integer> ingredient : ingredients.entrySet()) {
-                int available = player.getItemCount(ingredient.getKey());
-                int possibleCrafts = available / ingredient.getValue();
-                maxCraftable = Math.min(maxCraftable, possibleCrafts);
-            }
+        String menuChoice = scanner.nextLine().toLowerCase().trim();
 
-            if (maxCraftable > 0) {
-                canSmeltAnything = true;
-                System.out.println(PURPLE + itemName + RESET + GREEN + " (Can smelt: " + maxCraftable + ")" + RESET);
-                System.out.print(YELLOW + "  Requires: " + RESET);
-                ingredients.forEach((ing, amount) ->
-                        System.out.print(amount + " " + ing + " (" + player.getItemCount(ing) + " available), "));
-                System.out.println();
-            }
+        if (menuChoice.equals("*") || menuChoice.equals("back") || menuChoice.equals("exit")) {
+            return;
         }
 
-        if (!canSmeltAnything) {
+        boolean showOnlySmeltable = menuChoice.equals("1");
+
+        // Display recipes based on user choice
+        boolean canSmeltAnything = displaySmeltingRecipes(player, showOnlySmeltable);
+
+        if (showOnlySmeltable && !canSmeltAnything) {
             System.out.println(RED + "You don't have enough materials to smelt anything!" + RESET);
             return;
         }
@@ -101,19 +93,30 @@ public class Crafting extends Recipes {
     }
 
     protected void cook(Player player) {
-        System.out.println(BLUE + "\n=== Cookable Fish ===" + RESET);
+        System.out.println(BLUE + "\n=== Cooking Menu ===" + RESET);
 
-        // Show available raw fish from recipes that player has
-        boolean hasRawFish = false;
-        for (String fish : cookingRecipes.keySet()) {
-            int count = player.getItemCount(fish);
-            if (count > 0) {
-                hasRawFish = true;
-                System.out.println(PURPLE + fish + RESET + " x" + count);
-            }
+        if (cookingRecipes.isEmpty()) {
+            System.out.println(RED + "There are no cooking recipes available." + RESET);
+            return;
         }
 
-        if (!hasRawFish) {
+        // Menu for choosing what to display
+        System.out.println("1. " + GREEN + "Show Cookable Items Only" + RESET + " (fish you have now)");
+        System.out.println("2. " + YELLOW + "Show All Cooking Recipes" + RESET + " (all possible fish)");
+        System.out.println("*. " + RED + "Back" + RESET);
+
+        String menuChoice = scanner.nextLine().toLowerCase().trim();
+
+        if (menuChoice.equals("*") || menuChoice.equals("back") || menuChoice.equals("exit")) {
+            return;
+        }
+
+        boolean showOnlyCookable = menuChoice.equals("1");
+
+        // Display recipes based on user choice
+        boolean hasCookableItems = displayCookingRecipes(player, showOnlyCookable);
+
+        if (showOnlyCookable && !hasCookableItems) {
             System.out.println(RED + "You don't have any fish to cook!" + RESET);
             return;
         }
@@ -143,64 +146,30 @@ public class Crafting extends Recipes {
         }
     }
     protected void craft(Player player) {
-        System.out.println(BLUE + "\n=== Craftable Items ===" + RESET);
+        System.out.println(BLUE + "\n=== Crafting Menu ===" + RESET);
 
         if (craftingRecipes.isEmpty()) {
             System.out.println(RED + "There are no crafting recipes available." + RESET);
             return;
         }
 
-        // Show all recipes with improved formatting
-        boolean canCraftAnything = false;
-        System.out.println(YELLOW + "╔════════════════════════════════════════════════════════════╗" + RESET);
-        System.out.println(YELLOW + "║ " + PURPLE + "ITEM NAME                  " + YELLOW + "│ " + GREEN + "INGREDIENTS                    " + YELLOW + "║" + RESET);
-        System.out.println(YELLOW + "╠════════════════════════════════════════════════════════════╣" + RESET);
+        // Menu for choosing what to display
+        System.out.println("1. " + GREEN + "Show Craftable Items Only" + RESET + " (items you can make now)");
+        System.out.println("2. " + YELLOW + "Show All Recipes" + RESET + " (including items you can't make yet)");
+        System.out.println("*. " + RED + "Back" + RESET);
 
-        for (Map.Entry<String, Map<String, Integer>> recipeEntry : craftingRecipes.entrySet()) {
-            String itemName = recipeEntry.getKey();
-            Map<String, Integer> ingredients = recipeEntry.getValue();
+        String menuChoice = scanner.nextLine().toLowerCase().trim();
 
-            // Calculate maximum craftable amount
-            int maxCraftable = Integer.MAX_VALUE;
-            for (Map.Entry<String, Integer> ingredient : ingredients.entrySet()) {
-                int available = player.getItemCount(ingredient.getKey());
-                int possibleCrafts = available / ingredient.getValue();
-                maxCraftable = Math.min(maxCraftable, possibleCrafts);
-            }
-
-            // Format item name with craftable amount
-            String displayName = PURPLE + String.format("%-25s", itemName) + RESET;
-            if (maxCraftable > 0) {
-                canCraftAnything = true;
-                displayName += GREEN + " (Can craft: " + maxCraftable + ")" + RESET;
-            }
-
-            System.out.println(YELLOW + "║ " + displayName + YELLOW + "│                                  ║" + RESET);
-
-            // Display ingredients with better formatting
-            boolean firstIngredient = true;
-            for (Map.Entry<String, Integer> ingredient : ingredients.entrySet()) {
-                String ingName = ingredient.getKey();
-                int required = ingredient.getValue();
-                int available = player.getItemCount(ingName);
-
-                String prefix = firstIngredient ? YELLOW + "║ " + RESET + "                          " + YELLOW + "│ " + RESET : 
-                                                YELLOW + "║ " + RESET + "                          " + YELLOW + "│ " + RESET;
-
-                String ingredientText = String.format("%d %s", required, ingName);
-                String availableText = String.format("(%d available)", available);
-
-                String color = available >= required ? GREEN : RED;
-                System.out.println(prefix + color + String.format("%-20s %-10s", ingredientText, availableText) + YELLOW + " ║" + RESET);
-
-                firstIngredient = false;
-            }
-
-            System.out.println(YELLOW + "╟────────────────────────────────────────────────────────────╢" + RESET);
+        if (menuChoice.equals("*") || menuChoice.equals("back") || menuChoice.equals("exit")) {
+            return;
         }
-        System.out.println(YELLOW + "╚════════════════════════════════════════════════════════════╝" + RESET);
 
-        if (!canCraftAnything) {
+        boolean showOnlyCraftable = menuChoice.equals("1");
+
+        // Display recipes based on user choice
+        boolean canCraftAnything = displayRecipes(player, showOnlyCraftable);
+
+        if (showOnlyCraftable && !canCraftAnything) {
             System.out.println(RED + "You don't have enough materials to craft anything!" + RESET);
             return;
         }
@@ -250,5 +219,184 @@ public class Crafting extends Recipes {
         } else {
             System.out.println(RED + "Invalid item to craft!" + RESET);
         }
+    }
+
+    /**
+     * Displays smelting recipes with improved formatting and filtering options
+     * @param player The player
+     * @param onlySmeltable If true, only shows recipes that the player can smelt
+     * @return True if there are any smeltable recipes, false otherwise
+     */
+    private boolean displaySmeltingRecipes(Player player, boolean onlySmeltable) {
+        String title = onlySmeltable ? BLUE + "\n=== Smeltable Items Only ===" + RESET : BLUE + "\n=== All Smelting Recipes ===" + RESET;
+        System.out.println(title);
+
+        boolean canSmeltAnything = false;
+        System.out.println(PURPLE + "ITEM NAME                  " + YELLOW + "| " + GREEN + "INGREDIENTS" + RESET);
+        System.out.println("----------------------------------------------------------");
+
+        for (Map.Entry<String, Map<String, Integer>> recipeEntry : smeltingRecipes.entrySet()) {
+            String itemName = recipeEntry.getKey();
+            Map<String, Integer> ingredients = recipeEntry.getValue();
+
+            // Calculate maximum smeltable amount
+            int maxSmeltable = Integer.MAX_VALUE;
+            for (Map.Entry<String, Integer> ingredient : ingredients.entrySet()) {
+                int available = player.getItemCount(ingredient.getKey());
+                int possibleSmelts = available / ingredient.getValue();
+                maxSmeltable = Math.min(maxSmeltable, possibleSmelts);
+            }
+
+            // Skip this recipe if we're only showing smeltable items and this one isn't smeltable
+            if (onlySmeltable && maxSmeltable <= 0) {
+                continue;
+            }
+
+            // Format item name with smeltable amount
+            String displayName = PURPLE + String.format("%-25s", itemName) + RESET;
+            if (maxSmeltable > 0) {
+                canSmeltAnything = true;
+                displayName += GREEN + " (Can smelt: " + maxSmeltable + ")" + RESET;
+            } else {
+                displayName += RED + " (Cannot smelt)" + RESET;
+            }
+
+            System.out.println(displayName + YELLOW + " | " + RESET);
+
+            // Display ingredients with better formatting
+            boolean firstIngredient = true;
+            for (Map.Entry<String, Integer> ingredient : ingredients.entrySet()) {
+                String ingName = ingredient.getKey();
+                int required = ingredient.getValue();
+                int available = player.getItemCount(ingName);
+
+                String prefix = "                           | ";
+
+                String ingredientText = String.format("%d %s", required, ingName);
+                String availableText = String.format("(%d available)", available);
+
+                String color = available >= required ? GREEN : RED;
+                System.out.println(prefix + color + String.format("%-20s %-10s", ingredientText, availableText) + RESET);
+
+                firstIngredient = false;
+            }
+
+            System.out.println("----------------------------------------------------------");
+        }
+        System.out.println();
+
+        return canSmeltAnything;
+    }
+
+    /**
+     * Displays cooking recipes with improved formatting and filtering options
+     * @param player The player
+     * @param onlyCookable If true, only shows recipes for fish that the player has
+     * @return True if there are any cookable items, false otherwise
+     */
+    private boolean displayCookingRecipes(Player player, boolean onlyCookable) {
+        String title = onlyCookable ? BLUE + "\n=== Cookable Fish Only ===" + RESET : BLUE + "\n=== All Cooking Recipes ===" + RESET;
+        System.out.println(title);
+
+        boolean hasCookableItems = false;
+        System.out.println(PURPLE + "RAW FISH                   " + YELLOW + "| " + GREEN + "COOKED RESULT" + RESET);
+        System.out.println("----------------------------------------------------------");
+
+        for (Map.Entry<String, String> recipeEntry : cookingRecipes.entrySet()) {
+            String rawFish = recipeEntry.getKey();
+            String cookedFish = recipeEntry.getValue();
+            int count = player.getItemCount(rawFish);
+
+            // Skip this recipe if we're only showing cookable items and player doesn't have this fish
+            if (onlyCookable && count <= 0) {
+                continue;
+            }
+
+            if (count > 0) {
+                hasCookableItems = true;
+            }
+
+            // Format fish names with quantity
+            String rawFishDisplay = PURPLE + String.format("%-25s", rawFish) + RESET;
+            if (count > 0) {
+                rawFishDisplay += GREEN + " (x" + count + ")" + RESET;
+            } else {
+                rawFishDisplay += RED + " (x0)" + RESET;
+            }
+
+            String cookedFishDisplay = GREEN + String.format("%-25s", cookedFish) + RESET;
+
+            System.out.println(rawFishDisplay + YELLOW + " | " + cookedFishDisplay + RESET);
+            System.out.println("----------------------------------------------------------");
+        }
+        System.out.println();
+
+        return hasCookableItems;
+    }
+
+    /**
+     * Displays crafting recipes with improved formatting and filtering options
+     * @param player The player
+     * @param onlyCraftable If true, only shows recipes that the player can craft
+     * @return True if there are any craftable recipes, false otherwise
+     */
+    private boolean displayRecipes(Player player, boolean onlyCraftable) {
+        String title = onlyCraftable ? BLUE + "\n=== Craftable Items Only ===" + RESET : BLUE + "\n=== All Crafting Recipes ===" + RESET;
+        System.out.println(title);
+
+        boolean canCraftAnything = false;
+        System.out.println(PURPLE + "ITEM NAME                  " + YELLOW + "| " + GREEN + "INGREDIENTS" + RESET);
+        System.out.println("----------------------------------------------------------");
+
+        for (Map.Entry<String, Map<String, Integer>> recipeEntry : craftingRecipes.entrySet()) {
+            String itemName = recipeEntry.getKey();
+            Map<String, Integer> ingredients = recipeEntry.getValue();
+
+            // Calculate maximum craftable amount
+            int maxCraftable = Integer.MAX_VALUE;
+            for (Map.Entry<String, Integer> ingredient : ingredients.entrySet()) {
+                int available = player.getItemCount(ingredient.getKey());
+                int possibleCrafts = available / ingredient.getValue();
+                maxCraftable = Math.min(maxCraftable, possibleCrafts);
+            }
+
+            // Skip this recipe if we're only showing craftable items and this one isn't craftable
+            if (onlyCraftable && maxCraftable <= 0) {
+                continue;
+            }
+
+            // Format item name with craftable amount
+            if (maxCraftable > 0) {
+                canCraftAnything = true;
+                System.out.println(YELLOW + "║ " + PURPLE + String.format("%-25s", itemName) + YELLOW + "│                                  ║" + RESET);
+                System.out.println(YELLOW + "║                           " + GREEN + String.format("(Can craft: %d)", maxCraftable) + YELLOW + "│                                  ║" + RESET);
+            } else {
+                System.out.println(YELLOW + "║ " + PURPLE + String.format("%-25s", itemName) + YELLOW + "│                                  ║" + RESET);
+                System.out.println(YELLOW + "║                           " + RED + "(Cannot craft)" + YELLOW + "│                                  ║" + RESET);
+            }
+
+            // Display ingredients with better formatting
+            boolean firstIngredient = true;
+            for (Map.Entry<String, Integer> ingredient : ingredients.entrySet()) {
+                String ingName = ingredient.getKey();
+                int required = ingredient.getValue();
+                int available = player.getItemCount(ingName);
+
+                String prefix = YELLOW + "║ " + RESET + "                          " + YELLOW + "│ " + RESET;
+
+                String ingredientText = String.format("%d %s", required, ingName);
+                String availableText = String.format("(%d available)", available);
+
+                String color = available >= required ? GREEN : RED;
+                System.out.println(prefix + color + String.format("%-20s %-10s", ingredientText, availableText) + YELLOW + " ║" + RESET);
+
+                firstIngredient = false;
+            }
+
+            System.out.println(YELLOW + "╟────────────────────────────────────────────────────────────╢" + RESET);
+        }
+        System.out.println(YELLOW + "╚════════════════════════════════════════════════════════════╝" + RESET);
+
+        return canCraftAnything;
     }
 }

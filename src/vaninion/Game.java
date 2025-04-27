@@ -67,7 +67,7 @@ public class Game {
 
         // MUST REMOVE @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
         player.addItem("gold coin", 1000);
-        player.addItem("vaninite bar", 100);
+        player.addItem("gorganite bar", 100);
         player.addItem("legendary rod", 1);
         player.addItem("legendary bait", 1000);
         player.setMoney(100);

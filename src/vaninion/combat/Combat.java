@@ -30,6 +30,20 @@ public class Combat {
     private int maxCombo = 0;  // Tracks highest combo achieved
     private int basePower = 0;
 
+    // Available spells for the player to cast
+    private final Spell[] availableSpells = {
+        Spell.FIREBALL,
+        Spell.ICE_SPIKE,
+        Spell.LIGHTNING_BOLT,
+        Spell.SOUL_DRAIN,
+        Spell.HEALING_TOUCH,
+        Spell.REJUVENATION,
+        Spell.IRON_SKIN,
+        Spell.ARCANE_INTELLECT,
+        Spell.WEAKEN,
+        Spell.VULNERABILITY
+    };
+
     public Monster getMonsterAndFight(Player player) {
         if (player.getHealth() <= 10) {
             System.out.println(RED + "You are far too weak to fight,\n" +
@@ -41,7 +55,7 @@ public class Combat {
         if (selectedMonster != null) {
             // Set random battle condition
             String[] battleConditions = {
-                    "normal", "stormy", "foggy", "sunny"
+                    "normal", "stormy", "foggy", "sunny", "volcanic", "frozen", "magical", "cursed"
             };
             currentBattleCondition = battleConditions[random.nextInt(battleConditions.length)];
 
@@ -62,6 +76,14 @@ public class Combat {
                     System.out.println("║ " + GREY + "Dense fog reduces accuracy!" + BLUE);
             case "sunny" ->
                     System.out.println("║ " + YELLOW + "The sun's energy empowers you!" + BLUE);
+            case "volcanic" ->
+                    System.out.println("║ " + RED + "Volcanic heat burns! Fire attacks enhanced!" + BLUE);
+            case "frozen" ->
+                    System.out.println("║ " + CYAN + "Freezing cold slows movement! Defense increased!" + BLUE);
+            case "magical" ->
+                    System.out.println("║ " + PURPLE + "Magical energy fills the air! Mana regenerates!" + BLUE);
+            case "cursed" ->
+                    System.out.println("║ " + RED + "A curse lingers! Random status effects may occur!" + BLUE);
             default ->
                     System.out.println("║ " + GREEN + "Normal conditions" + BLUE);
         }
@@ -147,13 +169,29 @@ public class Combat {
     }
 
     private void handleClassEffects(Player player, Monster target) {
-        if (player instanceof Viking viking && viking.getBerserkStacks() > 0) {
-            int bonusDamage = viking.getBerserkStacks() * 2;
-            target.setHealth(target.getHealth() - bonusDamage);
-            System.out.println(PURPLE + "Berserk bonus damage: " + bonusDamage + "!" + RESET);
-        } else if (player instanceof Ork ork) {
+        // Viking effects
+        if (player instanceof Viking viking) {
+            // Call onAttack to potentially gain berserk stacks
+            viking.onAttack();
+
+            // Apply berserk damage bonus if stacks exist
+            if (viking.getBerserkStacks() > 0) {
+                int bonusDamage = viking.getBerserkStacks() * 2;
+
+                // Apply battle fury bonus if available
+                if (viking.getBattleFury() > 0) {
+                    bonusDamage += viking.getBattleFury() * viking.getBerserkStacks();
+                }
+
+                target.setHealth(target.getHealth() - bonusDamage);
+                System.out.println(PURPLE + "Berserk bonus damage: " + bonusDamage + "!" + RESET);
+            }
+        } 
+        // Ork effects
+        else if (player instanceof Ork ork) {
             ork.increaseRage(10);
         }
+        // Human effects - no combat effects to apply
     }
 
     public void fight(Player player, Monster monster) {
@@ -231,7 +269,7 @@ public class Combat {
         System.out.println("╠═══════════════════════════════════════╣");
         System.out.println("║" + YELLOW + " Actions:" + BLUE + "                              ║");
         System.out.println("║ " + PURPLE + "1. Attack" + BLUE + "                             ║");
-        System.out.println("║ " + PURPLE + "2. Special Attack " + GREEN + "(20 MP)" + BLUE + "             ║");
+        System.out.println("║ " + PURPLE + "2. Cast Spell" + BLUE + "                         ║");
         System.out.println("║ " + PURPLE + "3. Use Potion" + BLUE + "                         ║");
         System.out.println("║ " + PURPLE + "4. Guard" + BLUE + "                              ║");
         System.out.println("║ " + RED + "5. Flee" + BLUE + "                               ║");
@@ -313,6 +351,7 @@ public class Combat {
     // ... [Previous helper methods remain the same]
 
     private void handleBattleConditions(Player player, Monster monster) {
+        // Stormy condition - random lightning strikes
         if (currentBattleCondition.equals("stormy") && random.nextDouble() < 0.15 - player.getWisdom() * 0.01) {
             int lightningDamage = random.nextInt(10) + player.getLevel();
             if (random.nextBoolean()) {
@@ -321,6 +360,62 @@ public class Combat {
             } else {
                 monster.setHealth(monster.getHealth() - lightningDamage);
                 System.out.println(CYAN + "⚡ Lightning strikes " + monster.getName() + " for " + lightningDamage + " damage! ⚡" + RESET);
+            }
+        }
+
+        // Volcanic condition - periodic burn damage and fire attack boost
+        else if (currentBattleCondition.equals("volcanic") && random.nextDouble() < 0.2) {
+            int burnDamage = random.nextInt(5) + 3;
+            player.setHealth(player.getHealth() - burnDamage);
+            System.out.println(RED + "🔥 The volcanic heat burns you for " + burnDamage + " damage! 🔥" + RESET);
+
+            // Fire attack boost for special attacks
+            if (random.nextDouble() < 0.3) {
+                player.addEffect("fire_boost", 2, 5); // Name, duration, strength
+                System.out.println(YELLOW + "The volcanic energy empowers your next attack!" + RESET);
+            }
+        }
+
+        // Frozen condition - movement slowed, defense increased
+        else if (currentBattleCondition.equals("frozen") && random.nextDouble() < 0.15) {
+            // Temporary defense boost
+            player.setTempStrength(player.getTempStrength() - 1); // Reduce strength temporarily
+            player.setDefense(player.getDefense() + 2); // Increase defense temporarily
+            System.out.println(CYAN + "❄ The freezing cold slows you but hardens your defenses! ❄" + RESET);
+        }
+
+        // Magical condition - mana regeneration
+        else if (currentBattleCondition.equals("magical")) {
+            int manaRegen = random.nextInt(3) + 2;
+            player.setMana(Math.min(player.getMaxMana(), player.getMana() + manaRegen));
+            if (manaRegen > 0) {
+                System.out.println(PURPLE + "✨ Magical energy restores " + manaRegen + " mana! ✨" + RESET);
+            }
+        }
+
+        // Cursed condition - random status effects
+        else if (currentBattleCondition.equals("cursed") && random.nextDouble() < 0.15) {
+            String[] effects = {"confusion", "weakness", "strength", "wisdom"};
+            String effect = effects[random.nextInt(effects.length)];
+            int duration = random.nextInt(2) + 1;
+
+            switch (effect) {
+                case "confusion" -> {
+                    player.applyEffect("confusion", duration);
+                    System.out.println(PURPLE + "👻 A curse confuses you for " + duration + " turns! 👻" + RESET);
+                }
+                case "weakness" -> {
+                    player.setTempStrength(player.getTempStrength() - 2);
+                    System.out.println(RED + "👻 A curse weakens you! 👻" + RESET);
+                }
+                case "strength" -> {
+                    player.setTempStrength(player.getTempStrength() + 2);
+                    System.out.println(GREEN + "👻 A curse unexpectedly strengthens you! 👻" + RESET);
+                }
+                case "wisdom" -> {
+                    player.addEffect("wisdom", duration, 2);
+                    System.out.println(BLUE + "👻 A curse grants you temporary wisdom! 👻" + RESET);
+                }
             }
         }
     }
@@ -336,7 +431,7 @@ public class Combat {
                 playerAttack(player, monster);
                 yield true;
             }
-            case "2", "special" -> handleSpecialAttack(player, monster);
+            case "2", "spell", "cast" -> handleSpellCasting(player, monster);
             case "3", "potion" -> {
                 potion.usePotion(player);
                 yield false;
@@ -354,15 +449,51 @@ public class Combat {
         };
     }
 
-    private boolean handleSpecialAttack(Player player, Monster monster) {
-        if (player.getMana() >= 20) {
-            int damage = player.getStrength() + player.getLevel() + player.getWisdom();
-            monster.setHealth(monster.getHealth() - damage);
-            player.setMana(player.getMana() - 20);
-            System.out.println(PURPLE + "Special attack deals " + damage + " damage!" + RESET);
-            return true;
-        } else {
-            System.out.println(RED + "Not enough mana!" + RESET);
+    private boolean handleSpellCasting(Player player, Monster monster) {
+        // Display available spells
+        System.out.println(PURPLE + "\n=== Available Spells ===" + RESET);
+        for (int i = 0; i < availableSpells.length; i++) {
+            Spell spell = availableSpells[i];
+            String spellInfo = String.format("%d. %s (%d MP) - %s", 
+                i + 1, 
+                spell.getName(), 
+                spell.getManaCost(),
+                spell.getDescription());
+
+            // Color the spell name based on type
+            String coloredInfo = switch(spell.getType()) {
+                case DAMAGE -> RED + spellInfo + RESET;
+                case HEAL -> GREEN + spellInfo + RESET;
+                case BUFF -> BLUE + spellInfo + RESET;
+                case DEBUFF -> PURPLE + spellInfo + RESET;
+            };
+
+            System.out.println(coloredInfo);
+        }
+        System.out.println(YELLOW + "0. Back" + RESET);
+
+        // Get player's choice
+        System.out.print("Choose a spell to cast (0-" + availableSpells.length + "): ");
+        String input = scanner.nextLine().trim();
+
+        try {
+            int choice = Integer.parseInt(input);
+
+            if (choice == 0) {
+                return false; // Player chose to go back
+            }
+
+            if (choice < 1 || choice > availableSpells.length) {
+                System.out.println(RED + "Invalid spell choice!" + RESET);
+                return false;
+            }
+
+            // Cast the selected spell
+            Spell selectedSpell = availableSpells[choice - 1];
+            return selectedSpell.cast(player, monster);
+
+        } catch (NumberFormatException e) {
+            System.out.println(RED + "Please enter a number!" + RESET);
             return false;
         }
     }
@@ -398,6 +529,7 @@ public class Combat {
             System.out.println("2. " + GREEN + "Skeleton" + RESET);
             System.out.println("3. " + GREEN + "Werewolf" + RESET);
             System.out.println("4. " + GREEN + "Giant Tarantula" + RESET);
+            System.out.println("5. " + RED + BOLD + "DRAGON LORD (BOSS)" + RESET);
             System.out.println("*. " + RED + "Back" + RESET);
 
             String choice = scanner.nextLine().toLowerCase().trim();
@@ -406,6 +538,7 @@ public class Combat {
                 case "2", "skeleton" -> new Skeleton();
                 case "3", "werewolf" -> new Werewolf();
                 case "4", "giant tarantula" -> new Tarantula();
+                case "5", "dragon lord", "boss", "dragon" -> new DragonLord();
                 case "*", "back", "exit", "leave" -> null;
                 default -> {
                     System.out.println(RED + "Invalid choice!" + RESET);

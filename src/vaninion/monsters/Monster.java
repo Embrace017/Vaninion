@@ -13,6 +13,7 @@ public abstract class Monster {
     private int maxHealth;
     private int defence;
     private int strength;
+    private final int maxStr;
     private Map<String, Double> possibleDrops;
     private Random random;
     Shop shop = new Shop();
@@ -24,6 +25,7 @@ public abstract class Monster {
         this.maxHealth = health;
         this.defence = defence;
         this.strength = strength;
+        this.maxStr = strength;
         this.possibleDrops = new HashMap<>();
         this.random = new Random();
 
@@ -97,6 +99,10 @@ public abstract class Monster {
 
     public int getStrength() {
         return strength;
+    }
+
+    public int getMaxStr() {
+        return maxStr;
     }
 
     public void setStrength(int strength) {

@@ -1,7 +1,8 @@
 package vaninion.players;
 import vaninion.ColoredConsole;
 import vaninion.adventure.Riddle;
-import vaninion.combat.Equipment;
+import vaninion.combat.equipment.EquipmentManager;
+import vaninion.combat.equipment.EquipmentItem;
 
 import java.util.*;
 
@@ -26,7 +27,7 @@ public class Player {
     private int charisma;
 
     // Equipment
-    private Equipment equipment;
+    private EquipmentManager equipment;
 
 
     // Skill stats
@@ -515,4 +516,3 @@ public class Player {
     }
 
 }
-

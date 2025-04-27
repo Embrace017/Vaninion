@@ -76,6 +76,12 @@ public class ArmourStats {
     public static final ArmourStats GORGANITE_SWORD = new ArmourStats("gorganite sword", 0, 20, 0, 60, 1, 0);
     public static final ArmourStats VANINITE_SWORD = new ArmourStats("vaninite sword", 0, 100, 0, 1000, 1, 0);
 
+    // New weapons
+    public static final ArmourStats DRAGON_SWORD = new ArmourStats("dragon sword", 5, 50, 20, 100, 1, 0);
+    public static final ArmourStats FIRE_STAFF = new ArmourStats("fire staff", 0, 15, 0, 200, 1, 0);
+    public static final ArmourStats ICE_STAFF = new ArmourStats("ice staff", 0, 15, 0, 200, 1, 0);
+    public static final ArmourStats LIGHTNING_STAFF = new ArmourStats("lightning staff", 0, 15, 0, 200, 1, 0);
+
     // Iron armour
     public static final ArmourStats IRON_HELMET = new ArmourStats("iron helmet", 1, 0, 0, 0, 1, 0);
     public static final ArmourStats IRON_CHESTPLATE = new ArmourStats("iron chestplate", 1, 0, 0, 0, 1, 0);
@@ -98,6 +104,18 @@ public class ArmourStats {
     public static final ArmourStats VANINITE_LEGGINGS = new ArmourStats("vaninite leggins", 100, 100, 100, 100, 1, 0);
     public static final ArmourStats VANINITE_SHIELD = new ArmourStats("vaninite sheild", 100, 100, 100, 100, 1, 0);
 
+
+    // Dragon armour
+    public static final ArmourStats DRAGON_HELMET = new ArmourStats("dragon helmet", 30, 20, 50, 50, 1, 0);
+    public static final ArmourStats DRAGON_CHESTPLATE = new ArmourStats("dragon chestplate", 40, 20, 50, 50, 1, 0);
+    public static final ArmourStats DRAGON_LEGGINGS = new ArmourStats("dragon leggings", 30, 20, 50, 50, 1, 0);
+    public static final ArmourStats DRAGON_SHIELD = new ArmourStats("dragon shield", 30, 20, 50, 50, 1, 0);
+
+    // Mage armour
+    public static final ArmourStats MAGE_HAT = new ArmourStats("mage hat", 5, 5, 10, 100, 1, 0);
+    public static final ArmourStats MAGE_ROBE = new ArmourStats("mage robe", 5, 5, 10, 150, 1, 0);
+    public static final ArmourStats MAGE_PANTS = new ArmourStats("mage pants", 5, 5, 10, 100, 1, 0);
+    public static final ArmourStats MAGE_AMULET = new ArmourStats("mage amulet", 0, 10, 0, 200, 1, 0);
 
     // Misc
     public static final ArmourStats STARTER_HELMET = new ArmourStats("starter helmet", 0, 0, 10, 0, 1, 0);

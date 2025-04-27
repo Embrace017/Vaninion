@@ -60,19 +60,43 @@ public class Shop {
         while (true) {
             System.out.println(YELLOW + "Your current cash: $" + player.getMoney() + RESET);
 
+            // Iron Gear
+            System.out.println(BLUE + "\n=== Iron Gear ===" + RESET);
             System.out.println("1. " + PURPLE + "iron Helmet" + RESET + " - $" + GREEN + 100 + RESET + (player.inventory.getOrDefault("iron helmet", 0) > 0 ? " (" + player.inventory.get("iron helmet") + " Owned)" : ""));
             System.out.println("2. " + PURPLE + "iron chestplate" + RESET + " - $" + GREEN + 150 + RESET + (player.inventory.getOrDefault("iron chestplate", 0) > 0 ? " (" + player.inventory.get("iron chestplate") + " Owned)" : ""));
             System.out.println("3. " + PURPLE + "iron leggings" + RESET + " - $" + GREEN + 100 + RESET + (player.inventory.getOrDefault("iron leggings", 0) > 0 ? " (" + player.inventory.get("iron leggings") + " Owned)" : ""));
             System.out.println("4. " + PURPLE + "iron Shield" + RESET + " - $" + GREEN + 100 + RESET + (player.inventory.getOrDefault("iron shield", 0) > 0 ? " (" + player.inventory.get("iron shield") + " Owned)" : ""));
             System.out.println("5. " + PURPLE + "iron Sword" + RESET + " - $" + GREEN + 150 + RESET + (player.inventory.getOrDefault("iron sword", 0) > 0 ? " (" + player.inventory.get("iron sword") + " Owned)" : ""));
-            System.out.println("6. " + PURPLE + "Armour Package (Helmet, Body, Legs, Shield, Sword)" + RESET + " - $" + GREEN + 500 + RESET);
-            System.out.println("7. " + RED + "Back to Shop Categories" + RESET);
+            System.out.println("6. " + PURPLE + "Iron Armour Package (Helmet, Body, Legs, Shield, Sword)" + RESET + " - $" + GREEN + 500 + RESET);
+
+            // Mage Gear
+            System.out.println(BLUE + "\n=== Mage Gear ===" + RESET);
+            System.out.println("7. " + PURPLE + "Mage Hat" + RESET + " - $" + GREEN + 500 + RESET + (player.inventory.getOrDefault("mage hat", 0) > 0 ? " (" + player.inventory.get("mage hat") + " Owned)" : ""));
+            System.out.println("8. " + PURPLE + "Mage Robe" + RESET + " - $" + GREEN + 800 + RESET + (player.inventory.getOrDefault("mage robe", 0) > 0 ? " (" + player.inventory.get("mage robe") + " Owned)" : ""));
+            System.out.println("9. " + PURPLE + "Mage Pants" + RESET + " - $" + GREEN + 500 + RESET + (player.inventory.getOrDefault("mage pants", 0) > 0 ? " (" + player.inventory.get("mage pants") + " Owned)" : ""));
+            System.out.println("10. " + PURPLE + "Mage Amulet" + RESET + " - $" + GREEN + 1000 + RESET + (player.inventory.getOrDefault("mage amulet", 0) > 0 ? " (" + player.inventory.get("mage amulet") + " Owned)" : ""));
+            System.out.println("11. " + PURPLE + "Fire Staff" + RESET + " - $" + GREEN + 1200 + RESET + (player.inventory.getOrDefault("fire staff", 0) > 0 ? " (" + player.inventory.get("fire staff") + " Owned)" : ""));
+            System.out.println("12. " + PURPLE + "Ice Staff" + RESET + " - $" + GREEN + 1200 + RESET + (player.inventory.getOrDefault("ice staff", 0) > 0 ? " (" + player.inventory.get("ice staff") + " Owned)" : ""));
+            System.out.println("13. " + PURPLE + "Lightning Staff" + RESET + " - $" + GREEN + 1200 + RESET + (player.inventory.getOrDefault("lightning staff", 0) > 0 ? " (" + player.inventory.get("lightning staff") + " Owned)" : ""));
+            System.out.println("14. " + PURPLE + "Mage Package (Hat, Robe, Pants, Amulet, Staff of choice)" + RESET + " - $" + GREEN + 3500 + RESET);
+
+            // Dragon Gear (Premium)
+            System.out.println(RED + "\n=== Dragon Gear (Premium) ===" + RESET);
+            System.out.println("15. " + PURPLE + "Dragon Helmet" + RESET + " - $" + GREEN + 2000 + RESET + (player.inventory.getOrDefault("dragon helmet", 0) > 0 ? " (" + player.inventory.get("dragon helmet") + " Owned)" : ""));
+            System.out.println("16. " + PURPLE + "Dragon Chestplate" + RESET + " - $" + GREEN + 3000 + RESET + (player.inventory.getOrDefault("dragon chestplate", 0) > 0 ? " (" + player.inventory.get("dragon chestplate") + " Owned)" : ""));
+            System.out.println("17. " + PURPLE + "Dragon Leggings" + RESET + " - $" + GREEN + 2000 + RESET + (player.inventory.getOrDefault("dragon leggings", 0) > 0 ? " (" + player.inventory.get("dragon leggings") + " Owned)" : ""));
+            System.out.println("18. " + PURPLE + "Dragon Shield" + RESET + " - $" + GREEN + 2000 + RESET + (player.inventory.getOrDefault("dragon shield", 0) > 0 ? " (" + player.inventory.get("dragon shield") + " Owned)" : ""));
+            System.out.println("19. " + PURPLE + "Dragon Sword" + RESET + " - $" + GREEN + 3000 + RESET + (player.inventory.getOrDefault("dragon sword", 0) > 0 ? " (" + player.inventory.get("dragon sword") + " Owned)" : ""));
+            System.out.println("20. " + PURPLE + "Dragon Armour Package (Helmet, Body, Legs, Shield, Sword)" + RESET + " - $" + GREEN + 10000 + RESET);
+
+            System.out.println("0. " + RED + "Back to Shop Categories" + RESET);
             System.out.print(CYAN + BOLD + "Enter the " + RESET + "number " + CYAN + BOLD + "of the item you wish to purchase: " + RESET);
 
             String armourChoice = scanner.nextLine().trim();
 
             try {
                 switch (armourChoice) {
+                    // Iron Gear
                     case "1":
                         buyArmour(player, "iron helmet", 100);
                         break;
@@ -88,10 +112,57 @@ public class Shop {
                     case "5":
                         buyArmour(player, "iron sword", 150);
                         break;
-                    case "6": // Armour Package
+                    case "6": // Iron Armour Package
                         buyArmourPackage(player);
                         break;
-                    case "7", "back", "leave", "exit": // Back
+
+                    // Mage Gear
+                    case "7":
+                        buyArmour(player, "mage hat", 500);
+                        break;
+                    case "8":
+                        buyArmour(player, "mage robe", 800);
+                        break;
+                    case "9":
+                        buyArmour(player, "mage pants", 500);
+                        break;
+                    case "10":
+                        buyArmour(player, "mage amulet", 1000);
+                        break;
+                    case "11":
+                        buyArmour(player, "fire staff", 1200);
+                        break;
+                    case "12":
+                        buyArmour(player, "ice staff", 1200);
+                        break;
+                    case "13":
+                        buyArmour(player, "lightning staff", 1200);
+                        break;
+                    case "14": // Mage Package
+                        buyMagePackage(player);
+                        break;
+
+                    // Dragon Gear
+                    case "15":
+                        buyArmour(player, "dragon helmet", 2000);
+                        break;
+                    case "16":
+                        buyArmour(player, "dragon chestplate", 3000);
+                        break;
+                    case "17":
+                        buyArmour(player, "dragon leggings", 2000);
+                        break;
+                    case "18":
+                        buyArmour(player, "dragon shield", 2000);
+                        break;
+                    case "19":
+                        buyArmour(player, "dragon sword", 3000);
+                        break;
+                    case "20": // Dragon Armour Package
+                        buyDragonPackage(player);
+                        break;
+
+                    case "0", "back", "leave", "exit": // Back
                         return;
                     default:
                         System.out.println(RED + "Invalid choice." + RESET);
@@ -111,7 +182,7 @@ public class Shop {
             player.addItem("iron leggings", 1);
             player.addItem("iron shield", 1);
             player.addItem("iron sword", 1);
-            System.out.println(GREEN + "You bought the Armour Package for $" + YELLOW + packagePrice + GREEN + ". You now have:" + RESET);
+            System.out.println(GREEN + "You bought the Iron Armour Package for $" + YELLOW + packagePrice + GREEN + ". You now have:" + RESET);
             System.out.println(YELLOW + "  - iron Helmet" + GREEN + ": " + player.getItemCount("iron helmet"));
             System.out.println(YELLOW + "  - iron chestplate" + GREEN + ": " + player.getItemCount("iron chestplate"));
             System.out.println(YELLOW + "  - iron leggings" + GREEN + ": " + player.getItemCount("iron leggings"));
@@ -119,7 +190,68 @@ public class Shop {
             System.out.println(YELLOW + "  - iron  Sword" + GREEN + ": " + player.getItemCount("iron sword") + RESET);
             System.out.println(GREEN + "Your remaining cash: $" + YELLOW + player.getMoney() + RESET);
         } else {
-            System.out.println(RED + "Not enough money for the Armour Package!" + RESET);
+            System.out.println(RED + "Not enough money for the Iron Armour Package!" + RESET);
+        }
+    }
+
+    private void buyMagePackage(Player player) {
+        int packagePrice = 3500;
+        if (player.getMoney() >= packagePrice) {
+            player.setMoney(player.getMoney() - packagePrice);
+            player.addItem("mage hat", 1);
+            player.addItem("mage robe", 1);
+            player.addItem("mage pants", 1);
+            player.addItem("mage amulet", 1);
+
+            // Ask which staff they want
+            System.out.println(YELLOW + "Which staff would you like with your Mage Package?" + RESET);
+            System.out.println("1. " + PURPLE + "Fire Staff" + RESET);
+            System.out.println("2. " + PURPLE + "Ice Staff" + RESET);
+            System.out.println("3. " + PURPLE + "Lightning Staff" + RESET);
+
+            String staffChoice = scanner.nextLine().trim();
+            String staffName = switch(staffChoice) {
+                case "1" -> "fire staff";
+                case "2" -> "ice staff";
+                case "3" -> "lightning staff";
+                default -> {
+                    System.out.println(YELLOW + "Invalid choice. You'll receive a Fire Staff by default." + RESET);
+                    yield "fire staff";
+                }
+            };
+
+            player.addItem(staffName, 1);
+
+            System.out.println(GREEN + "You bought the Mage Package for $" + YELLOW + packagePrice + GREEN + ". You now have:" + RESET);
+            System.out.println(YELLOW + "  - Mage Hat" + GREEN + ": " + player.getItemCount("mage hat"));
+            System.out.println(YELLOW + "  - Mage Robe" + GREEN + ": " + player.getItemCount("mage robe"));
+            System.out.println(YELLOW + "  - Mage Pants" + GREEN + ": " + player.getItemCount("mage pants"));
+            System.out.println(YELLOW + "  - Mage Amulet" + GREEN + ": " + player.getItemCount("mage amulet"));
+            System.out.println(YELLOW + "  - " + staffName + GREEN + ": " + player.getItemCount(staffName) + RESET);
+            System.out.println(GREEN + "Your remaining cash: $" + YELLOW + player.getMoney() + RESET);
+        } else {
+            System.out.println(RED + "Not enough money for the Mage Package!" + RESET);
+        }
+    }
+
+    private void buyDragonPackage(Player player) {
+        int packagePrice = 10000;
+        if (player.getMoney() >= packagePrice) {
+            player.setMoney(player.getMoney() - packagePrice);
+            player.addItem("dragon helmet", 1);
+            player.addItem("dragon chestplate", 1);
+            player.addItem("dragon leggings", 1);
+            player.addItem("dragon shield", 1);
+            player.addItem("dragon sword", 1);
+            System.out.println(GREEN + "You bought the Dragon Armour Package for $" + YELLOW + packagePrice + GREEN + ". You now have:" + RESET);
+            System.out.println(YELLOW + "  - Dragon Helmet" + GREEN + ": " + player.getItemCount("dragon helmet"));
+            System.out.println(YELLOW + "  - Dragon Chestplate" + GREEN + ": " + player.getItemCount("dragon chestplate"));
+            System.out.println(YELLOW + "  - Dragon Leggings" + GREEN + ": " + player.getItemCount("dragon leggings"));
+            System.out.println(YELLOW + "  - Dragon Shield" + GREEN + ": " + player.getItemCount("dragon shield"));
+            System.out.println(YELLOW + "  - Dragon Sword" + GREEN + ": " + player.getItemCount("dragon sword") + RESET);
+            System.out.println(GREEN + "Your remaining cash: $" + YELLOW + player.getMoney() + RESET);
+        } else {
+            System.out.println(RED + "Not enough money for the Dragon Armour Package!" + RESET);
         }
     }
 
