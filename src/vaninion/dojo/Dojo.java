@@ -1,12 +1,10 @@
 package vaninion.dojo;
 // Unlock dojo quick commands from main menu?
+import vaninion.combat.equipment.EquipmentManager;
 import vaninion.dojo.crafting.Crafting;
-import vaninion.dojo.crafting.Recipes;
 import vaninion.foodAndPotions.Food;
 import vaninion.players.Player;
 
-
-import java.util.Map;
 import java.util.Scanner;
 import java.util.Random;
 
@@ -14,15 +12,16 @@ import static vaninion.ColoredConsole.*;
 
 public class Dojo extends Crafting {
     private static final Food food = new Food();
-    private final Scanner scanner = new Scanner(System.in);
-    Random random = new Random();
+    private static final Scanner scanner = new Scanner(System.in);
+    private static final Random random = new Random();
 
     private boolean furnaceLit = false;
 
     // Update to the existing Dojo constructor to add new cooking recipes
     public Dojo() {
     }
-    public void enterDojo (Player player) {
+    
+    public void enterDojo(Player player) {
         while (true) {
             System.out.println(YELLOW + "\n=== Welcome to the Dojo ===" + RESET);
             System.out.println("1. " + PURPLE + "Rest" + RESET + " (You may rest below half health");
@@ -59,9 +58,6 @@ public class Dojo extends Crafting {
         if (player.getHealth() < player.getMaxHealth() / 2) {
             res = Math.max(10 + player.getWisdom(), random.nextInt(player.getMaxHealth() / 2)); // Restore up to half of your max health
             player.setHealth(player.getHealth() + res);
-
-
-
         } else {
             System.out.println(RED + "Health too high too rest. Get back to work!" + RESET);
             return;
@@ -78,7 +74,6 @@ public class Dojo extends Crafting {
         // Display available food
         food.displayAvailableFood(player);
 
-
         System.out.println(YELLOW + "\nWhat would you like to eat? (type the food name or 'back')" + RESET);
         String choice = scanner.nextLine().trim();
 
@@ -86,35 +81,4 @@ public class Dojo extends Crafting {
 
         food.consumeFood(player, choice);
     }
-
-    private void showEquipmentMenu(Player player) {
-        Scanner scanner = new Scanner(System.in);
-
-        while (true) {
-            System.out.println(YELLOW + "\n=== Equipment Menu ===" + RESET);
-            System.out.println("Currently Equipped:");
-            System.out.println("1. Helmet: " + (player.getEquipment().getHelmet() != null ? PURPLE + "Equipped" + RESET : RED + "Empty" + RESET));
-            System.out.println("2. Chestplate: " + (player.getEquipment().getChestplate() != null ? PURPLE + "Equipped" + RESET : RED + "Empty" + RESET));
-            System.out.println("3. Leggings: " + (player.getEquipment().getLeggings() != null ? PURPLE + "Equipped" + RESET : RED + "Empty" + RESET));
-            System.out.println("4. Shield: " + (player.getEquipment().getShield() != null ? PURPLE + "Equipped" + RESET : RED + "Empty" + RESET));
-            System.out.println("5. Weapon: " + (player.getEquipment().getWeapon() != null ? PURPLE + "Equipped" + RESET : RED + "Empty" + RESET));
-            System.out.println("6. Back");
-
-            System.out.print(CYAN + "Choose slot to manage (1-5): " + RESET);
-            String choice = scanner.nextLine().trim();
-
-            if (choice.equals("6")) break;
-
-            if (choice.matches("[1-5]")) {
-                showEquipmentSlotOptions(player, Integer.parseInt(choice));
-            }
-        }
-    }
-
-    private void showEquipmentSlotOptions(Player player, int slot) {
-        // Show available items for that slot from player's inventory
-        // Allow equipping/unequipping items
-        // Update player stats when equipment changes
-    }
-
 }

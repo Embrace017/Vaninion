@@ -1,4 +1,5 @@
-package vaninion.combat;
+package vaninion.combat.equipment;
+import vaninion.combat.ArmourStats;
 import vaninion.players.Player;
 import static vaninion.ColoredConsole.*;
 

@@ -252,8 +252,8 @@ public class Combat {
         System.out.println(BLUE + BOLD + "\n╔═══════════════════════════════════════╗");
         System.out.println("║" + YELLOW + "           COMBAT INITIATED            " + BLUE + "║");
         System.out.println("╠═══════════════════════════════════════╣");
-        System.out.println("║ " + PURPLE + "Opponent: " + monster.getName() + RED + " Strength: " + monster.getStrength()+ BLUE);
-        System.out.println("║ " + RED + "Defense: " + monster.getDefence() + GREEN + " Health: " + monster.getHealth()  + BLUE);
+        System.out.println("║ " + PURPLE + " Opponent: " + monster.getName() + GREEN + " Health: " + monster.getHealth() + BLUE);
+        System.out.println("║ " + RED + " Strength: " + monster.getStrength()+ " Defense: " + monster.getDefence() + BLUE);
         System.out.println("╚═══════════════════════════════════════╝" + RESET);
     }
 
@@ -320,6 +320,12 @@ public class Combat {
         } else if (player.getSkillPoints() > 1) {
             System.out.println(YELLOW + "Unused skill points!" + RESET);
         }
+
+        // Reset berserker stacks if player is a Viking
+        if (player instanceof vaninion.players.player.Viking) {
+            ((vaninion.players.player.Viking) player).resetBerserkStacks();
+        }
+
         // Reset for next battle
         monster.reset();
         comboCounter = 0;

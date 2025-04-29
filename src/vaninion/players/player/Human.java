@@ -15,8 +15,9 @@ public class Human extends Player {
     public Human(String name) {
         super(name);
         setHealth(getMaxHealth() + 10); // Slight health bonus
-        setWisdom(getWisdom() + 2);     // Humans are wise
-        setCharisma(getCharisma() + 2); // Humans are charismatic
+        setDefense(getMana() + 20);
+        setWisdom(getWisdom() + 10);     // Humans are wise
+        setCharisma(getCharisma() + 10); // Humans are charismatic
 
         this.bonusSkill = "diplomacy";
         this.diplomacyLevel = 1;
@@ -29,25 +30,25 @@ public class Human extends Player {
     public void useRacialAbility() {
         System.out.println(YELLOW + getName() + " uses their " + bonusSkill + " (Level " + diplomacyLevel + ") to influence others." + RESET);
 
-        // Different effects based on diplomacy level
+        // Different effects based on diplomacy level, increased wisdom and charisma effects to compensate for removed defense
         switch(diplomacyLevel) {
             case 1 -> {
-                setCharisma(getCharisma() + 1);
-                System.out.println(GREEN + "Your charisma is temporarily increased by 1!" + RESET);
-            }
-            case 2 -> {
                 setCharisma(getCharisma() + 2);
                 System.out.println(GREEN + "Your charisma is temporarily increased by 2!" + RESET);
             }
-            case 3 -> {
-                setCharisma(getCharisma() + 2);
-                setWisdom(getWisdom() + 1);
-                System.out.println(GREEN + "Your charisma is temporarily increased by 2 and wisdom by 1!" + RESET);
+            case 2 -> {
+                setCharisma(getCharisma() + 3);
+                System.out.println(GREEN + "Your charisma is temporarily increased by 3!" + RESET);
             }
-            default -> {
+            case 3 -> {
                 setCharisma(getCharisma() + 3);
                 setWisdom(getWisdom() + 2);
                 System.out.println(GREEN + "Your charisma is temporarily increased by 3 and wisdom by 2!" + RESET);
+            }
+            default -> {
+                setCharisma(getCharisma() + 4);
+                setWisdom(getWisdom() + 3);
+                System.out.println(GREEN + "Your charisma is temporarily increased by 4 and wisdom by 3!" + RESET);
             }
         }
     }
@@ -81,17 +82,18 @@ public class Human extends Player {
 
     /**
      * Humans have a chance to avoid damage through quick thinking
+     * Change from damage reduction to health recovery
      */
     @Override
     public void setHealth(int health) {
         int currentHealth = getHealth();
         int damage = currentHealth - health;
 
-        // If taking damage, chance to reduce it based on wisdom
+        // Instead of reducing damage, have a chance to heal a bit when taking damage
         if (damage > 0 && Math.random() < getWisdom() * 0.03) {
-            int reducedDamage = Math.max(1, damage / 2);
-            health = currentHealth - reducedDamage;
-            System.out.println(CYAN + "Your quick thinking allows you to avoid some damage!" + RESET);
+            int healAmount = Math.max(1, getWisdom());
+            health += healAmount;
+            System.out.println(CYAN + "Your adaptability allows you to quickly recover " + healAmount + " health!" + RESET);
         }
 
         super.setHealth(health);

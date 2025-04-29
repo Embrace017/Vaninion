@@ -3,6 +3,7 @@ import vaninion.ColoredConsole;
 import vaninion.adventure.Riddle;
 import vaninion.combat.equipment.EquipmentManager;
 import vaninion.combat.equipment.EquipmentItem;
+import vaninion.combat.equipment.EquipmentSlot;
 
 import java.util.*;
 
@@ -27,7 +28,7 @@ public class Player {
     private int charisma;
 
     // Equipment
-    private EquipmentManager equipment;
+    private static final EquipmentManager equipmentManager = new EquipmentManager();
 
 
     // Skill stats
@@ -71,10 +72,6 @@ public class Player {
         this.fishingExp = 0;
         this.cookingLevel = 1;
         this.cookingExp = 0;
-
-        // Equipment
-        this.equipment = new Equipment();
-
         // Inventories
         this.inventory = new HashMap<>();
         this.resourceInventory = new HashMap<>();
@@ -118,7 +115,10 @@ public class Player {
         this.health = health;
     }
     public int getMaxHealth() {
-        return maxHealth + tempMaxHealth + equipment.getTotalHealthBoost();
+        return maxHealth + tempMaxHealth + equipmentManager.getTotalHealthBoost();
+    }
+    public int getBaseMaxHealth() {
+        return maxHealth + tempMaxHealth;
     }
     public void setMaxHealth(int maxHealth) {
         this.maxHealth = maxHealth;
@@ -132,7 +132,7 @@ public class Player {
         this.mana = mana;
     }
     public int getMaxMana() {
-        return maxMana + equipment.getTotalManaBoost();
+        return maxMana + equipmentManager.getTotalManaBoost();
     }
     public void setMaxMana(int maxMana) {
         this.maxMana = maxMana;
@@ -140,7 +140,10 @@ public class Player {
 
     // Strength
     public int getStrength() {
-        return strength + equipment.getTotalStrengthBoost();
+        return strength + equipmentManager.getTotalStrengthBoost();
+    }
+    public int getBaseStrength() {
+        return strength;
     }
     public void setStrength(int strength) {
         this.strength = strength;
@@ -154,7 +157,10 @@ public class Player {
 
     // Defense
     public int getDefense() {
-        return defense + equipment.getTotalDefenceBoost();
+        return defense + equipmentManager.getTotalDefenceBoost();
+    }
+    public int getBaseDefense() {
+        return defense;
     }
     public void setDefense(int defence) {
         this.defense = defence;
@@ -253,10 +259,6 @@ public class Player {
         this.tempMaxHealth = tempMaxHealth;
     }
 
-    // Equipment
-    public Equipment getEquipment() {
-        return equipment;
-    }
 
     // You might want to modify the getMaxHealth method to include temporary boosts
 
@@ -275,7 +277,18 @@ public class Player {
         System.out.println("Healed for " + amount + " health. Current health: " + getHealth());
     }
     public void equipItem(String itemName) {
-        equipment.equipItemByName(itemName, this);
+        equipmentManager.equipItemByName(itemName, this);
+    }
+
+    public String getEquipmentStatus() {
+        return equipmentManager.getEquipmentStatus();
+    }
+
+    /**
+     * Unequip all items
+     */
+    public void unequipAllItems() {
+        equipmentManager.unequipAll();
     }
 
     // Start inventory management methods
@@ -421,7 +434,7 @@ public class Player {
         System.out.println(GREEN + "Level: " + getLevel() + RESET);
         System.out.println(GREEN + "Experience: " + getExperience() + "/" + (100 * getLevel()) + RESET);
         System.out.println(GREEN + "Skill Points: " + getSkillPoints() + RESET);
-        System.out.println(getHealth() < getMaxHealth() / 2 ? RED : GREEN + "Health: " + getHealth() + "/" + getMaxHealth() + RESET);
+        System.out.println((getHealth() < getMaxHealth() / 2 ? RED : GREEN) + "Health: " + getHealth() + "/" + getMaxHealth() + RESET);
         System.out.println(GREEN + "Mana: " + getMana() + RESET);
         System.out.println(GREEN + "Strength: " + getStrength() + RESET);
         System.out.println(GREEN + "Defence: " + getDefense() + RESET);

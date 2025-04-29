@@ -71,22 +71,22 @@ public class Shop {
 
             // Mage Gear
             System.out.println(BLUE + "\n=== Mage Gear ===" + RESET);
-            System.out.println("7. " + PURPLE + "Mage Hat" + RESET + " - $" + GREEN + 500 + RESET + (player.inventory.getOrDefault("mage hat", 0) > 0 ? " (" + player.inventory.get("mage hat") + " Owned)" : ""));
-            System.out.println("8. " + PURPLE + "Mage Robe" + RESET + " - $" + GREEN + 800 + RESET + (player.inventory.getOrDefault("mage robe", 0) > 0 ? " (" + player.inventory.get("mage robe") + " Owned)" : ""));
-            System.out.println("9. " + PURPLE + "Mage Pants" + RESET + " - $" + GREEN + 500 + RESET + (player.inventory.getOrDefault("mage pants", 0) > 0 ? " (" + player.inventory.get("mage pants") + " Owned)" : ""));
-            System.out.println("10. " + PURPLE + "Mage Amulet" + RESET + " - $" + GREEN + 1000 + RESET + (player.inventory.getOrDefault("mage amulet", 0) > 0 ? " (" + player.inventory.get("mage amulet") + " Owned)" : ""));
-            System.out.println("11. " + PURPLE + "Fire Staff" + RESET + " - $" + GREEN + 1200 + RESET + (player.inventory.getOrDefault("fire staff", 0) > 0 ? " (" + player.inventory.get("fire staff") + " Owned)" : ""));
-            System.out.println("12. " + PURPLE + "Ice Staff" + RESET + " - $" + GREEN + 1200 + RESET + (player.inventory.getOrDefault("ice staff", 0) > 0 ? " (" + player.inventory.get("ice staff") + " Owned)" : ""));
-            System.out.println("13. " + PURPLE + "Lightning Staff" + RESET + " - $" + GREEN + 1200 + RESET + (player.inventory.getOrDefault("lightning staff", 0) > 0 ? " (" + player.inventory.get("lightning staff") + " Owned)" : ""));
-            System.out.println("14. " + PURPLE + "Mage Package (Hat, Robe, Pants, Amulet, Staff of choice)" + RESET + " - $" + GREEN + 3500 + RESET);
+            System.out.println("7. " + PURPLE + "Mage Hat" + RESET + " - $" + GREEN + 5000 + RESET + (player.inventory.getOrDefault("mage hat", 0) > 0 ? " (" + player.inventory.get("mage hat") + " Owned)" : ""));
+            System.out.println("8. " + PURPLE + "Mage Robe" + RESET + " - $" + GREEN + 8000 + RESET + (player.inventory.getOrDefault("mage robe", 0) > 0 ? " (" + player.inventory.get("mage robe") + " Owned)" : ""));
+            System.out.println("9. " + PURPLE + "Mage Pants" + RESET + " - $" + GREEN + 5000 + RESET + (player.inventory.getOrDefault("mage pants", 0) > 0 ? " (" + player.inventory.get("mage pants") + " Owned)" : ""));
+            System.out.println("10. " + PURPLE + "Mage Amulet" + RESET + " - $" + GREEN + 10000 + RESET + (player.inventory.getOrDefault("mage amulet", 0) > 0 ? " (" + player.inventory.get("mage amulet") + " Owned)" : ""));
+            System.out.println("11. " + PURPLE + "Fire Staff" + RESET + " - $" + GREEN + 12000 + RESET + (player.inventory.getOrDefault("fire staff", 0) > 0 ? " (" + player.inventory.get("fire staff") + " Owned)" : ""));
+            System.out.println("12. " + PURPLE + "Ice Staff" + RESET + " - $" + GREEN + 12000 + RESET + (player.inventory.getOrDefault("ice staff", 0) > 0 ? " (" + player.inventory.get("ice staff") + " Owned)" : ""));
+            System.out.println("13. " + PURPLE + "Lightning Staff" + RESET + " - $" + GREEN + 12000 + RESET + (player.inventory.getOrDefault("lightning staff", 0) > 0 ? " (" + player.inventory.get("lightning staff") + " Owned)" : ""));
+            System.out.println("14. " + PURPLE + "Mage Package (Hat, Robe, Pants, Amulet, Staff of choice)" + RESET + " - $" + GREEN + 35000 + RESET);
 
             // Dragon Gear (Premium)
             System.out.println(RED + "\n=== Dragon Gear (Premium) ===" + RESET);
-            System.out.println("15. " + PURPLE + "Dragon Helmet" + RESET + " - $" + GREEN + 2000 + RESET + (player.inventory.getOrDefault("dragon helmet", 0) > 0 ? " (" + player.inventory.get("dragon helmet") + " Owned)" : ""));
-            System.out.println("16. " + PURPLE + "Dragon Chestplate" + RESET + " - $" + GREEN + 3000 + RESET + (player.inventory.getOrDefault("dragon chestplate", 0) > 0 ? " (" + player.inventory.get("dragon chestplate") + " Owned)" : ""));
-            System.out.println("17. " + PURPLE + "Dragon Leggings" + RESET + " - $" + GREEN + 2000 + RESET + (player.inventory.getOrDefault("dragon leggings", 0) > 0 ? " (" + player.inventory.get("dragon leggings") + " Owned)" : ""));
-            System.out.println("18. " + PURPLE + "Dragon Shield" + RESET + " - $" + GREEN + 2000 + RESET + (player.inventory.getOrDefault("dragon shield", 0) > 0 ? " (" + player.inventory.get("dragon shield") + " Owned)" : ""));
-            System.out.println("19. " + PURPLE + "Dragon Sword" + RESET + " - $" + GREEN + 3000 + RESET + (player.inventory.getOrDefault("dragon sword", 0) > 0 ? " (" + player.inventory.get("dragon sword") + " Owned)" : ""));
+            System.out.println("15. " + PURPLE + "Dragon Helmet" + RESET + " - $" + GREEN + 20000 + RESET + (player.inventory.getOrDefault("dragon helmet", 0) > 0 ? " (" + player.inventory.get("dragon helmet") + " Owned)" : ""));
+            System.out.println("16. " + PURPLE + "Dragon Chestplate" + RESET + " - $" + GREEN + 30000 + RESET + (player.inventory.getOrDefault("dragon chestplate", 0) > 0 ? " (" + player.inventory.get("dragon chestplate") + " Owned)" : ""));
+            System.out.println("17. " + PURPLE + "Dragon Leggings" + RESET + " - $" + GREEN + 20000 + RESET + (player.inventory.getOrDefault("dragon leggings", 0) > 0 ? " (" + player.inventory.get("dragon leggings") + " Owned)" : ""));
+            System.out.println("18. " + PURPLE + "Dragon Shield" + RESET + " - $" + GREEN + 20000 + RESET + (player.inventory.getOrDefault("dragon shield", 0) > 0 ? " (" + player.inventory.get("dragon shield") + " Owned)" : ""));
+            System.out.println("19. " + PURPLE + "Dragon Sword" + RESET + " - $" + GREEN + 30000 + RESET + (player.inventory.getOrDefault("dragon sword", 0) > 0 ? " (" + player.inventory.get("dragon sword") + " Owned)" : ""));
             System.out.println("20. " + PURPLE + "Dragon Armour Package (Helmet, Body, Legs, Shield, Sword)" + RESET + " - $" + GREEN + 10000 + RESET);
 
             System.out.println("0. " + RED + "Back to Shop Categories" + RESET);
@@ -118,25 +118,25 @@ public class Shop {
 
                     // Mage Gear
                     case "7":
-                        buyArmour(player, "mage hat", 500);
+                        buyArmour(player, "mage hat", 5000);
                         break;
                     case "8":
-                        buyArmour(player, "mage robe", 800);
+                        buyArmour(player, "mage robe", 8000);
                         break;
                     case "9":
-                        buyArmour(player, "mage pants", 500);
+                        buyArmour(player, "mage pants", 5000);
                         break;
                     case "10":
-                        buyArmour(player, "mage amulet", 1000);
+                        buyArmour(player, "mage amulet", 10000);
                         break;
                     case "11":
-                        buyArmour(player, "fire staff", 1200);
+                        buyArmour(player, "fire staff", 12000);
                         break;
                     case "12":
-                        buyArmour(player, "ice staff", 1200);
+                        buyArmour(player, "ice staff", 12000);
                         break;
                     case "13":
-                        buyArmour(player, "lightning staff", 1200);
+                        buyArmour(player, "lightning staff", 12000);
                         break;
                     case "14": // Mage Package
                         buyMagePackage(player);
@@ -144,19 +144,19 @@ public class Shop {
 
                     // Dragon Gear
                     case "15":
-                        buyArmour(player, "dragon helmet", 2000);
+                        buyArmour(player, "dragon helmet", 20000);
                         break;
                     case "16":
-                        buyArmour(player, "dragon chestplate", 3000);
+                        buyArmour(player, "dragon chestplate", 30000);
                         break;
                     case "17":
-                        buyArmour(player, "dragon leggings", 2000);
+                        buyArmour(player, "dragon leggings", 20000);
                         break;
                     case "18":
-                        buyArmour(player, "dragon shield", 2000);
+                        buyArmour(player, "dragon shield", 20000);
                         break;
                     case "19":
-                        buyArmour(player, "dragon sword", 3000);
+                        buyArmour(player, "dragon sword", 30000);
                         break;
                     case "20": // Dragon Armour Package
                         buyDragonPackage(player);
@@ -195,7 +195,7 @@ public class Shop {
     }
 
     private void buyMagePackage(Player player) {
-        int packagePrice = 3500;
+        int packagePrice = 35000;
         if (player.getMoney() >= packagePrice) {
             player.setMoney(player.getMoney() - packagePrice);
             player.addItem("mage hat", 1);
@@ -235,7 +235,7 @@ public class Shop {
     }
 
     private void buyDragonPackage(Player player) {
-        int packagePrice = 10000;
+        int packagePrice = 100000;
         if (player.getMoney() >= packagePrice) {
             player.setMoney(player.getMoney() - packagePrice);
             player.addItem("dragon helmet", 1);

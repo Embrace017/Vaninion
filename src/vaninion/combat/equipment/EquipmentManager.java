@@ -75,18 +75,26 @@ public class EquipmentManager {
      * Calculate the total health boost from all equipped items
      */
     public int getTotalHealthBoost() {
-        return equippedItems.values().stream()
-                .mapToInt(EquipmentItem::getMaxHealthBoost)
-                .sum();
+        if (equippedItems != null) {
+
+
+            return equippedItems.values().stream()
+                    .mapToInt(EquipmentItem::getMaxHealthBoost)
+                    .sum();
+        }
+        return 0;
     }
     
     /**
      * Calculate the total mana boost from all equipped items
      */
     public int getTotalManaBoost() {
-        return equippedItems.values().stream()
-                .mapToInt(EquipmentItem::getMaxManaBoost)
-                .sum();
+        if (equippedItems != null) {
+            return equippedItems.values().stream()
+                    .mapToInt(EquipmentItem::getMaxManaBoost)
+                    .sum();
+        }
+        return 0;
     }
     
     /**

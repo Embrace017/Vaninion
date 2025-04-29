@@ -23,8 +23,8 @@ public class Viking extends Player {
         setHealth(getHealth() + 15);      // Vikings are hardy
         setMaxHealth(getMaxHealth() + 15); // Increase max health too
         setStrength(getStrength() + 2);   // Vikings are strong
-        setDefense(getDefense() + 1);     // Vikings are tough
     }
+
 
     /**
      * Vikings can enter a berserk state to deal more damage
@@ -41,11 +41,9 @@ public class Viking extends Player {
                 System.out.println(BLUE + "Battle fury grants +" + strengthBonus + " strength!" + RESET);
             }
 
-            // Apply resilience effects
+            // Remove defense bonuses from vikingResilience
             if (vikingResilience > 0) {
-                int defenseBonus = vikingResilience;
-                setDefense(getDefense() + defenseBonus);
-                System.out.println(BLUE + "Viking resilience grants +" + defenseBonus + " defense!" + RESET);
+                System.out.println(BLUE + "Viking resilience grants increased healing!" + RESET);
             }
         } else {
             // When at max stacks, unleash a powerful attack
@@ -78,11 +76,13 @@ public class Viking extends Player {
     public void setHealth(int health) {
         super.setHealth(health);
 
-        // When below 30% health, gain temporary defense boost
+        // When below 30% health, gain healing instead of defense
         if (getHealth() <= getMaxHealth() * 0.3) {
-            int resilienceBonus = vikingResilience * 2;
-            setDefense(getDefense() + resilienceBonus);
-            System.out.println(BLUE + getName() + "'s viking resilience activates! Defense increased by " + resilienceBonus + "!" + RESET);
+            int healAmount = vikingResilience * 2;
+            if (healAmount > 0) {
+                heal(healAmount);
+                System.out.println(BLUE + getName() + "'s viking resilience activates! Healed for " + healAmount + " health!" + RESET);
+            }
         }
     }
 
@@ -125,5 +125,15 @@ public class Viking extends Player {
      */
     public int getVikingResilience() {
         return vikingResilience;
+    }
+
+    /**
+     * Reset berserker stacks after combat
+     */
+    public void resetBerserkStacks() {
+        if (berserkStacks > 0) {
+            System.out.println(BLUE + getName() + "'s berserker rage subsides. (Stacks reset from " + berserkStacks + " to 0)" + RESET);
+            this.berserkStacks = 0;
+        }
     }
 }

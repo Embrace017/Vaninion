@@ -37,7 +37,7 @@ public enum EquipmentSlot {
             return SHIELD;
         } else if (itemName.contains("sword") || itemName.contains("staff")) {
             return WEAPON;
-        } else if (itemName.contains("amulet")) {
+        } else if (itemName.contains("amulet") || (itemName.contains("necklace"))) {
             return AMULET;
         }
         

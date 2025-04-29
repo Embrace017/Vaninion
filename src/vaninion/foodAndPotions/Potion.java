@@ -4,7 +4,6 @@ import java.util.Scanner;
 import vaninion.players.Player;
 import static vaninion.ColoredConsole.*;
 
-// Maybe add stat drain too? end of fight or fights?
 
 public class Potion {
     private final Scanner scanner = new Scanner(System.in);
@@ -13,6 +12,18 @@ public class Potion {
     public boolean strengthPotion;
     public boolean healthPotion;
     public boolean manaPotion;
+    public int getHealthPotionCount(Player player) {
+        return player.getItemCount("health potion");
+    }
+    public int getManaPotionCount(Player player) {
+        return player.getItemCount("mana potion");
+    }
+    public int getStrengthPotionCount(Player player) {
+        return player.getItemCount("strength potion");
+    }
+    public int getDefensePotionCount(Player player) {
+        return player.getItemCount("defence potion");
+    }
 
     public void usePotion(Player player) {
 
@@ -20,10 +31,10 @@ public class Potion {
 
         System.out.println(YELLOW + "\nPotion effects reset after battle" + RESET);
         System.out.println(YELLOW + "\nWhat would you like to drink?" + RESET);
-        System.out.println("1. " + PURPLE + "Health Potion" + RESET);
-        System.out.println("2. " + PURPLE + "Mana Potion" + RESET);
-        System.out.println("3. " + PURPLE + "Strength Potion" + RESET);
-        System.out.println("4. " + PURPLE + "Defence Potion" + RESET);
+        System.out.println("1. " + PURPLE + "Health Potion: " + RESET + getHealthPotionCount(player));
+        System.out.println("2. " + PURPLE + "Mana Potion: " + RESET + getManaPotionCount(player) );
+        System.out.println("3. " + PURPLE + "Strength Potion: " + RESET + getStrengthPotionCount(player));
+        System.out.println("4. " + PURPLE + "Defence Potion: " + RESET + getDefensePotionCount(player));
 
         System.out.println("* " + RED + "Back" + RESET);
         String choice = scanner.nextLine().toLowerCase().trim();
@@ -116,11 +127,12 @@ public class Potion {
             }
         }
         if (healthPotion) {
-            player.setHealth(player.getMaxHealth());
-            if (player.getHealth() < player.getMaxHealth()) {
-                player.setHealth(player.getMaxHealth());
-                healthPotion = false;
-            }
+            // Instead of full heal, heal 50% of missing health
+            int missingHealth = player.getMaxHealth() - player.getHealth();
+            int healAmount = missingHealth / 2;
+            player.setHealth(player.getHealth() + healAmount);
+            System.out.println(GREEN + "Health potion effect: Healed for " + healAmount + " health." + RESET);
+            healthPotion = false;
         }
     }
 

@@ -1,3 +1,4 @@
+
 package vaninion.players.player;
 
 import vaninion.players.Player;
@@ -20,9 +21,7 @@ public class Ork extends Player {
         this.berserkerStrength = 0;
 
         // Set Ork-specific stats
-        setHealth(getHealth() + 30);     // Orks are much tougher
-        setMaxHealth(getMaxHealth() + 30); // Increase max health too
-        setStrength(getStrength() + 3);  // Orks are stronger
+
         setDefense(getDefense() + 1);    // Orks have thick skin
         setWisdom(getWisdom() - 1);      // Orks are less wise
     }
@@ -34,7 +33,7 @@ public class Ork extends Player {
         System.out.println(RED + getName() + " unleashes a mighty roar!" + RESET);
 
         if (rage >= 50) {
-            // Different effects based on rage level
+            // Different effects based on rage level, removing defense bonuses
             switch(rageLevel) {
                 case 1 -> {
                     System.out.println(RED + "RAGE BONUS ACTIVATED!" + RESET);
@@ -43,23 +42,20 @@ public class Ork extends Player {
                 }
                 case 2 -> {
                     System.out.println(RED + "ENHANCED RAGE BONUS ACTIVATED!" + RESET);
-                    setStrength(getStrength() + 3);
-                    setDefense(getDefense() + 1);
-                    System.out.println(RED + "Strength increased by 3 and defense by 1!" + RESET);
+                    setStrength(getStrength() + 4);
+                    System.out.println(RED + "Strength increased by 4!" + RESET);
                 }
                 case 3 -> {
                     System.out.println(RED + "SUPERIOR RAGE BONUS ACTIVATED!" + RESET);
-                    setStrength(getStrength() + 4);
-                    setDefense(getDefense() + 2);
+                    setStrength(getStrength() + 6);
                     heal(10);
-                    System.out.println(RED + "Strength increased by 4, defense by 2, and healed 10 HP!" + RESET);
+                    System.out.println(RED + "Strength increased by 6 and healed 10 HP!" + RESET);
                 }
                 default -> {
                     System.out.println(RED + "ULTIMATE RAGE BONUS ACTIVATED!" + RESET);
-                    setStrength(getStrength() + 5);
-                    setDefense(getDefense() + 3);
+                    setStrength(getStrength() + 8);
                     heal(20);
-                    System.out.println(RED + "Strength increased by 5, defense by 3, and healed 20 HP!" + RESET);
+                    System.out.println(RED + "Strength increased by 8 and healed 20 HP!" + RESET);
                 }
             }
 
