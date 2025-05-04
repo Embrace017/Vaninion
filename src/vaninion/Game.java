@@ -38,8 +38,8 @@ public class Game {
         // Get player name
         System.out.println(YELLOW + "\nEnter your character name: " + RESET);
 
-        //String name = "Ragnorok"; //scanner.nextLine().trim();
-        String name = scanner.nextLine();
+        String name = "Ragnorok"; //scanner.nextLine().trim();
+        //String name = scanner.nextLine();
         if (name.equals("hannah")) {
             while (true) {
                 try {
@@ -58,8 +58,8 @@ public class Game {
             System.out.println("2. " + PURPLE + "Ork " + GREEN + "(Bonus: Thick skin)" + RESET);
             System.out.println("3. " + PURPLE + "Viking " + GREEN + "(Bonus: Berserk Power)" + RESET);
 
-            String choice = scanner.nextLine().toLowerCase().trim();
-            //String choice = "1";
+            //String choice = scanner.nextLine().toLowerCase().trim();
+            String choice = "1";
 
             player = switch (choice) {
                 case "1", "human" -> new Human(name);
@@ -74,9 +74,6 @@ public class Game {
         player.addItem("starter helmet", 1);
 
         // MUST REMOVE @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-        player.addItem("dragon sword", 10);
-        player.addItem("dragon chestplate", 10);
-
 
 
         // MUST REMOVE @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
@@ -158,9 +155,19 @@ public class Game {
                 case "armour" -> player.displayArmourInventory();
 
 
-                //Dev Commands
-                case "catchrates" -> System.out.println(fishing.calculateTotalCatchRate());
+                // Dev commands
+                case "money" -> {
+                    player.setMoney(player.getMoney() + 1000000);
+                    System.out.println("money: " + player.getMoney());
+                }
+                case "items" -> {
+                    player.addItem("dragon sword", 1);
+                    player.addItem("dragon chestplate", 1);
 
+                    player.addItem("basic rod", 1);
+                    player.addItem("basic bait", 1000000);
+                    player.addItem("legendary bait", 10000000);
+                }
 
                 default -> System.out.println(RED + "Invalid choice! Please try again." + RESET);
             }

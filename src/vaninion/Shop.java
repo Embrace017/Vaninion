@@ -408,6 +408,7 @@ public class Shop {
     private void customSellItems() {
         shopItems.putIfAbsent("copper wire", 175); // Manual shop items
         shopItems.putIfAbsent("starter helmet", 10);
+        shopItems.putIfAbsent("seaweed", 2);
 
     }
     private void sell(Player player) {
