@@ -23,7 +23,7 @@ public class Fishing {
 
     public void fish(Player player) {
         initializeCatchRates(player.getFishingLevel());
-        System.out.println(YELLOW + "Welcome to fishing!" + RESET);
+        System.out.println(YELLOW + "~~~ You've found a lake! ~~~" + RESET);
 
         // Show current fish in inventory
         System.out.println(BOLD + GREEN + "Your current catches:" + RESET);
@@ -256,7 +256,7 @@ public class Fishing {
 
                 System.out.println((i + 1) +BLUE + BOLD + "~~~ You cast your rod in the Small Lake using " + baitType + " ~~~" + RESET);
                 Thread.sleep(1000 / player.getFishingLevel());
-                if (Math.random() < 0.1 + player.getFishingLevel() * 0.01) {
+                if (Math.random() < Math.min(0.50, player.getFishingLevel() * 0.01)) {
                     System.out.println(BRIGHT_GREEN + "You saved your bait!" + RESET);
                 } else {
                     player.removeItem(baitType, 1);
@@ -270,7 +270,7 @@ public class Fishing {
                 switch (itemCaught) {
                     case null -> System.out.println(YELLOW + "You didn't even get a bite." + RESET);
                     case "Abyssal Leviathan" -> {
-                        System.out.println(BLUE + BOLD + UNDERLINE + "This is literally a 1 in a million chance to catch! You found a " + PURPLE + "mythical card!");
+                        System.out.println(BLUE + BOLD + UNDERLINE + "This is literally a 1 in a million chance to catch! You found a " + PURPLE + "mythical card!" + RESET);
                         player.addItem("raw mythical card", 1);
                         player.setFishingLevel(player.getFishingLevel() + 100);
 

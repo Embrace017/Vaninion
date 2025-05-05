@@ -30,7 +30,9 @@ public class Mining {
             System.out.println("You need at least one Gold Coin to enter the mine");
             return;
         }
+        System.out.println(CYAN + BOLD +"You have found an abandon mine!");
         System.out.println(BRIGHT_YELLOW + "How many gold coins would you like to use?" + RESET);
+        System.out.println(player.getItemCount("gold coin") + " Gold Coins");
         try {
             int choice = scanner.nextInt();
         for (int i = 0; i < choice; i++) {

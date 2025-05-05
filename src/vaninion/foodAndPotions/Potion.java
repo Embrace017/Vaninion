@@ -44,7 +44,6 @@ public class Potion {
             case "1", "health potion", "health" -> {
                 choice = "health potion";
                 if (player.hasItem(choice)) {
-                    player.removeItem(choice, 1);
                     player.setHealth(player.getHealth() + 50);
                     drinkPotion(player, choice);
                     healthPotion = true;
@@ -53,7 +52,6 @@ public class Potion {
             case "2", "mana potion", "mana" -> {
                 choice = "mana potion";
                 if (player.hasItem(choice)) {
-                    player.removeItem(choice, 1);
                     player.setMana(player.getMana() + 50);
                     drinkPotion(player, choice);
                     manaPotion = true;
@@ -62,17 +60,18 @@ public class Potion {
             case "3", "strength potion", "strength" -> {
                 choice = "strength potion";
                 if (player.hasItem(choice) && !strengthPotion) {
-                    player.removeItem(choice, 1);
-                    player.setStrength(Math.max(player.getStrength() + 1, player.getStrength() + player.getStrength() / 2));
                     drinkPotion(player, choice);
+                    player.setStrength(Math.max(player.getStrength() + 1, player.getStrength() + player.getStrength() / 2));
                     strengthPotion = true;
+                    System.out.println("Strength: " + player.getStrength());
+                } else {
+                    System.out.println(RED + "You already drank a strength potion, or don't have one!!" + RESET);
                 }
-                System.out.println("Strength: " + player.getStrength());
+
             }
             case "4", "defense potion", "defence" -> {
                 choice = "defence potion";
                 if (player.hasItem(choice) && !defensePotion) {
-                    player.removeItem(choice, 1);
                     player.setDefense(Math.max(player.getDefense() + 1, player.getDefense() + player.getDefense() / 2));
                     drinkPotion(player, choice);
                     defensePotion = true;
@@ -89,7 +88,7 @@ public class Potion {
             System.out.println(" ");
             System.out.println(BLUE + BOLD + "\n====== Combat Continued ======" + RESET);
             System.out.println(GREEN + "You used a " + potion + RESET);
-
+            player.removeItem(potion, 1);
         } else {
             System.out.println(BLUE + BOLD + "\n====== Please Choose Again ======" + RESET);
             System.out.println(RED + "No " + potion + "'s available." + RESET);
@@ -126,14 +125,5 @@ public class Potion {
                 defensePotion = false;
             }
         }
-        if (healthPotion) {
-            // Instead of full heal, heal 50% of missing health
-            int missingHealth = player.getMaxHealth() - player.getHealth();
-            int healAmount = missingHealth / 2;
-            player.setHealth(player.getHealth() + healAmount);
-            System.out.println(GREEN + "Health potion effect: Healed for " + healAmount + " health." + RESET);
-            healthPotion = false;
-        }
     }
-
 }

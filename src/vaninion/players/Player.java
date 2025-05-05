@@ -48,6 +48,9 @@ public class Player {
     public Map<String, Integer> inventory;
     public Map<String, Integer> resourceInventory;
 
+    // Animals
+    public Map<String, Integer> animalInventory;
+
 
     public Player(String name) {
         this.name = name;
@@ -75,6 +78,7 @@ public class Player {
         // Inventories
         this.inventory = new HashMap<>();
         this.resourceInventory = new HashMap<>();
+        this.animalInventory = new HashMap<>();
 
     }
 
@@ -327,6 +331,24 @@ public class Player {
         }
         System.out.println(YELLOW + "=========================\n" + RESET);
     }
+    public void displayAnimalInventory() {
+        if (animalInventory.isEmpty()) {
+            System.out.println(RED + "Your barn empty!" + RESET);
+            return;
+        }
+
+        System.out.println(YELLOW + "\n=== barn  ===" + RESET);
+        List<Map.Entry<String, Integer>> sortedAnimals = new ArrayList<>(animalInventory.entrySet());
+        sortedAnimals.sort(Map.Entry.comparingByKey());
+
+        for (Map.Entry<String, Integer> animal : sortedAnimals) {
+            String animalName = ColoredConsole.capitalizeWords(animal.getKey());
+            int count = animal.getValue();
+            System.out.printf(PURPLE + "%-20s" + GREEN + "x%d" + RESET + "%n", animalName, count);
+        }
+        System.out.println(YELLOW + "=========================\n" + RESET);
+    }
+
 
     public void addItem(String item, int count) {
         if (isResource(item)) {
@@ -431,11 +453,12 @@ public class Player {
     // Expierience management methods
     public void stats() {
         System.out.println(YELLOW + "\n====== " + getName() + "'s Stats ======" + RESET);
+        System.out.println(GREEN + "Money: " + getMoney() + RESET);
         System.out.println(GREEN + "Level: " + getLevel() + RESET);
         System.out.println(GREEN + "Experience: " + getExperience() + "/" + (100 * getLevel()) + RESET);
         System.out.println(GREEN + "Skill Points: " + getSkillPoints() + RESET);
         System.out.println((getHealth() < getMaxHealth() / 2 ? RED : GREEN) + "Health: " + getHealth() + "/" + getMaxHealth() + RESET);
-        System.out.println(GREEN + "Mana: " + getMana() + RESET);
+        System.out.println((getMana() < getMaxMana() / 2 ? RED : GREEN) + "Mana: " + getMana() + "/" + getMaxMana() + RESET);
         System.out.println(GREEN + "Strength: " + getStrength() + RESET);
         System.out.println(GREEN + "Defence: " + getDefense() + RESET);
         System.out.println(GREEN + "Wisdom: " + getWisdom() + RESET);

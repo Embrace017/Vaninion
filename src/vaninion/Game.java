@@ -18,12 +18,11 @@ import static vaninion.ColoredConsole.*;
 public class Game {
     private static final Scanner scanner = new Scanner(System.in);
     private static final Shop shop = new Shop();
-    private static final Mining mining = new Mining();
-    private static final Fishing fishing = new Fishing();
-    private static final Monster goblin = new Goblin();
     private static final Combat combat = new Combat();
-    private static final Adventure adventure = new Adventure();
-    private static final Riddle riddle = new Riddle();
+    private static final Area area = new Area();
+    private static final Animal animal = new Animal();
+    private static final Camp camp = new Camp();
+
 
 
 
@@ -84,6 +83,7 @@ public class Game {
                 GREEN + "!" + RESET);
         boolean running = true;
         while (running) {
+            updateRewards(player);
 
             System.out.println();
             // Create a decorative header
@@ -92,29 +92,21 @@ public class Game {
             System.out.println("╠════════════════════════════════╣" + RESET);
 
             // Combat & Adventure section
-            System.out.println(BLUE + "║" + PURPLE + " Combat & Adventure:" + BLUE + "            ║");
             System.out.println("║ " + PURPLE + "1. Attack" + BLUE + "                      ║");
             System.out.println("║ " + PURPLE + "2. Adventure" + BLUE + "                   ║");
-            System.out.println("║ " + PURPLE + "3. Riddle" + BLUE + "                      ║");
-
-            // Skills section
-            System.out.println("╟────────────────────────────────╢");
-            System.out.println("║" + PURPLE + " Skills & Activities:" + BLUE + "           ║");
-            System.out.println("║ " + PURPLE + "4. Fishing" + BLUE + "                     ║");
-            System.out.println("║ " + PURPLE + "5. Mining" + BLUE + "                      ║");
-            System.out.println("║ " + PURPLE + "6. Dojo" + BLUE + "                        ║");
+            System.out.println("║ " + PURPLE + "3. Shop" + BLUE + "                        ║");
+            System.out.println("║ " + PURPLE + "4. Dojo" + BLUE + "                        ║");
 
             // Character Management section
             System.out.println("╟────────────────────────────────╢");
             System.out.println("║" + PURPLE + " Character Management:" + BLUE + "          ║");
-            System.out.println("║ " + PURPLE + "7. Stats" + BLUE + "                       ║");
-            System.out.println("║ " + PURPLE + "8. Level Up" + BLUE + "                    ║");
-            System.out.println("║ " + PURPLE + "9. Equipment" + BLUE + "                   ║");
+            System.out.println("║ " + PURPLE + "5. Stats" + BLUE + "                       ║");
+            System.out.println("║ " + PURPLE + "6. Level Up" + BLUE + "                    ║");
+            System.out.println("║ " + PURPLE + "7. Equipment" + BLUE + "                   ║");
 
             // Shop & Save/Load section
             System.out.println("╟────────────────────────────────╢");
-            System.out.println("║ " + PURPLE + "S. Shop" + BLUE + "                        ║");
-            System.out.println("║ " + PURPLE + "V. Save Game" + BLUE + "                   ║");
+            System.out.println("║ " + PURPLE + "S. Save Game" + BLUE + "                   ║");
             System.out.println("║ " + PURPLE + "L. Load Game" + BLUE + "                   ║");
             System.out.println("║ " + RED + "E. Exit Game" + BLUE + "                   ║");
             System.out.println("╚════════════════════════════════╝" + RESET);
@@ -125,16 +117,16 @@ public class Game {
             String choice = scanner.nextLine().toLowerCase().trim();
             switch (choice) {
                 case "1", "attack" -> combat.getMonsterAndFight(player);
-                case "2", "adventure" -> System.out.println("Adventure not yet implemented.");
-                case "3", "riddle" -> riddle.playRiddle(player);
-                case "4", "fishing", "fish" -> fishing.fish(player);
-                case "5", "mining", "mine" -> mining.mine(player);
-                case "6", "dojo" -> new Dojo().enterDojo(player);
-                case "7", "stats" -> player.stats();
-                case "8", "level", "level up" -> player.useSkillPoint();
-                case "9", "equipment", "equip" -> equipMenu(player);
-                case "s", "shop" -> shop.shop(player);
-                case "v", "save" -> saveGame(player);
+                case "2", "adventure" -> area.areas(player);
+                case "3", "shop" -> shop.shop(player);
+                case "4", "dojo" -> new Dojo().enterDojo(player);
+
+
+                case "5", "stats" -> player.stats();
+                case "6", "level", "level up" -> player.useSkillPoint();
+                case "732", "equipment", "equip" -> equipMenu(player);
+
+                case "s", "save" -> saveGame(player);
                 case "l", "load" -> {
                     Player loadedPlayer = loadGame();
                     if (loadedPlayer != null) {
@@ -153,26 +145,32 @@ public class Game {
                 case "inv", "inventory" -> player.displayRegularInventory();
                 case "res", "resource" -> player.displayResourceInventory();
                 case "armour" -> player.displayArmourInventory();
+                case "barn", "animals", "animal" -> player.displayAnimalInventory();
 
 
                 // Dev commands
+                case "area" -> area.areas(player);
+                case "w" -> area.wildDojo(player);
+                case "a" -> animal.addSheep(player);
+                case "c" -> camp.camp(player);
                 case "money" -> {
-                    player.setMoney(player.getMoney() + 1000000);
+                    player.setMoney(player.getMoney() + 1_000_000);
                     System.out.println("money: " + player.getMoney());
                 }
                 case "items" -> {
                     player.addItem("dragon sword", 1);
                     player.addItem("dragon chestplate", 1);
-
+                    player.addItem("gold coin", 1_000_000);
                     player.addItem("basic rod", 1);
-                    player.addItem("basic bait", 1000000);
-                    player.addItem("legendary bait", 10000000);
+                    player.addItem("basic bait", 1_000_000);
+                    player.addItem("legendary bait", 1_000_000);
                 }
 
                 default -> System.out.println(RED + "Invalid choice! Please try again." + RESET);
             }
         }
     }
+
 
     /**
      * Save the current game state
@@ -266,4 +264,14 @@ public class Game {
             }
         }
     }
+    public static void updateRewards(Player player) {
+
+        System.out.println(GREEN + BOLD + "\nrewards");
+        Animal.animalRewards(player);
+
+
+
+
+    }
+
 }

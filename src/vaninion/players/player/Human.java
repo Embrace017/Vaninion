@@ -16,8 +16,8 @@ public class Human extends Player {
         super(name);
         setHealth(getMaxHealth() + 10); // Slight health bonus
         setDefense(getMana() + 20);
-        setWisdom(getWisdom() + 10);     // Humans are wise
-        setCharisma(getCharisma() + 10); // Humans are charismatic
+        setWisdom(getWisdom() + 9);     // Humans are wise
+        setCharisma(getCharisma() + 9); // Humans are charismatic
 
         this.bonusSkill = "diplomacy";
         this.diplomacyLevel = 1;

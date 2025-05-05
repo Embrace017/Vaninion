@@ -24,7 +24,7 @@ public class Dojo extends Crafting {
     public void enterDojo(Player player) {
         while (true) {
             System.out.println(YELLOW + "\n=== Welcome to the Dojo ===" + RESET);
-            System.out.println("1. " + PURPLE + "Rest" + RESET + " (You may rest below half health");
+            System.out.println("1. " + PURPLE + "Rest" + RESET + " (You may rest below half health)");
             System.out.println("2. " + PURPLE + "Eat Food" + RESET);
             System.out.println("3. " + PURPLE + "Smelt Ores" + RESET);
             System.out.println("4. " + PURPLE + "Cook Fish" + RESET);

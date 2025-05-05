@@ -73,6 +73,7 @@ public class SaveGame {
             // Save inventories
             oos.writeObject(player.inventory);
             oos.writeObject(player.resourceInventory);
+            oos.writeObject(player.animalInventory);
 
             // Save equipment status (as a string for now)
             oos.writeObject(player.getEquipmentStatus());
@@ -156,10 +157,12 @@ public class SaveGame {
             Map<String, Integer> inventory = (Map<String, Integer>) ois.readObject();
             @SuppressWarnings("unchecked")
             Map<String, Integer> resourceInventory = (Map<String, Integer>) ois.readObject();
+            @SuppressWarnings("unchecked")
+            Map<String, Integer> animalInventory = (Map<String, Integer>) ois.readObject();
 
             player.inventory = inventory;
             player.resourceInventory = resourceInventory;
-
+            player.animalInventory = animalInventory;
             // Read equipment status (but we don't use it directly)
             String equipmentStatus = (String) ois.readObject();
 

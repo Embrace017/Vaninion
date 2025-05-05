@@ -343,7 +343,7 @@ public class Shop {
                         buyBait(player, "basic bait", 50);
                         break;
                     case "4":
-                        buyBait(player, "super bait", 100);
+                        buyBait(player, "super bait", 125);
                         break;
 
                     case "5", "exit", "back", "leave": // Back

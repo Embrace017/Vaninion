@@ -392,7 +392,7 @@ public class Combat {
 
         // Magical condition - mana regeneration
         else if (currentBattleCondition.equals("magical")) {
-            int manaRegen = random.nextInt(3) + 2;
+            int manaRegen = random.nextInt(player.getWisdom() * 10) ;
             player.setMana(Math.min(player.getMaxMana(), player.getMana() + manaRegen));
             if (manaRegen > 0) {
                 System.out.println(PURPLE + "✨ Magical energy restores " + manaRegen + " mana! ✨" + RESET);
