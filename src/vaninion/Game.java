@@ -23,6 +23,7 @@ public class Game {
     private static final Animal animal = new Animal();
     private static final Camp camp = new Camp();
     private static final Tree tree = new Tree();
+    private static final Merchant merchant = new Merchant();
 
 
 
@@ -150,6 +151,7 @@ public class Game {
 
 
                 // Dev commands
+                case "m" -> merchant.createMerchant();
                 case "t" -> tree.tree(player);
                 case "gnome" -> tree.shakeGnome(player);
                 case "a" -> animal.addSheep(player);

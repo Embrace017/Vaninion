@@ -41,21 +41,23 @@ public class Tree {
 
         String choice2 = scanner.nextLine().trim().toLowerCase();
 
-        if (Math.random() < 0.1 && choice2.equals("yes")) {
+        if (Math.random() < 1.1 && choice2.equals("yes")) {
 
             System.out.println(BRIGHT_RED + "You spot a gnome running around inside!!!");
             System.out.println("Do you chase it? (10 Strength, Wisdom, and a bit of luck required)");
 
             String choice3 = scanner.nextLine().trim().toLowerCase();
-            if (choice3.equals("yes") && player.getStrength() >= 10 && player.getWisdom() >= 10 && Math.random() < 0.5) {
+            double roll = Math.random();
+            if (choice3.equals("yes") && player.getStrength() >= 10 && player.getWisdom() >= 10 && roll < 0.5) {
                 System.out.println(BRIGHT_CYAN + BOLD + "You caught the gnome and begin shaking him by his ankles immediately!!!");
                 shakeGnome(player);  // Initiates looting the gnome
 
-
-            } else if (choice3.equals("yes") && player.getWisdom() < 10) {
-                System.out.println(BRIGHT_RED + "Your mind wasn't quick enough!!");
             } else if (choice3.equals("yes") && player.getStrength() < 10) {
                 System.out.println(BRIGHT_RED + "You weren't strong enough!!");
+            } else if (choice3.equals("yes") && player.getWisdom() < 10) {
+                System.out.println(BRIGHT_RED + "Your mind wasn't quick enough!!");
+            } else if (roll >= 0.5) {
+                System.out.println(BRIGHT_RED + "You just barely missed the bugger!!!");
             }
 
         } else {
@@ -116,7 +118,7 @@ public class Tree {
                     default -> System.out.println("Something went wrong!");
                 }
 
-                if (Math.random() < 0.3) {
+                if (Math.random() > 0.5) {
                     running = false;
                     System.out.println(RED + "The little bugger bit you and you dropped him. He gets away!" + RESET); // Randomly ends or continues
                 } else {
