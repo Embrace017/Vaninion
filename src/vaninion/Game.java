@@ -22,6 +22,7 @@ public class Game {
     private static final Area area = new Area();
     private static final Animal animal = new Animal();
     private static final Camp camp = new Camp();
+    private static final Tree tree = new Tree();
 
 
 
@@ -58,7 +59,7 @@ public class Game {
             System.out.println("3. " + PURPLE + "Viking " + GREEN + "(Bonus: Berserk Power)" + RESET);
 
             //String choice = scanner.nextLine().toLowerCase().trim();
-            String choice = "1";
+            String choice = "3";
 
             player = switch (choice) {
                 case "1", "human" -> new Human(name);
@@ -89,7 +90,7 @@ public class Game {
             // Create a decorative header
             System.out.println(BLUE + BOLD + "\n╔════════════════════════════════╗");
             System.out.println("║" + YELLOW + "            MAIN MENU           " + BLUE + "║");
-            System.out.println("╠════════════════════════════════╣" + RESET);
+            System.out.println("╠════════════════════════════════╣" + BLUE);
 
             // Combat & Adventure section
             System.out.println("║ " + PURPLE + "1. Attack" + BLUE + "                      ║");
@@ -149,8 +150,8 @@ public class Game {
 
 
                 // Dev commands
-                case "area" -> area.areas(player);
-                case "w" -> area.wildDojo(player);
+                case "t" -> tree.tree(player);
+                case "gnome" -> tree.shakeGnome(player);
                 case "a" -> animal.addSheep(player);
                 case "c" -> camp.camp(player);
                 case "money" -> {
@@ -164,6 +165,11 @@ public class Game {
                     player.addItem("basic rod", 1);
                     player.addItem("basic bait", 1_000_000);
                     player.addItem("legendary bait", 1_000_000);
+                    player.addItem("axe", 1);
+                }
+                case "lvls" -> {
+                    player.setWisdom(player.getWisdom() + 10);
+                    player.setStrength(player.getStrength() + 10);
                 }
 
                 default -> System.out.println(RED + "Invalid choice! Please try again." + RESET);

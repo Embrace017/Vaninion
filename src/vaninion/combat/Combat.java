@@ -27,6 +27,7 @@ public class Combat {
     private String currentBattleCondition = "normal";
     private int comboCounter = 0;
     private boolean comboInitiatedMsg = false;
+    private boolean comboResetMsg = false;
     private int maxCombo = 0;  // Tracks highest combo achieved
     private int basePower = 0;
 
@@ -94,30 +95,43 @@ public class Combat {
         boolean isCritical = random.nextDouble() < (0.15 + (player.getWisdom() * 0.01));
 
         // Base damage calculation
-        basePower = random.nextInt(player.getStrength() + player.getLevel());
+        int basePower = random.nextInt(player.getStrength() + player.getLevel());
 
         // Combo damage calculation
-        int comboDamage = Math.min(basePower * comboCounter, player.getWisdom() * 2);
-        if (basePower == 0)
-            comboDamage = 0;
+        int comboDamage = 0;
+        if (comboCounter > 0) {
+            comboDamage = (comboCounter * 2);
+            if (basePower == 0) {
+                comboDamage = 0;
+                comboCounter = 0;
+                comboInitiatedMsg = false;
+                comboResetMsg = true;
+            }
+        }
+
         // Miss chance in fog
-        if (currentBattleCondition.equals("foggy") && random.nextDouble() < 0.3 - player.getWisdom() * 0.01) {
+        if (currentBattleCondition.equals("foggy") && random.nextDouble() < 0.3 - player.getWisdom() * 0.05) {
             System.out.println(GREY + "The fog causes you to miss!" + RESET);
             return;
         }
 
-        // Calculate total damage
-
+        // Calculate initial total damage
         int totalDamage = Math.max(0, basePower + comboDamage - target.getDefence());
 
-
-        // Apply critical hit
-        if (totalDamage != 0){
-            if (isCritical) {
-                totalDamage *= 2;
+        // Handle Viking berserk bonus
+        int berserkBonus = 0;
+        if (player instanceof Viking viking) {
+            berserkBonus = viking.getBerserkStacks() * 2;
+            if (viking.getBattleFury() > 0) {
+                berserkBonus += viking.getBattleFury() * viking.getBerserkStacks();
             }
+            totalDamage += berserkBonus;
         }
 
+        // Apply critical hit
+        if (totalDamage > 0 && isCritical) { // Only apply critical if there's base damage
+            totalDamage *= 2;
+        }
 
         // Apply sunny bonus
         if (currentBattleCondition.equals("sunny")) {
@@ -129,27 +143,27 @@ public class Combat {
         target.setHealth(target.getHealth() - totalDamage);
 
         // Display combat information
-        displayAttackInfo(player, target, basePower, comboDamage, totalDamage, isCritical);
-
-        // Handle class-specific effects
-        handleClassEffects(player, target);
+        displayAttackInfo(player, target, basePower, comboDamage, totalDamage, isCritical, berserkBonus);
     }
-
-    private void displayAttackInfo(Player player, Monster target, int baseDamage, int comboDamage, int totalDamage, boolean isCritical) {
+    private void displayAttackInfo(Player player, Monster target, int baseDamage, int comboDamage, int totalDamage, boolean isCritical, int berserkBonus) {
         String[] attackMessages = {
                 " strikes at ", " lunges toward ", " swings their weapon at ",
                 " charges at ", " attacks "
         };
         String attackMessage = attackMessages[random.nextInt(attackMessages.length)];
-        System.out.println("\n".repeat(20));
+        System.out.println("\n".repeat(5));
         System.out.println(BLUE + "╔════════════════ ATTACK ════════════════╗");
         System.out.println("║ " + GREEN + player.getName() + YELLOW + attackMessage + RED + target.getName() + BLUE);
 
-        System.out.println("║ " +  BOLD + BRIGHT_GREEN + "Power: " + basePower + BLUE);
+        System.out.println("║ " +  BOLD + BRIGHT_GREEN + "Power: " + baseDamage + BLUE);
         if (comboCounter == 1) {
             if (!comboInitiatedMsg) {
                 System.out.println("║ " + BRIGHT_CYAN + "Combo Initiated." + BLUE);
                 comboInitiatedMsg = true;
+            }
+            if (comboResetMsg) {
+                System.out.println(BRIGHT_RED + "Combo Reset." + BLUE);
+                comboResetMsg = false;
             }
         }
 
@@ -157,12 +171,13 @@ public class Combat {
             System.out.println("║ " + CYAN + "Combo bonus: +" + comboDamage + BLUE);
         }
 
-        if (totalDamage != 0) {
-            if (isCritical) {
-                System.out.println("║ " + BRIGHT_YELLOW + "CRITICAL HIT!" + BLUE);
-            }
+        if (berserkBonus > 0) {
+            System.out.println("║ " + BRIGHT_PURPLE + "Berserk bonus: +" + berserkBonus + BLUE);
         }
 
+        if (totalDamage > 0 && isCritical) {
+            System.out.println("║ " + BRIGHT_YELLOW + "CRITICAL HIT!" + BLUE);
+        }
 
         System.out.println("║ " + PURPLE + "Total damage: " + totalDamage + RESET + BOLD +" (After enemy defence)" + BLUE);
         System.out.println("╚════════════════════════════════════════╝" + RESET);
@@ -174,19 +189,20 @@ public class Combat {
             // Call onAttack to potentially gain berserk stacks
             viking.onAttack();
 
-            // Apply berserk damage bonus if stacks exist
-            if (viking.getBerserkStacks() > 0) {
-                int bonusDamage = viking.getBerserkStacks() * 2;
+            // Calculate total berserk bonus damage
+            int bonusDamage = viking.getBerserkStacks() * 2;
 
-                // Apply battle fury bonus if available
-                if (viking.getBattleFury() > 0) {
-                    bonusDamage += viking.getBattleFury() * viking.getBerserkStacks();
-                }
-
-                target.setHealth(target.getHealth() - bonusDamage);
-                System.out.println(PURPLE + "Berserk bonus damage: " + bonusDamage + "!" + RESET);
+            // Apply battle fury bonus
+            if (viking.getBattleFury() > 0) {
+                bonusDamage += viking.getBattleFury() * viking.getBerserkStacks();
             }
-        } 
+
+            // Apply the calculated bonus damage
+            if (bonusDamage > 0) {
+                target.setHealth(target.getHealth() - bonusDamage);
+                System.out.println(BRIGHT_PURPLE + "Berserk bonus damage: " + bonusDamage + RESET);
+            }
+        }
         // Ork effects
         else if (player instanceof Ork ork) {
             ork.increaseRage(10);
@@ -218,7 +234,7 @@ public class Combat {
                 if (handleFlee()) {
                     return;  // Exit combat if flee was successful
                 }
-                continue;  // Skip the rest of this loop iteration if flee failed
+                // Monster attacks if flee fails
             }
 
             boolean playerTurnEnded = handlePlayerTurn(choice, player, monster, playerGuarding);
@@ -252,8 +268,8 @@ public class Combat {
         System.out.println(BLUE + BOLD + "\n╔═══════════════════════════════════════╗");
         System.out.println("║" + YELLOW + "           COMBAT INITIATED            " + BLUE + "║");
         System.out.println("╠═══════════════════════════════════════╣");
-        System.out.println("║ " + PURPLE + " Opponent: " + monster.getName() + GREEN + " Health: " + monster.getHealth() + BLUE);
-        System.out.println("║ " + RED + " Strength: " + monster.getStrength()+ " Defense: " + monster.getDefence() + BLUE);
+        System.out.println("║ " + PURPLE + " Opponent: " + monster.getName() + RESET + " | " + GREEN + " Health: " + monster.getHealth() + BLUE);
+        System.out.println("║ " + RED + " Strength: " + monster.getStrength() + RESET + " | " + RED + " Defense: " + monster.getDefence() + BLUE);
         System.out.println("╚═══════════════════════════════════════╝" + RESET);
     }
 
@@ -264,7 +280,7 @@ public class Combat {
         System.out.println("║ " + GREEN + "Your HP: " + player.getHealth() + "/" + player.getMaxHealth() + PURPLE + " Your MP: " + player.getMana() + "/" + player.getMaxMana()+ BLUE);
         System.out.println("║ " + RED + monster.getName() + " HP Remaining: " + BRIGHT_WHITE + monster.getHealth() + BLUE);
         if (comboCounter > 0) {
-            System.out.println("║ " + CYAN + "Combo Counter: " + comboCounter + BLUE);
+            System.out.println("║ " + BRIGHT_CYAN + BOLD + "Combo Counter: " + comboCounter + BLUE);
         }
         System.out.println("╠═══════════════════════════════════════╣");
         System.out.println("║" + YELLOW + " Actions:" + BLUE + "                              ║");
@@ -427,15 +443,18 @@ public class Combat {
     }
 
     private boolean handlePlayerTurn(String choice, Player player, Monster monster, boolean playerGuarding) {
+        if (player instanceof Viking viking)
+                viking.useRacialAbility(monster);
+
         return switch (choice) {
             case "1", "attack" -> {
-                if (random.nextDouble() < 0.1 + player.getWisdom() * 0.05 )
+                if (random.nextDouble() < 0.1 + player.getWisdom() * 0.05 && (player instanceof Viking)) {
                     comboCounter++;
+                    maxCombo = Math.max(maxCombo, comboCounter);
+                }
+                    playerAttack(player, monster);
+                    yield true;
 
-
-                maxCombo = Math.max(maxCombo, comboCounter);
-                playerAttack(player, monster);
-                yield true;
             }
             case "2", "spell", "cast" -> handleSpellCasting(player, monster);
             case "3", "potion" -> {
@@ -546,6 +565,7 @@ public class Combat {
                 case "4", "giant tarantula" -> new Tarantula();
                 case "5", "dragon lord", "boss", "dragon" -> new DragonLord();
                 case "*", "back", "exit", "leave" -> null;
+                case "test", "t" -> new TestMonster();
                 default -> {
                     System.out.println(RED + "Invalid choice!" + RESET);
                     yield null;

@@ -22,8 +22,7 @@ public class Ork extends Player {
 
         // Set Ork-specific stats
 
-        setDefense(getDefense() + 1);    // Orks have thick skin
-        setWisdom(getWisdom() - 1);      // Orks are less wise
+        setDefense(10);    // Orks have thick skin
     }
 
     /**

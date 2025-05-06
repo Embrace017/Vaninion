@@ -551,4 +551,5 @@ public class Player {
     public void addEffect(String wisdom, int i, int i1) {
     }
 
+
 }

@@ -21,10 +21,13 @@ public class Area {
     private final Mining mining = new Mining();
     private final Animal animal = new Animal();
     private final Camp camp = new Camp();
+    private final Tree tree = new Tree();
+    private final WildDojo wildDojo = new WildDojo();
+
 
     public void areas(Player player) {
 
-        System.out.println(YELLOW + "Welcome to the adventure! Are you ready to explore?" + RESET);
+        System.out.println(YELLOW + "\nWelcome to the adventure! Are you ready to explore?" + RESET);
 
         String choice;
         do {
@@ -33,16 +36,16 @@ public class Area {
             // Print area stats
 
             // Show current adventure common items
-            System.out.println(CYAN + "Gold coin: " + player.getItemCount("gold coin") + RESET);
+            System.out.println(CYAN + "\nGold coin: " + player.getItemCount("gold coin") + RESET);
             //System.out.println(CYAN + "Super Bait: " + player.getItemCount("super bait") + RESET);
             //System.out.println(CYAN + "Legendary Bait: " + player.getItemCount("legendary bait") + RESET);
 
-            System.out.println(YELLOW + "Where would you like to go?" + RESET);
+            System.out.println(YELLOW + "\nWhere would you like to go?" + RESET);
             System.out.println("1. " + PURPLE + "Forest" + RESET + " (Requires: 1x Gold coin)");
             //System.out.println("2. " + PURPLE + "Mountains" + RESET + " (Requires: 10x Gold coin.)");
             //System.out.println("3. " + PURPLE + "South pole" + RESET + " (Requires: 100x Gold coin)");
             System.out.println("* " + RED + "Leave" + RESET);
-            System.out.print(CYAN + "Enter your choice: " + RESET);
+            System.out.print(CYAN + "\nEnter your choice: " + RESET);
 
             choice = scanner.nextLine().toLowerCase().trim();
 
@@ -90,21 +93,22 @@ public class Area {
 
             switch (areaRate) {
                 case "fight" -> combat.getMonsterAndFight(player);
+
                 case "mine" -> mining.mine(player);
                 case "fish" -> fishing.fish(player);
-                case "riddle" -> riddle.playRiddle(player);
-                case "wild dojo" -> wildDojo(player);
+                case "tree" -> tree.tree(player);
 
+                case "wild dojo" -> wildDojo.wildDojo(player);
+                case "riddle" -> riddle.playRiddle(player);
                 case "wild animal" -> animal.wildAnimal(player);
                 case "camp" -> camp.camp(player);
-
-                case "tree" -> System.out.println("cut wood. crafting. bonfire for boosts?");
+                case "work" -> System.out.println("do a job for someone/thing");
                 case "random stranger" -> System.out.println("charisma check. recruit? rob(charisma * wisdom)?");
                 case "merchant" -> System.out.println("rare items or better prices");
                 case "scavenger hunt" -> System.out.println("clues, searching");
-                case "work" -> System.out.println("do a job for someone/thing");
+
                 case "land for sale" -> System.out.println("but land, makes passive income,");
-                case "abandon lookout" -> System.out.println("climb for view? better area?");
+                case "abandon lookout" -> System.out.println("climb for view? better area? maybe view all?");
 
                 case "boss" -> System.out.println("boss fight"); //more rare
 
@@ -120,39 +124,5 @@ public class Area {
     private void southPole(Player player) {
     }
 
-    public void wildDojo(Player player) {
 
-        System.out.println(BRIGHT_PURPLE + "You've found a training dojo!" + RESET);
-        System.out.println(BRIGHT_PURPLE + "Pay the trainers $1000 in hopes of gaining some valuable skills?" + RESET);
-        System.out.println("yes/no .. 'info'");
-
-
-        int roll = random.nextInt(Math.max(50, 100 - player.getWisdom()));
-        String choice = scanner.nextLine().toLowerCase().trim();
-        switch (choice) {
-            case "y", "yes" -> {
-                if (player.getMoney() >= 1000) {
-                    player.setMoney(player.getMoney() - 1000);
-                    if (roll <= 50) {
-                        player.setSkillPoints(player.getSkillPoints() + 1);
-                        System.out.println(GREEN + "You have actually managed to learn something!! " + RESET + "(+1 skill point)");
-                        System.out.println(GREEN + "You rolled a " + roll + "!" + RESET);
-                    } else {
-                        System.out.println(RED + "You didn't listen to anything they said!" + RESET);
-                        System.out.println(RED + "You rolled a " + roll + "!" + RESET);
-                    }
-                } else {
-                    System.out.println(RED + "You don't have enough money!" + RESET);
-                }
-            }
-            case "n", "no" ->
-                    System.out.println(RED + "You leave the Dojo. Just as inexperienced as you came!" + RESET);
-            case "info" -> {
-                System.out.println(RED + "You have a 50% chance of gaining a skill point. (Boosted with wisdom)");
-                wildDojo(player);
-            }
-            default -> System.out.println(RED + "Invalid choice." + RESET);
-
-        }
-    }
 }

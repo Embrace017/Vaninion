@@ -15,7 +15,7 @@ public class Human extends Player {
     public Human(String name) {
         super(name);
         setHealth(getMaxHealth() + 10); // Slight health bonus
-        setDefense(getMana() + 20);
+        setMana(getMana() + 20);
         setWisdom(getWisdom() + 9);     // Humans are wise
         setCharisma(getCharisma() + 9); // Humans are charismatic
 

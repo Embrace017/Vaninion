@@ -325,8 +325,9 @@ public class Shop {
             System.out.println("1. " + PURPLE + "Calculator" + RESET + " - $" + GREEN + 2000 + RESET + (player.inventory.containsKey("calculator") ? " (Owned)" : ""));
             System.out.println("2. " + PURPLE + "Basic Rod" + RESET + " - $" + GREEN + 2000 + RESET + (player.inventory.containsKey("basic rod") ? " (Owned)" : ""));
             System.out.println("3. " + PURPLE + "Basic bait" + RESET + " - $" + GREEN + 50 + RESET + (player.inventory.getOrDefault("basic bait", 0) > 0 ? " (" + player.inventory.get("basic bait") + " Owned)" : ""));
-            System.out.println("4. " + PURPLE + "Super bait" + RESET + " - $" + GREEN + 100 + RESET + (player.inventory.getOrDefault("super bait", 0) > 0 ? " (" + player.inventory.get("super bait") + " Owned)" : ""));
-            System.out.println("5. " + RED + "Back to Shop Categories" + RESET);
+            System.out.println("4. " + PURPLE + "Super bait" + RESET + " - $" + GREEN + 125 + RESET + (player.inventory.getOrDefault("super bait", 0) > 0 ? " (" + player.inventory.get("super bait") + " Owned)" : ""));
+            System.out.println("5. " + PURPLE + "axe" + RESET + " - $" + GREEN + 5000 + RESET + (player.inventory.getOrDefault("axe", 0) > 0 ? " (" + player.inventory.get("axe") + " Owned)" : ""));
+            System.out.println("*. " + RED + "Back to Shop Categories" + RESET);
             System.out.print(CYAN + "Enter the number of the item you wish to purchase: " + RESET);
 
             String miscChoice = scanner.nextLine().trim().toLowerCase();
@@ -345,8 +346,11 @@ public class Shop {
                     case "4":
                         buyBait(player, "super bait", 125);
                         break;
+                    case "5":
+                        buyAxe(player, 5000);
+                        break;
 
-                    case "5", "exit", "back", "leave": // Back
+                    case "*", "exit", "back", "leave": // Back
                         return;
                     default:
                         System.out.println(RED + "Invalid choice." + RESET);
@@ -383,6 +387,19 @@ public class Shop {
             }
         } else {
             System.out.println(YELLOW + "You already own a Basic Rod." + RESET);
+        }
+    }
+    private void buyAxe(Player player, int price) {
+        if (!player.hasItem("axe")) {
+            if (player.getMoney() >= price) {
+                player.setMoney(player.getMoney() - price);
+                player.addItem("axe", 1);
+                System.out.println(GREEN + "You purchased an " + PURPLE + "axe" + GREEN + " for $" + YELLOW + price + GREEN + ". You now have $" + YELLOW + player.getMoney() + GREEN + "." + RESET);
+            } else {
+                System.out.println(RED + "Not enough money for the axe!" + RESET);
+            }
+        } else {
+            System.out.println(YELLOW + "You already own an axe." + RESET);
         }
     }
 
